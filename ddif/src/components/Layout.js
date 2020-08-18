@@ -15,6 +15,7 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Link from '@material-ui/core/Link';
 import { Badge, Drawer } from '@material-ui/core';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 //import TredenceLogo from '../../assets/Images/tredence-logo.png'
 import TredenceLogo from '../assets/Images/tredence-logo.png'
@@ -30,7 +31,7 @@ import Register from './Register';
 import Ingestion from './Ingestion';
 import ChangePassword from './ChangePassword';
 
-const drawerWidth = 260;
+const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -193,8 +194,15 @@ export default function Layout() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.title} align={'left'}>
-                        Driverless Data Ingestion Framework
+                    <img src={TredenceLogo} height={'40px'} width={'70px'} /> &nbsp; Driverless Data Ingestion Framework
                     </Typography>
+                    <IconButton color='inherit'>
+                        <Badge color="secondary">
+                            <HelpOutlineIcon  onClick={(e)=>{
+                                
+                            }}/>
+                        </Badge>
+                    </IconButton>
                     <IconButton color='inherit'>
                         <Badge color="secondary">
                             <PowerSettingsNewIcon  onClick={(e)=>{
@@ -210,10 +218,10 @@ export default function Layout() {
                     classes={{
                         paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
                     }}
-                    open={open}
+                    // open={open}
                 >
                     <div className={classes.toolbarIcon}>
-                        <img src={TredenceLogo} height={'50px'} width={'160px'} alt="Tredence Logo" />
+                        {/* <img src={TredenceLogo} height={'40px'} width={'60px'} alt="Tredence Logo" /> */}
                         <IconButton onClick={handleDrawerClose}>
                             <ChevronLeftIcon />
                         </IconButton>
@@ -226,12 +234,9 @@ export default function Layout() {
                     <Container maxWidth="lg" className={classes.container}>
                         <Paper>
                             <Switch>
-                                {/* <Route exact path="/" component={Logintest}/>
-                                <Route exact path="/register" component={Register}/>
-                                <Route exact path="/recover" component={ChangePassword}/> */}
                                 <Fragment>
                                     <Route exact path="/Home" >
-                                        <Test />
+                                        <Home />
                                     </Route>
                                     <Route exact path="/Ingestion">
                                         <Ingestion />

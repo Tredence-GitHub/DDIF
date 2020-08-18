@@ -5,4 +5,54 @@
     height:280px
 }
 
-/* MuiPaper-root MuiDrawer-paper MuiDrawer-paperAnchorBottom MuiPaper-elevation16 */
+.keyCards {
+    background: rgba(223, 230, 230, 0.486);
+    border-left: 3px solid #8792cc;
+    width: 205px;
+    height: 100px;
+    padding-right: 0px;
+    position: relative;
+}
+
+.MuiGrid-item.cardDivs {
+    margin: 10px;
+    position: relative;
+}
+
+
+
+.Numbers {
+    float: right;
+    margin-top: 0px;
+    padding-right: 5%;
+    color: rgba(14, 14, 68, 0.76);
+}
+
+.innerCircle {
+    width: 110px;
+    height: 125px;
+    border: 0.75px solid rgba(226, 234, 236, 0.432);
+    /* border-top-left-radius: 5px; */
+    border-radius: 50%;
+    box-shadow: 1px 1px 7px 4px rgba(226, 234, 236, 0.432);
+    /* align-content: center; */
+    /* background: rgba(102, 102, 253, 0.158); */
+    /* background: #add8e62e; */
+    background: #8da5ad21;
+    padding: 2%;
+    margin: 15px;
+    
+}
+
+.iconsize {
+    font-size: 40px !important;  
+    color:  rgb(3, 3, 136);
+    color: rgb(230 116 17 / 0.62);
+}
+
+.subtext {
+    line-break: normal;
+    line-height: 1;
+    color: black;
+    /* font-size: 8pt; */
+}
