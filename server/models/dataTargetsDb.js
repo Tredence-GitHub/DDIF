@@ -1,11 +1,11 @@
 module.exports = function(sequelize, Sequelize){
-    return sequelize.define('DataSources', {
+    return sequelize.define('DataTargets', {
         typeId: {
             primaryKey: true,
             autoIncrement: true,
             type: Sequelize.INTEGER
         },
-        source_type: {
+        target_type: {
             type: Sequelize.STRING
         },
         abbrv: {
@@ -15,6 +15,6 @@ module.exports = function(sequelize, Sequelize){
             freezeTableName: true,
             timestamps: false,
             underscored: true,
-            tableName: 'data_sources'
+            tableName: 'data_targets'
     })
 }

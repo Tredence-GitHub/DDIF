@@ -32,6 +32,10 @@ db.ProjectTypes = require('../models/projecttypesDb.js')(sequelize, Sequelize);
 db.DataCatalog = require('../models/dataCatalogDb.js')(sequelize, Sequelize);
 db.DataSources = require('../models/dataSourcesDb.js')(sequelize, Sequelize);
 db.Announcements = require('../models/announcementsDb.js')(sequelize, Sequelize);
+db.Parameters = require('../models/parametersDb.js')(sequelize, Sequelize);
+db.DataTargets = require('../models/dataTargetsDb.js')(sequelize, Sequelize);
+
+
 db.Announcements.belongsTo(db.DataCatalog, {foreignKey: 'entry_id'})
 module.exports = db;
 
