@@ -68,7 +68,7 @@ import Axios from 'axios';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const drawerWidth = 240
+const drawerWidth = 220
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -163,6 +163,7 @@ function Home() {
     const [logData, setlogData] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
+    const [notficationsData, setnotficationsData] = useState({});
 
     let local = 'http://localhost:4000'
 
@@ -170,7 +171,8 @@ function Home() {
     function getInfo() {
         Promise.all(
             [Axios.get(`${local}/dashboard/dashboardInformation`), 
-            Axios.post(`${local}/dashboard/getActivityLogs`)
+            Axios.post(`${local}/dashboard/getActivityLogs`),
+            Axios.get(`${local}/dashboard/announcements`)
             ]).then((res)=>{
                 return [res]
             })  
@@ -179,6 +181,8 @@ function Home() {
             if(response[0][0].status === 200 && response[0][1].status === 200){
                 setdashboardnumbers(response[0][0].data.data);
                 setlogData(response[0][1].data.data);
+                setnotficationsData(response[0][2].data.data);
+
                 seterror(false);
                 setloading(false);
                 console.log('CAME !!!!!  ', response.length)
@@ -227,22 +231,17 @@ function Home() {
             onKeyDown={toggleDrawer(anchor, false)}
         >
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
+                {notficationsData.map((text, index) => (
+                    <ListItem button key={index}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                        <ListItemText primary={text.description} style={{
+                            color: 'green'
+                        }} />
+                        <Divider />
                     </ListItem>
                 ))}
             </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
+           
 
         </div>
     );
@@ -487,7 +486,7 @@ if(!loading){
                     <div style={{margin:"40px 0 0 0 "}}>
                         {['bottom'].map((anchor) => (
                             <React.Fragment key={anchor}>
-                                <Button variant='contained' color='primary' style={{ width: '365px' }} onClick={toggleDrawer(anchor, true)}>Announcements <NotificationsIcon fontSize='small'/></Button>
+                                <Button variant='contained' color='primary' style={{ width: '365px' }} onClick={toggleDrawer(anchor, true)}>Notifications <NotificationsIcon fontSize='small'/>({notficationsData.length})</Button>
                                 <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
                                     {list(anchor)}
                                 </Drawer>

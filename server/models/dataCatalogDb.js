@@ -35,6 +35,15 @@ module.exports = function(sequelize, Sequelize) {
         status: {
             type: Sequelize.STRING,
             default: 'draft'
+        },
+        updated_at: {
+            type: 'TIMESTAMP'
+        },
+        updated_by: {
+            type: Sequelize.STRING
+        },
+        status_changed_at: {
+            type: 'TIMESTAMP'
         }
     }, {
             freezeTableName: true,

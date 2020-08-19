@@ -104,7 +104,10 @@ export default function Login() {
                     // alert(response.data.message)
                      handleOpen() 
                      setMsg(response.data.message) 
-                    return window.location.href = "/";
+
+                     if(response.data.data.length > 0){
+                         return window.location.href = "/";
+                     }
                 }
                 else if (response.status === 400) {
                      handleOpen() 
@@ -121,9 +124,9 @@ export default function Login() {
 
         }
         else {
-            window.alert("Please Check your Credentials")
-            name.focus();
-            return false;
+            handleOpen();
+            setMsg("Please Check your Credentials")
+            // return false;
         }
 
     };
@@ -247,7 +250,7 @@ export default function Login() {
                                 </TextField>
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Button variant="contained" color="primary" onClick={(e) => { passwordValidator() }}>
+                                <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); passwordValidator() }}>
                                     Register
                 </Button>
                             </div>
