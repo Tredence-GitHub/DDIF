@@ -28,14 +28,15 @@ export default function mainListItems() {
         <div>
             <Paper elevation={0}>
                 <MenuList aria-label="main mailbox folders">
-                    <MenuItem to="/Home" component={Link}>
+                    <MenuItem to="/home" component={Link}>
                         <ListItemIcon>
                         <Tooltip title="Home Page">
                             <HomeIcon fontSize="small" />
                         </Tooltip>
                         </ListItemIcon>
                     </MenuItem>
-                    <MenuItem to="/Ingestion"  component={Link}>
+                    {/* <MenuItem to="/ingestion/setup"  component={Link}> */}
+                    <MenuItem to="/ingestiontable"  component={Link}>
                         <ListItemIcon>
                         <Tooltip title="Configue Ingestion Job">
                             <BarChartIcon fontSize="small" />

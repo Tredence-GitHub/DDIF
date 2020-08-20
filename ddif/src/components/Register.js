@@ -252,11 +252,11 @@ export default function Login() {
                             <div className={classes.buttonRoot}>
                                 <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); passwordValidator() }}>
                                     Register
-                </Button>
+                            </Button>
                             </div>
                             <div className={classes.buttonRoot}>
                                 <Link href="/" variant="body2">
-                                    {'Take me back to Login'}
+                                    {'Already have an account? Sign in'}
                                 </Link>
                             </div>
 

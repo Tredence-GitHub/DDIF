@@ -30,6 +30,7 @@ import Login from './Login';
 import Register from './Register';
 import Ingestion from './Ingestion';
 import ChangePassword from './ChangePassword';
+import IngestionTable from './configure_ingestion/IngestionTable';
 
 const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
@@ -235,11 +236,16 @@ export default function Layout() {
                         <Paper>
                             <Switch>
                                 <Fragment>
-                                    <Route exact path="/Home" >
+                                    <Route exact path="/home" >
                                         <Home />
                                     </Route>
-                                    <Route exact path="/Ingestion">
+                                    <Route exact path="/ingestion" >
                                         <Ingestion />
+                                    </Route>
+                                    {/* <Route exact path="/ingestion/:page" render={props=> <Ingestion {...props}/>}>
+                                    </Route> */}
+                                    <Route exact path="/ingestiontable" >
+                                        <IngestionTable/>
                                     </Route>
                                 </Fragment>
                             </Switch>

@@ -17,6 +17,9 @@ module.exports = function(sequelize, Sequelize) {
         projectname: {
             type: Sequelize.STRING
         },
+        rationale: {
+            type: Sequelize.STRING
+        },
         created_by: {
             type: Sequelize.STRING
         },

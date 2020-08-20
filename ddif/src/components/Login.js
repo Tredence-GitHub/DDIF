@@ -12,6 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 // import Background from '../assets/Images/imagebg.jpg'
 
 const roles = [
@@ -45,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(1),
     },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+        marginLeft:"115px"
+      },
 
 }));
 
@@ -91,7 +98,8 @@ export default function Login() {
                 handleOpen()
                 setMsg(response.data.message)
                 localStorage.setItem('loggedIn', true);
-                return window.location.href = "/Home";
+                localStorage.setItem('username',username);
+                return window.location.href = "/home";
             }
             else if (response.status === 400) {
                 handleOpen()
@@ -142,7 +150,10 @@ export default function Login() {
 
                 <Grid item xs={3} >
                     <Paper className={classes.paper} style={{ width: "300px" }}>
-                        <strong>Login </strong>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                        <strong>Login</strong>
                         <hr />
                         <form className={classes.root} noValidate autoComplete="off">
                             <div>
@@ -153,8 +164,8 @@ export default function Login() {
                                     onChange={handleChangeUsername}
                                     InputProps={{
                                         startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
+                                            <InputAdornment  position="start">
+                                                <PersonIcon /> 
                                             </InputAdornment>
                                         ),
                                     }}
@@ -178,7 +189,7 @@ export default function Login() {
                                 />
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); validator() }}>
+                                <Button variant="contained"  color="primary" onClick={(e) => { e.preventDefault(); validator() }}>
                                     Login
                                 </Button>
 
@@ -193,7 +204,6 @@ export default function Login() {
                                     Forget Password?
                                 </Button> */}
                             </div>
-
                             <div className={classes.buttonRoot}>
                                 <Link href="/register" variant="body2">
                                     {'Not Registered? Create an account! '}
@@ -205,7 +215,6 @@ export default function Login() {
                                     {'Forgot Password?'}
                                 </Link>
                             </div>
-
                         </form>
                     </Paper>
                 </Grid>

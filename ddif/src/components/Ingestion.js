@@ -6,6 +6,11 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
+import Setup from './configure_ingestion/Setup';
+import SetupTest from './configure_ingestion/SetupTest';
+import { Link } from 'react-router-dom';
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+import Metadata from './configure_ingestion/Metadata';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,15 +61,38 @@ function a11yProps(index) {
 }
 
 
-export default function SimpleTabs() {
+export default function Ingestion(props) {
+    // const {match, history} = props;
+    // const {params} = match;
+    // const {page} = params;
+
+    // const tabNametoIndex ={
+    //     0: "setup",
+    //     1:"metadata",
+    //     2:"customrules",
+    //     3:"review"
+    // };
+
+    // const indexToTabName ={
+    //     setup :0,
+    //     metadata:1,
+    //     customrules:2,
+    //     review:3
+    // };
+
+
+
     const classes = useStyles();
+    // const [value, setValue] = React.useState(indexToTabName[page]);
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
+        // history.push(`/ingestion/${tabNametoIndex[newValue]}`)
         setValue(newValue);
     };
 
     return (
+
         <div className={classes.root}>
             <AppBar position="static">
                 <Tabs value={value}
@@ -77,19 +105,22 @@ export default function SimpleTabs() {
                     <Tab label="Review & Ingest" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
+            
             <TabPanel value={value} index={0}>
-                Item One
-      </TabPanel>
+                <SetupTest/>
+            </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
-      </TabPanel>
+                <Metadata/>
+            </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three
-      </TabPanel>
+            </TabPanel>
             <TabPanel value={value} index={3}>
                 Item Four
-      </TabPanel>
+            </TabPanel>
         </div>
+
+        
 
     );
 }
