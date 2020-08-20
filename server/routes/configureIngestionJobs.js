@@ -1,14 +1,16 @@
 const db = require('../config/db.js');
 const express = require('express');
-const { resolve } = require('path');
 const Router = express.Router();
 
 // get all the information for the data table
 Router.post('/getRecords', (req, res)=>{
-    db.DataCatalog.findAll()
+    db.DataCatalog.findAll({
+        include: [db.Schedule]
+    })
     .then((result)=>{
         res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify(result))});
     }).catch((err)=>{
+        console.log(err);
         res.status(400).json({message: 'failed', data: [], error: [err]});
     })
 })
@@ -97,27 +99,63 @@ Router.post('/setupDataSave', (req, res)=>{
 
                     }
                 }).then((updatedRes)=>{
-                    db.Parameters.create({
-                        entryId: result.entryId,
-                        SourceType: request_data.source_type,
-                        SourceParameter: JSON.stringify(request_data.source_parameter),
-                        SourceQuery: request_data.source_query,
-                        TargetType: request_data.target_type,
-                        TargetParameter:JSON.stringify(request_data.target_parameter),
-                        TargetFileType: request_data.target_file_type,
-                        TargetFileDelimiter: request_data.target_file_delimiter
 
-                    }).then((parametersRes)=>{
-                     
-                        let frameFinal = {};
-                        frameFinal['entry_id'] = result.entryId;
-                        frameFinal['parameters'] = JSON.parse(JSON.stringify(parametersRes));
+                    let saveSchedule = new Promise((resolve, reject) =>{
+                        db.Schedule.create({
+                        job_id: result.entryId,
+                        jobname: request_data.jobname,
+                        schedule_type: request_data.schedule_type,
+                        recurrence_type: request_data.recurrence_type,
+                        recurrence: request_data.recurrence,
+                        days: request_data.days,
+                        start_time: request_data.start_time,
+                        start_date: request_data.start_date,
+                        end_date: request_data.end_date
 
-                        res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(frameFinal)) });
-
+                    }).then((scheduleRes)=>{
+                        resolve(JSON.parse(JSON.stringify(scheduleRes)));
                     }).catch((err)=>{
-                        console.log(err)
-                        res.status(400).json({message: 'failed', error: [err]})
+                        console.log(err);
+                        reject(err);
+                    })
+                 })
+
+                    let saveParameters = new Promise((resolve, reject)=> {
+
+                        db.Parameters.create({
+                            entryId: result.entryId,
+                            SourceType: request_data.source_type,
+                            SourceParameter: JSON.stringify(request_data.source_parameter),
+                            SourceQuery: request_data.source_query,
+                            TargetType: request_data.target_type,
+                            TargetParameter:JSON.stringify(request_data.target_parameter),
+                            TargetFileType: request_data.target_file_type,
+                            TargetFileDelimiter: request_data.target_file_delimiter
+    
+                        }).then((parametersRes)=>{
+                            
+                            resolve(JSON.parse(JSON.stringify(parametersRes)));
+                            let frameFinal = {};
+                            frameFinal['entry_id'] = result.entryId;
+                            frameFinal['parameters'] = JSON.parse(JSON.stringify(parametersRes));
+    
+                            
+                        }).catch((err)=>{
+                            console.log(err)
+                            reject(err);
+                        })
+                    }) 
+                    
+                    Promise.all([saveParameters, saveSchedule]).then((results)=>{
+                        console.log(results[0], results[1]);
+                        if(results[0].length > 0 && results[1].length > 0){
+                            res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(frameFinal)) });
+                        }else{
+                            res.status(400).json({message: 'failed', error: []})
+                        }
+                    }).catch((err2)=>{
+                        console.log(err2, "***");
+                        res.status(400).json({message: 'failed', error: [err2], data: []})
                     })
 
                 }).catch((err)=>{

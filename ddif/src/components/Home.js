@@ -154,7 +154,7 @@ function Home() {
     const classesLoad = useStylesLoad();
     const theme = useTheme();
     const [state, setState] = React.useState({
-        bottom: false,
+        right: false,
     });
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = 2;
@@ -224,7 +224,7 @@ function Home() {
     const list = (anchor) => (
         <div
             className={clsx(classes.list, {
-                [classes.fullList]: anchor === 'bottom',
+                [classes.fullList]: anchor === 'right',
             })}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
@@ -234,9 +234,7 @@ function Home() {
                 {notficationsData.map((text, index) => (
                     <ListItem button key={index}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text.description} style={{
-                            color: 'green'
-                        }} />
+                        <ListItemText primary={text.description} />
                         <Divider />
                     </ListItem>
                 ))}
@@ -459,8 +457,19 @@ if(!loading){
                 </Grid>
                 <Grid item container direction="column" xs={4}>
                     <Paper className={classes.paper}>
-                        <Typography>Activity Log</Typography>
-                        <TableContainer component={Paper}>
+                        <Typography>Activity Log {['right'].map((anchor) => (
+                            <React.Fragment key={anchor}>
+                                <Button  color='default' style={{ width: '1px', border: 'none',backgroundColor: 'none' }} onClick={toggleDrawer(anchor, true)}><NotificationsIcon fontSize='small'/>({notficationsData.length})</Button>
+                                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                                    {list(anchor)}
+                                </Drawer>
+                            </React.Fragment>
+                        ))}
+                        </Typography>
+                        <TableContainer component={Paper} style={{
+                                maxHeight: "405px"
+
+                        }}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -482,17 +491,6 @@ if(!loading){
                             </Table>
                         </TableContainer>
                     </Paper>
-                    
-                    <div style={{margin:"40px 0 0 0 "}}>
-                        {['bottom'].map((anchor) => (
-                            <React.Fragment key={anchor}>
-                                <Button variant='contained' color='primary' style={{ width: '365px' }} onClick={toggleDrawer(anchor, true)}>Notifications <NotificationsIcon fontSize='small'/>({notficationsData.length})</Button>
-                                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-                                    {list(anchor)}
-                                </Drawer>
-                            </React.Fragment>
-                        ))}
-                    </div>
 
 
                 </Grid>

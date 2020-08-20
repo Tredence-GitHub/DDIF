@@ -5,17 +5,41 @@
     height:280px
 }
 
+.MuiPaper-root.MuiDrawer-paperAnchorRight {
+    max-width: 250px;
+    margin-top: 1px;
+    background: none;
+    border: none;
+    /* max-height: 80%; */
+}
+
+.MuiListItemText-root { 
+    color: navy;
+}
+.MuiListItem-root.MuiButtonBase-root  {
+    background: rgba(255, 255, 255, 0.836);
+    border-radius: 4px;
+}
 .keyCards {
-    background: rgba(223, 230, 230, 0.486);
-    border-left: 3px solid #8792cc;
+    /* background: rgba(223, 230, 230, 0.486); */
+    background: whitesmoke;
+    
+    border-left: 1px solid navy;
     width: 205px;
     height: 100px;
     padding-right: 0px;
     position: relative;
 }
 
+.MuiButtonBase-root:focus{
+    outline-color: white;
+}
+
+
+
 .MuiGrid-item.cardDivs {
     margin: 10px;
+    box-shadow: 4px 4px 7px 4px rgb(97 99 101 / 6%);
     position: relative;
 }
 
