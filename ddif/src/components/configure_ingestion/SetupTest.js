@@ -39,7 +39,11 @@ import OneTime from './OneTime'
 import FixedSchedule from './FixedSchedule';
 import Axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {useSnackbar} from 'notistack';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+// import {useSnackbar} from 'notistack';
 
 
 const Accordion = withStyles({
@@ -176,7 +180,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function Setup() {
+export default function Setup(props) {
     const classes = useStyles();
     const [project, setProject] = React.useState(0);
     const [jobTitle, setjobTitle] = React.useState('');
@@ -197,8 +201,10 @@ function Setup() {
     const [dropDownTarget, setdropDownTarget] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true);
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    let local = 'http://localhost:4000'
+    const [open, setOpen] = React.useState(false);
+    const [msg, setMsg] = React.useState('');
+    // const {enqueueSnackbar} = useSnackbar();
+    let local = 'http://localhost:4000';
 
     function getInfo() {
         Promise.all(
@@ -234,6 +240,16 @@ function Setup() {
     
     const handleChangeAccordion = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
     };
 
     const handleChange = (event) => {
@@ -417,25 +433,29 @@ function Setup() {
             start_date:scheduleParams.startDate,
             end_date:scheduleParams.endDate
         }
-        console.log(param)
-        console.log(typeof(param.start_date))
+        // console.log(param)
+        // console.log(typeof(param.start_date))
+
         let resp = Axios.post(`${local}/ingestion/setupDataSave`,param
 
         ).then((response) => {
             console.log(response);
             if (response.status === 200) {
                console.log(response);
+               handleOpen()
+                setMsg(response.data.message)
+
             // enqueueSnackbar("Success", {
             //     variant: 'success',
-            // })
+            // });
             //    window.location.href = "/ingestion/metadata";
 
             // Redirection to metadata tab
 
             }
             else if (response.status === 400) {
-                // handleOpen()
-                // setMsg('You are not registered with us! Please register!')
+                handleOpen()
+                setMsg('failed!')
                 // // alert('You are not registered with us! Please register!')
                 // // return window.location.href = "/";
                 // enqueueSnackbar("Failed", {
@@ -445,8 +465,8 @@ function Setup() {
 
         }).catch((err) => {
             console.log(err);
-            // handleOpen()
-            // setMsg('You are not registered with us! Please register!')
+            handleOpen()
+            setMsg('Failed!')
             // // alert('You are not registered with us! Please register!')
             // // return window.location.href = "/";
             // enqueueSnackbar("Failed", {
@@ -455,12 +475,36 @@ function Setup() {
         });
     }
 
+    const handleSetupOk =()=>{
+        let data ={
+            "done":1,
+        }
+
+        props.onPassSetup(data);
+    }
 
 
 
     if(!loading){
     return (
         <div>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                message={<span id="message-id">{msg}</span>}
+                action={
+                    <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                    </React.Fragment>
+                }
+            />
       <Accordion square expanded={expanded === 'panel1'} onChange={handleChangeAccordion('panel1')} >
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
           <Typography>Project Information</Typography>
@@ -695,7 +739,8 @@ function Setup() {
                 <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
                     <Button variant="contained" color='primary' disabled={!isFormValid()} onClick = {(e)=>{
                             e.preventDefault();
-                            saveData()
+                            saveData();
+                            handleSetupOk();
                             
                     }} >Next</Button>
                 </Grid>
@@ -712,4 +757,3 @@ else{
 }
 }
 
-export default Setup;

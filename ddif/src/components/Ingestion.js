@@ -85,11 +85,27 @@ export default function Ingestion(props) {
     const classes = useStyles();
     // const [value, setValue] = React.useState(indexToTabName[page]);
     const [value, setValue] = React.useState(0);
+    const [setup, setSetup] = React.useState(false);
+    const [enable, setEnable] = React.useState(false);
+
 
     const handleChange = (event, newValue) => {
         // history.push(`/ingestion/${tabNametoIndex[newValue]}`)
         setValue(newValue);
     };
+
+    const handleSetup =(data) =>{
+        setSetup(data)
+        console.log(data)
+        if(data.done===1){
+            setEnable(true)
+        }
+        else{
+            setEnable(false)
+        }
+    };
+
+
 
     return (
 
@@ -99,7 +115,8 @@ export default function Ingestion(props) {
                     onChange={handleChange}
                     variant="fullWidth"
                     aria-label="full width tabs example">
-                    <Tab label="Setup" {...a11yProps(0)} />
+                    <Tab label="Setup" {...a11yProps(0)}/>
+                    {/* <Tab label="Metadata Discovery" disabled={enable} {...a11yProps(1)} /> */}
                     <Tab label="Metadata Discovery" {...a11yProps(1)} />
                     <Tab label="Custom Rules" {...a11yProps(2)} />
                     <Tab label="Review & Ingest" {...a11yProps(3)} />
@@ -107,7 +124,7 @@ export default function Ingestion(props) {
             </AppBar>
             
             <TabPanel value={value} index={0}>
-                <SetupTest/>
+                <SetupTest onPassSetup={handleSetup}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Metadata/>

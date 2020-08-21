@@ -2,6 +2,7 @@ const db = require('../config/db.js');
 const express = require('express');
 const Router = express.Router();
 const notebook = require('./notebooks/notebook.js');
+const Moment = require('moment');
 
 
 // get all the information for the data table
@@ -110,9 +111,9 @@ Router.post('/setupDataSave', (req, res)=>{
                         recurrence_type: request_data.recurrence_type,
                         recurrence: request_data.recurrence,
                         days: request_data.days,
-                        start_time: request_data.start_time,
-                        start_date: request_data.start_date,
-                        end_date: request_data.end_date
+                        start_time: Moment(request_data.start_time).format("YYYY-MM-DD HH:mm:ss"),
+                        start_date: Moment(request_data.start_date).format("YYYY-MM-DD HH:mm:ss"),
+                        end_date: Moment(request_data.end_date).format("YYYY-MM-DD HH:mm:ss")
 
                     }).then((scheduleRes)=>{
                         resolve(JSON.parse(JSON.stringify(scheduleRes)));
@@ -137,9 +138,7 @@ Router.post('/setupDataSave', (req, res)=>{
                         }).then((parametersRes)=>{
                             
                             resolve(JSON.parse(JSON.stringify(parametersRes)));
-                            let frameFinal = {};
-                            frameFinal['entry_id'] = result.entryId;
-                            frameFinal['parameters'] = JSON.parse(JSON.stringify(parametersRes));
+                            
     
                             
                         }).catch((err)=>{
@@ -149,8 +148,12 @@ Router.post('/setupDataSave', (req, res)=>{
                     }) 
                     
                     Promise.all([saveParameters, saveSchedule]).then((results)=>{
+                        let frameFinal = {};
+                            frameFinal['entry_id'] = result.entryId;
+                            frameFinal['parameters'] = JSON.parse(JSON.stringify(saveParameters));
+                            frameFinal['Schedule'] = JSON.parse(JSON.stringify(saveSchedule));
                         console.log(results[0], results[1]);
-                        if(results[0].length > 0 && results[1].length > 0){
+                        if(results[0] !={} && results[1]!={}){
                             res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(frameFinal)) });
                         }else{
                             res.status(400).json({message: 'failed', error: []})
