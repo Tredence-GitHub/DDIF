@@ -1,6 +1,8 @@
 const db = require('../config/db.js');
 const express = require('express');
 const Router = express.Router();
+const notebook = require('./notebooks/notebook.js');
+
 
 // get all the information for the data table
 Router.post('/getRecords', (req, res)=>{
@@ -174,5 +176,41 @@ Router.post('/setupDataSave', (req, res)=>{
         res.status(400).json({message: 'failed', error: [err]})    
     })
 })
+
+const triggerNotebook = async (jobId) => {
+    const data = {
+        'job_id': jobId,
+        'notebook_params': {
+            'entryid': '300'
+        }
+    }
+    let notebookRes = await notebook.notebookTrigger(data);
+    notebookRes = JSON.stringify(notebookRes)
+
+    let response = await notebook.runJobResponse(notebookRes);
+    do{
+        response =  await notebook.runJobResponse(notebookRes);
+        if(response === 'Failed'){
+            return 'Failed'
+        }
+        console.log(response, "IN DO WHILE ");
+    }while(response === 'PENDING');
+
+    return response;
+    
+}
+
+Router.get('/api/getMetadata',async (req, res) => {
+    let finalRes = await triggerNotebook(31);
+    if(finalRes !== 'Failed') {
+        let metadata = JSON.parse(JSON.stringify(finalRes.result));
+
+        res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(metadata))})
+    }else{
+        res.status(400).json({message: 'failed', data: finalRes})
+
+    }
+})
+
 
 module.exports = Router;
