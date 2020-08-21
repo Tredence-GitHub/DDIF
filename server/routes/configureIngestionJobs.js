@@ -177,7 +177,7 @@ Router.post('/setupDataSave', (req, res)=>{
     })
 })
 
-const triggerNotebook = async (jobId) => {
+const triggerNotebook = async (jobId, entryId) => {
     const data = {
         'job_id': jobId,
         'notebook_params': {
@@ -200,8 +200,10 @@ const triggerNotebook = async (jobId) => {
     
 }
 
-Router.get('/api/getMetadata',async (req, res) => {
-    let finalRes = await triggerNotebook(31);
+Router.post('/api/getMetadata',async (req, res) => {
+    let request_data = req.body;
+
+    let finalRes = await triggerNotebook(31, request_data.entryId);
     if(finalRes !== 'Failed') {
         let metadata = JSON.parse(JSON.stringify(finalRes.result));
 
