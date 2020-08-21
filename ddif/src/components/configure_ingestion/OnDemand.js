@@ -47,16 +47,24 @@ export default function OnDemand(props){
     const classes = useStyles();
     
 
-    // const handleOk =()=>{
-    //     let data =[{
-    //         "Fileid":fileid,
-    //         "Delimiter":gddelimiter
-    //     }]
+    const handleOnDemandOk =()=>{
+        let data ={
+            "selectedTime":new Date().toISOString(),
+            "scheduleType":"",
+            "hours_minutes":0,
+            "weeks":"",
+            "startDate":new Date().toISOString(),
+            "endDate":new Date().toISOString()
+            
+        }
 
-    //     props.onPassGoogleDrive(data);
-    // }
+        props.onPassOnDemandSchedule(data);
+    }
 
     return(
-        <Button className={classes.buttonRoot} variant='contained' color ='primary'>Schedule Now</Button>
+        <Button className={classes.buttonRoot} variant='contained' color ='primary' onClick={(e)=>{
+            e.preventDefault();
+            handleOnDemandOk()
+            }}>OK</Button>
     )
 }

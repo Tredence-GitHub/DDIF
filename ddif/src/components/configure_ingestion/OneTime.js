@@ -50,36 +50,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function OnTime(props){
+export default function OneTime(props){
     const classes = useStyles();
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date());
-    const [selectedTime, setSelectedTime] = React.useState(new Date());
+    // const [selectedDate, setSelectedDate] = React.useState(new Date());
+    const [startTime, setStartTime] = React.useState(new Date().toISOString());
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-        console.log(selectedDate)
-    };
+    // const handleDateChange = (date) => {
+    //     setSelectedDate(date);
+    //     console.log(selectedDate)
+    // };
 
     const handleTimeChange = (date) => {
-        setSelectedTime(date);
-        console.log(selectedTime)
+        setStartTime(date);
+        // console.log(startTime)
     };
     
 
-    // const handleOk =()=>{
-    //     let data =[{
-    //         "Fileid":fileid,
-    //         "Delimiter":gddelimiter
-    //     }]
+    const handleOneTimeOk =()=>{
+        let data ={
+            "StartTime":startTime,
+        }
 
-    //     props.onPassGoogleDrive(data);
-    // }
+        props.onPassOneTimeSchedule(data);
+    }
 
     return(
         <div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            {/* <KeyboardDatePicker
           margin="normal"
           id="date-picker-dialog"
           label="Select Date"
@@ -89,33 +88,24 @@ export default function OnTime(props){
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
-        />
+        /> */}
 
             <KeyboardTimePicker
                     margin="normal"
                     id="time-picker"
                     label="Select Time"
-                    value={selectedTime}
+                    value={startTime}
                     onChange={handleTimeChange}
                     KeyboardButtonProps={{
                         'aria-label': 'change time',
                     }}
                     />
         </MuiPickersUtilsProvider>
-            <form className={classes.container} noValidate>
-                <TextField
-                    id="datetime-local"
-                    label="Next appointment"
-                    type="datetime-local"
-                    defaultValue="2017-05-24T10:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                />
-            </form>
         <div>
-        <Button className={classes.buttonRoot} variant='contained' color ='primary'>Schedule</Button>
+        <Button className={classes.buttonRoot} variant='contained' color ='primary' onClick={(e)=>{
+                                    e.preventDefault();
+                                    handleOneTimeOk()
+                                    }}>OK</Button>
         </div>
         </div>
         

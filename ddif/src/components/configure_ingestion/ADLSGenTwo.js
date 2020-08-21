@@ -58,7 +58,7 @@ const targetformats = [
     },
 ];
 
-export default function ADLSGenOne(props){
+export default function ADLSGenTwo(props){
     const classes = useStyles();
     const [ApplicationID, setApplicationID] = React.useState('');
     const [ApplicationCredential, setApplicationCredential] = React.useState('');
@@ -66,7 +66,9 @@ export default function ADLSGenOne(props){
     const [adlAccountName, setadlAccountName] = React.useState('');
     const [TargetFileType, setTargetFileType] = React.useState('');
     const [TargetFileDelimiter, setTargetFileDelimiter] = React.useState('');
-    const [Disabled, setDisabled] = React.useState(true)
+    const [Disabled, setDisabled] = React.useState(true);
+    const [errorinfo, seterrorinfo] = React.useState(false);
+    const [error, seterror]= React.useState('');
 
    
 
@@ -88,6 +90,15 @@ export default function ADLSGenOne(props){
 
     const handleChangeTargetFileDelimiter= (event) => {
         setTargetFileDelimiter(event.target.value);
+
+        if((event.target.value !== ',') && (event.target.value !== ';')){
+            seterrorinfo(true)
+            seterror("Invalid Delimiter")
+        }
+        else{
+            seterrorinfo(false)
+            seterror("")
+        }
     };
 
     const handleChangeTargetFileType= (event) => {
@@ -98,7 +109,7 @@ export default function ADLSGenOne(props){
         else{setDisabled(true)}
     };
 
-    const handleADLSGenOneOk =()=>{
+    const handleADLSGenTwoOk =()=>{
         let data ={
             "ApplicationID":ApplicationID,
             "ApplicationCredential":ApplicationCredential,
@@ -108,7 +119,7 @@ export default function ADLSGenOne(props){
             "TargetFileDelimiter":TargetFileDelimiter,
         }
 
-        props.onPassADLSGenOne(data);
+        props.onPassADLSGenTwo(data);
     }
 
 
@@ -209,6 +220,8 @@ export default function ADLSGenOne(props){
                                     label="Enter Delimiter"
                                     placeholder="Delimiter"
                                     disabled={Disabled}
+                                    error = {errorinfo}
+                                    helperText= {error}
                                     onChange={handleChangeTargetFileDelimiter}
                                     InputProps={{
                                         startAdornment: (
@@ -222,10 +235,10 @@ export default function ADLSGenOne(props){
                             <div>
                                 <Button variant="contained" color="primary" onClick={(e)=>{
                                     e.preventDefault();
-                                    handleADLSGenOneOk()
+                                    handleADLSGenTwoOk()
                                     }}>Ok</Button>
                             </div>
-                            {/* ADLS Gen 1 parameter ends */}
+                            {/* ADLS Gen 2 parameter ends */}
                         </form>
     )
 }

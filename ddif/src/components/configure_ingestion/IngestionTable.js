@@ -36,7 +36,12 @@ export default function IngestionTable(){
     const [tableData, settableData] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
+    
     let local = 'http://localhost:4000'
+ 
+    function scheduleNow(){
+
+    }
 
     function getInfo() {
         Promise.all(
@@ -75,7 +80,7 @@ if(!loading){
         <div>
         <Paper className={classes.paper}>
                         <Typography>Report Log</Typography>
-                        <TableContainer component={Paper}>
+                        <TableContainer component={Paper} style={{maxHeight:"460px"}}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -83,6 +88,7 @@ if(!loading){
                                         <TableCell><b>Job ID</b></TableCell>
                                         <TableCell><b>Project Name</b></TableCell>
                                         <TableCell><b>Status</b></TableCell>
+                                        <TableCell><b>Schedule Type</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -94,6 +100,14 @@ if(!loading){
                                             <TableCell >{row.jobname}</TableCell>
                                             <TableCell >{row.projectname}</TableCell>
                                             <TableCell >{row.status}</TableCell>
+                                            {row.Schedule.schedule_type==="On-Demand"?
+                                                <TableCell >
+                                                    <Button variant="contained" color='primary'> 
+                                                        {row.Schedule.schedule_type}
+                                                    </Button>
+                                                </TableCell>:
+                                                <TableCell >{row.Schedule.schedule_type}</TableCell> }
+                                            
 
                                         </TableRow>
                                     ))}
@@ -103,13 +117,15 @@ if(!loading){
                     </Paper>
         </div>
 
-        <div style={{marginTop:"20px"}}>
+        <div style={{marginTop:" 20px"}}>
+            <Grid container>
         <Grid direction="column" container justify="flex-start" alignItems="flex-start">
             <Button variant="contained" color='primary' onClick = {(e)=>{
                 e.preventDefault();
                 // window.location.href = "/ingestion/setup";
                 window.location.href = "/ingestion";
             }}>Fill form </Button>
+        </Grid>
         </Grid>
         </div>
         </div>
@@ -122,3 +138,6 @@ else{
     </div>)
 }
 }
+
+
+//https://levelup.gitconnected.com/react-material-table-crud-operations-with-restful-api-data-ca1af738d3c5

@@ -29,14 +29,17 @@ import Mysql from '../configure_ingestion/Mysql';
 import Hive from '../configure_ingestion/Hive';
 import AzureBlob from '../configure_ingestion/AzureBlob';
 import ADLSGenOne from '../configure_ingestion/ADLSGenOne';
+import ADLSGenTwo from './ADLSGenTwo';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import OnDemand from '../configure_ingestion/OnDemand';
 import OneTime from './OneTime'
+import FixedSchedule from './FixedSchedule';
 import Axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {useSnackbar} from 'notistack';
 
 
 const Accordion = withStyles({
@@ -188,11 +191,13 @@ function Setup() {
     const [expanded, setExpanded] = React.useState('panel1');
     const [sourceParams, setsourceParams] = React.useState({});
     const [targetParams, settargetParams] = React.useState({});
+    const [scheduleParams, setscheduleParams] = React.useState({});
     const [dropDownProject, setdropDownProject] = useState({})
     const [dropDownSource, setdropDownSource] = useState({})
     const [dropDownTarget, setdropDownTarget] = useState({})
     const [error, seterror] = useState(false)
-    const [loading, setloading] = useState(true)
+    const [loading, setloading] = useState(true);
+    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     let local = 'http://localhost:4000'
 
     function getInfo() {
@@ -301,7 +306,23 @@ function Setup() {
     const handleADLSGenOne =(data) =>{
         settargetParams(data)
     }
+    const handleADLSGenTwo =(data) =>{
+        settargetParams(data)
+    }
 
+    //Scheduler
+    const handleOneTimeSchedule = (data)=>{
+        setscheduleParams(data)
+    }
+
+    const handleFixedSchedule = (data)=>{
+        setscheduleParams(data)
+        // console.log(data,"8888888888");
+    }
+    const handleOnDemandSchedule = (data)=>{
+        setscheduleParams(data)
+        // console.log(data,"8888888888");
+    }
 
     
 
@@ -332,7 +353,7 @@ function Setup() {
             return <ADLSGenOne onPassADLSGenOne={handleADLSGenOne}/>
         }
         else if(targettype ===2){
-            return <div></div>
+            return <ADLSGenTwo onPassADLSGenTwo={handleADLSGenTwo}/>
         }
         else if(targettype ===3){
             return <div></div>
@@ -344,21 +365,21 @@ function Setup() {
     };
 
     const isFormValid = () => {
-        console.log(project,jobTitle ,rationale ,sourcetype ,targettype ,value, value2, Object.keys(sourceParams)[0], targetParams) ;
-        console.log(project>0 && jobTitle.length>0 && rationale.length>0 && sourcetype>0 && targettype>0 && value.length>0 && value2.length>0 && Object.keys(sourceParams)[0].length>0 && Object.keys(targetParams)[0].length>0);
+        // console.log(project,jobTitle ,rationale ,sourcetype ,targettype ,value, value2, Object.keys(sourceParams)[0], targetParams) ;
+        // console.log(project>0 && jobTitle.length>0 && rationale.length>0 && sourcetype>0 && targettype>0 && value.length>0 && value2.length>0 && Object.keys(sourceParams)[0].length>0 && Object.keys(targetParams)[0].length>0);
         return project>0 && jobTitle.length>0 && rationale.length>0 && sourcetype>0 && targettype>0 && value.length>0 && value2.length>0 && Object.keys(sourceParams)[0].length>0 && Object.keys(targetParams)[0].length>0
       };
     console.log(sourceParams,"5%%%")
 
       const ScheduleDisplay = () =>{
         if (value ==='On-Demand') {
-            return <OnDemand/>
+            return <OnDemand onPassOnDemandSchedule={handleOnDemandSchedule}/>
         }
         else if(value ==='One-Time'){
-            return <OneTime/>
+            return <OneTime onPassOneTimeSchedule={handleOneTimeSchedule}/>
         }
-        else if(sourcetype ==='Fixed Schedule'){
-            return <div></div>
+        else if(value ==='Fixed Schedule'){
+            return <FixedSchedule onPassFixedSchedule={handleFixedSchedule}/>
         }
         else{
             return <div></div>
@@ -387,15 +408,26 @@ function Setup() {
             target_parameter:targetParams,
             source_query:sourceParams.sourceQuery,
             target_file_type: targetParams.TargetFileType,
-            target_file_delimiter: targetParams.TargetFileDelimiter
+            target_file_delimiter: targetParams.TargetFileDelimiter,
+            schedule_type:value,
+            recurrence_type:scheduleParams.scheduleType,
+            recurrence:Number(scheduleParams.hours_minutes),
+            days:scheduleParams.weeks,
+            start_time:scheduleParams.selectedTime,
+            start_date:scheduleParams.startDate,
+            end_date:scheduleParams.endDate
         }
         console.log(param)
+        console.log(typeof(param.start_date))
         let resp = Axios.post(`${local}/ingestion/setupDataSave`,param
 
         ).then((response) => {
             console.log(response);
             if (response.status === 200) {
                console.log(response);
+            // enqueueSnackbar("Success", {
+            //     variant: 'success',
+            // })
             //    window.location.href = "/ingestion/metadata";
 
             // Redirection to metadata tab
@@ -406,6 +438,9 @@ function Setup() {
                 // setMsg('You are not registered with us! Please register!')
                 // // alert('You are not registered with us! Please register!')
                 // // return window.location.href = "/";
+                // enqueueSnackbar("Failed", {
+                //     variant: 'warning',
+                // })
             }
 
         }).catch((err) => {
@@ -414,8 +449,13 @@ function Setup() {
             // setMsg('You are not registered with us! Please register!')
             // // alert('You are not registered with us! Please register!')
             // // return window.location.href = "/";
+            // enqueueSnackbar("Failed", {
+            //     variant: 'warning',
+            // })
         });
     }
+
+
 
 
     if(!loading){

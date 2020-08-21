@@ -1,6 +1,6 @@
 .MuiDrawer-paperAnchorBottom {
-    width:450px;
-    margin-left:63%;
+    /* width:450px; */
+    margin-left:75%;
     max-height:50% !important;
     height:280px
 }
@@ -8,9 +8,9 @@
 .MuiPaper-root.MuiDrawer-paperAnchorRight {
     max-width: 250px;
     margin-top: 1px;
-    background: none;
+    /* background: none; */
     border: none;
-    /* max-height: 80%; */
+    /* max-height: 50%; */
 }
 
 .MuiListItemText-root { 
