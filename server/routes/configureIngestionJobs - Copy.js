@@ -2,8 +2,6 @@ const db = require('../config/db.js');
 const express = require('express');
 const Router = express.Router();
 const notebook = require('./notebooks/notebook.js');
-const Moment = require('moment');
-const { resolve } = require('path');
 
 
 // get all the information for the data table
@@ -107,14 +105,14 @@ Router.post('/setupDataSave', (req, res)=>{
                     let saveSchedule = new Promise((resolve, reject) =>{
                         db.Schedule.create({
                         job_id: result.entryId,
-                        jobname: request_data.jobname,
+                        jobname: jobID,
                         schedule_type: request_data.schedule_type,
                         recurrence_type: request_data.recurrence_type,
                         recurrence: request_data.recurrence,
                         days: request_data.days,
-                        start_time: Moment(request_data.start_time).format("YYYY-MM-DD HH:mm:ss"),
-                        start_date: Moment(request_data.start_date).format("YYYY-MM-DD HH:mm:ss"),
-                        end_date: Moment(request_data.end_date).format("YYYY-MM-DD HH:mm:ss")
+                        start_time: request_data.start_time,
+                        start_date: request_data.start_date,
+                        end_date: request_data.end_date
 
                     }).then((scheduleRes)=>{
                         resolve(JSON.parse(JSON.stringify(scheduleRes)));
@@ -140,6 +138,8 @@ Router.post('/setupDataSave', (req, res)=>{
                             
                             resolve(JSON.parse(JSON.stringify(parametersRes)));
                             
+    
+                            
                         }).catch((err)=>{
                             console.log(err)
                             reject(err);
@@ -147,12 +147,12 @@ Router.post('/setupDataSave', (req, res)=>{
                     }) 
                     
                     Promise.all([saveParameters, saveSchedule]).then((results)=>{
-                        let frameFinal = {};
-                            frameFinal['entry_id'] = result.entryId;
-                            frameFinal['parameters'] = JSON.parse(JSON.stringify(saveParameters));
-                            frameFinal['Schedule'] = JSON.parse(JSON.stringify(saveSchedule));
                         console.log(results[0], results[1]);
-                        if(results[0] !={} && results[1]!={}){
+                        let frameFinal = {};
+                        frameFinal['parameters'] = results[0];
+                        frameFinal['schedule'] = results[1];
+                        frameFinal['entryId'] = result.entryId;
+                        if(results[0].length > 0 && results[1].length > 0){
                             res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(frameFinal)) });
                         }else{
                             res.status(400).json({message: 'failed', error: []})
@@ -178,8 +178,7 @@ Router.post('/setupDataSave', (req, res)=>{
         res.status(400).json({message: 'failed', error: [err]})    
     })
 })
-
-const triggerNotebook = async (jobId, entryId) => {
+const triggerNotebook = async (jobId) => {
     const data = {
         'job_id': jobId,
         'notebook_params': {
@@ -202,10 +201,8 @@ const triggerNotebook = async (jobId, entryId) => {
     
 }
 
-Router.post('/api/getMetadata',async (req, res) => {
-    let request_data = req.body;
-
-    let finalRes = await triggerNotebook(31, request_data.entryId);
+Router.get('/api/getMetadata',async (req, res) => {
+    let finalRes = await triggerNotebook(31);
     if(finalRes !== 'Failed') {
         let metadata = JSON.parse(JSON.stringify(finalRes.result));
 
@@ -214,154 +211,6 @@ Router.post('/api/getMetadata',async (req, res) => {
         res.status(400).json({message: 'failed', data: finalRes})
 
     }
-})
-
-
-//UPDATE API for SET UP PAGE
-
-Router.post('/updateSetupDBData', (req, res)=>{
-    let request_data = req.body;
-    
-    let jobID = `JOB_${request_data.source_abbrv}_${request_data.target_abbrv}_${result.entryId}`;
-    
-    let DataCatalogData = {
-        username: request_data.username,
-        rationale: request_data.rationale,
-        projectname: request_data.projectname,
-        project_type: request_data.project_type,
-        jobname: jobID,
-        created_by: request_data.created_by,
-        created_at: request_data.created_at,
-        source_type: request_data.source_type,
-        target_type: request_data.target_type,
-        status: request_data.status,
-        operation: request_data.operation,
-        updated_at: new Date(),
-        updated_by: request_data.updated_by,
-        status_changed_at: new Date()
-    }
-    let updateDataCatalog = new Promise((resolve, reject) => {
-                db.DataCatalog.update(DataCatalogData,{
-                where: {
-                    entryId: request_data.entryId
-                }
-            }).then((result1)=>{
-                resolve(JSON.parse(JSON.stringify(resp)));
-            }).catch((err)=>{
-                reject(err);
-            })
-    })
-
-    let ScheduleData = {
-        jobname: request_data.jobname,
-        schedule_type: request_data.schedule_type,
-        recurrence_type: request_data.recurrence_type,
-        recurrence: request_data.recurrence,
-        days: request_data.days,
-        start_time: Moment(request_data.start_time).format("YYYY-MM-DD HH:mm:ss"),
-        start_date: Moment(request_data.start_date).format("YYYY-MM-DD HH:mm:ss"),
-        end_date: Moment(request_data.end_date).format("YYYY-MM-DD HH:mm:ss")
-
-    }
-
-    let updateScheduleData = new Promise((resolve, reject) => {
-        db.Schedule.update(ScheduleData,{
-        where: {
-            job_id: request_data.entryId
-        }
-        }).then((result1)=>{
-            resolve(JSON.parse(JSON.stringify(resp)));
-        }).catch((err)=>{
-            reject(err);
-        })
-    })
-
-    let ParametersData = {
-            SourceType: request_data.source_type,
-            SourceParameter: JSON.stringify(request_data.source_parameter),
-            SourceQuery: request_data.source_query,
-            TargetType: request_data.target_type,
-            TargetParameter:JSON.stringify(request_data.target_parameter),
-            TargetFileType: request_data.target_file_type,
-            TargetFileDelimiter: request_data.target_file_delimiter
-
-        }
-    let updateParametersData = new Promise((resolve, reject) => {
-            db.Parameters.update(ParametersData,{
-            where: {
-                entry_id: request_data.entryId
-            }
-                }).then((result1)=>{
-                    resolve(JSON.parse(JSON.stringify(resp)));
-                }).catch((err)=>{
-                    reject(err);
-                })
-        });
-
-        Promise.all([updateDataCatalog, updateScheduleData, updateParametersData])
-            .then((results)=>{
-                console.log(results);
-                res.status(200).json({message: 'Updated successfully ', entryId: request_data.entryId ,data: JSON.parse(JSON.stringify(result))});
-            }).catch((err)=>{
-                res.status(400).json({message: 'Failed'});
-            })
-})
-
-// create or update metadata records
-Router.post('/saveMetadata', (req, res)=>{
-    let entryId = req.body.entryId;
-    let request_data = req.body;
-
-    db.Metadata.destroy({
-        entry_id: entryId
-    }).then((result)=>{
-        for(let i = 0; i < request_data.length; i++){
-            request_data[i]['entry_id'] = entryId;
-            db.Metadata.create(request_data)
-            .then((result)=>{
-                if(i === request_data.length-1){
-                    res.status(200).json({message: 'Successful', data: [], entry_id: entryId});
-                }
-            }).catch((err)=>{
-                console.log('error -- looping --', err )
-                res.status(400).json({message: 'Failed', error: [err]})
-            })
-
-        }
-    }).catch((err)=>{
-        console.log(err);
-        res.status(400).json({message: 'Failed to add records'})
-    })
-})
-
-// get Metadata for entryId
-Router.get('/getMetadata/:entryId', (req, res)=>{
-    let entryId = req.params.entryId;
-
-    db.Metadata.findAll({
-        where: {
-            entry_id: entryId
-        }
-    }).then((result)=>{
-        res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(result))})
-    }).catch((err)=>{
-        res.status(400).json({message: 'Failed to fetch metadata'})
-    })
-})
-
-Router.get('/api/getEntryData/:entryId', (req, res)=>{
-    let entryId = req.params.entryId;
-
-    db.DataCatalog.findAll({
-        include: [db.Schedule, db.Parameters],
-        where:{
-            entry_id: parseInt(entryId)
-        }
-    }).then((result)=>{
-        res.status(200).json({data: JSON.parse(JSON.stringify(result))});
-    }).catch((err)=>{
-        res.status(400).json({message: 'Failed'});
-    })
 })
 
 module.exports = Router;

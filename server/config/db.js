@@ -35,9 +35,12 @@ db.Announcements = require('../models/announcementsDb.js')(sequelize, Sequelize)
 db.Parameters = require('../models/parametersDb.js')(sequelize, Sequelize);
 db.DataTargets = require('../models/dataTargetsDb.js')(sequelize, Sequelize);
 db.Schedule = require('../models/scheduleJobDb.js')(sequelize, Sequelize);
+db.Connections = require('../models/connectionStringsDb.js')(sequelize, Sequelize);
+db.Metadata = require('../models/metadataDb.js')(sequelize, Sequelize);
 
 db.Announcements.belongsTo(db.DataCatalog, {foreignKey: 'entry_id'});
 db.DataCatalog.belongsTo(db.Schedule, {foreignKey: 'entryId'});
+db.DataCatalog.belongsTo(db.Parameters, {foreignKey: 'entryId'});
 
 module.exports = db;
 

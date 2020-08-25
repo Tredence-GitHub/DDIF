@@ -9,6 +9,8 @@ import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
+import PersonIcon from '@material-ui/icons/Person';
+
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import Tooltip from '@material-ui/core/Tooltip';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -58,24 +60,7 @@ export default function ListItems() {
     return (
         <div>
             <Paper elevation={0}>
-                {/* <MenuList aria-label="main mailbox folders">
-                    <MenuItem to="/home" component={Link}>
-                        <ListItemIcon>
-                        <Tooltip title="Home Page">
-                            <HomeIcon fontSize="small" />
-                        </Tooltip>
-                        </ListItemIcon>
-                    </MenuItem> */}
-                {/* <MenuItem to="/ingestion/setup"  component={Link}> */}
-                {/* <MenuItem to="/ingestiontable"  component={Link}>
-                        <ListItemIcon>
-                        <Tooltip title="Configue Ingestion Job">
-                            <BarChartIcon fontSize="small" />
-                        </Tooltip>
-                        </ListItemIcon>
-                    </MenuItem>
-                </MenuList> */}
-
+                
                 <List
                     component="nav"
                     aria-labelledby="nested-list-subheader"
@@ -101,6 +86,15 @@ export default function ListItems() {
                         </Tooltip>
                         </ListItemIcon>
                         <ListItemText primary="Configue Ingestion Job" />
+                    </ListItem>
+                    <ListItem to="/admin"  component={Link} button >
+                        <ListItemIcon>
+                        <Tooltip title="Administration">
+                            <PersonIcon fontSize="small" />
+                        </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary="Job Monitor" />
+                        {open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     <ListItem button onClick={handleClick}>
                         <ListItemIcon>

@@ -31,6 +31,9 @@ import Register from './Register';
 import Ingestion from './Ingestion';
 import ChangePassword from './ChangePassword';
 import IngestionTable from './configure_ingestion/IngestionTable';
+import Administration from './administrator/administration';
+import SourceDetails from './administrator/sourceDetails';
+import TargetDetails from './administrator/targetDetails';
 
 const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
@@ -233,7 +236,7 @@ export default function Layout() {
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     <Container maxWidth="lg" className={classes.container}>
-                        <Paper>
+                        {/* <Paper> */}
                             <Switch>
                                 <Fragment>
                                     <Route exact path="/home" >
@@ -247,10 +250,20 @@ export default function Layout() {
                                     <Route exact path="/ingestiontable" >
                                         <IngestionTable/>
                                     </Route>
+                                    <Route exact path="/admin">
+                                        <Administration/>
+                                    </Route>
+                                    <Route path = {['/addSource','/addSource/:param']}>
+                                        <SourceDetails/>
+                                    </Route>
+                                   
+                                    <Route exact  path = {['/addTarget','/addTarget/:param']}>
+                                        <TargetDetails/>
+                                    </Route>
                                 </Fragment>
                             </Switch>
 
-                        </Paper>
+                        {/* </Paper> */}
                     </Container>
 
                 </main>
