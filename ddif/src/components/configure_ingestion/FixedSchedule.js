@@ -170,8 +170,8 @@ export default function FixedSchedule(props) {
 
     return (
         <div>
-            <form className={classes.root} noValidate autoComplete="off">
-            <div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardTimePicker
                         margin="normal"
@@ -184,9 +184,9 @@ export default function FixedSchedule(props) {
                         }}
                     />
                 </MuiPickersUtilsProvider>
-            </div>
+                </Grid>
 
-            <div >
+                <Grid item xs={4} direction="column" container>
                 <TextField
                     id="scheduletype"
                     select
@@ -208,9 +208,10 @@ export default function FixedSchedule(props) {
                         </MenuItem>
                     ))}
                 </TextField>
-            </div>
+            </Grid>
 
             <div style={{ display: hiddenminute }}>
+            <Grid item xs={4} direction="column" container>
                 <TextField
                     id=" minutes"
                     label="Enter minutes"
@@ -225,9 +226,11 @@ export default function FixedSchedule(props) {
                         ),
                     }}
                 />
+                </Grid>
             </div>
 
             <div style={{ display: hiddenhour}}>
+            <Grid item xs={4} direction="column" container>
                 <TextField
                     id=" hours"
                     label="Enter Hour"
@@ -242,6 +245,7 @@ export default function FixedSchedule(props) {
                         ),
                     }}
                 />
+                </Grid>
             </div>
 
             {/* <div style={{ display: hiddenday}}>
@@ -261,6 +265,7 @@ export default function FixedSchedule(props) {
             </div> */}
 
             <div style={{ display: hiddenweek }}>
+            <Grid item xs={4} direction="column" container>
                 <TextField
                     id="weekly"
                     label="Enter your choice"
@@ -274,9 +279,12 @@ export default function FixedSchedule(props) {
                         ),
                     }}
                 />
+                </Grid>
             </div>
+            </Grid>
 
-            <div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         margin="normal"
@@ -289,7 +297,11 @@ export default function FixedSchedule(props) {
                             'aria-label': 'change date',
                         }}
                     />
+                    </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={4} direction="column" container>
 
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         margin="normal"
                         id="date-picker-dialog-end"
@@ -302,15 +314,15 @@ export default function FixedSchedule(props) {
                         }}
                     />
                 </MuiPickersUtilsProvider>
-            </div>
+                </Grid>
+            </Grid>
 
-            <div style={{ marginTop: "30px" }}>
+            <Grid item container spacing={2} style={{ marginTop: "30px" }}>
                 <Button className={classes.buttonRoot} variant='contained' color='primary' onClick={(e)=>{
                                     e.preventDefault();
                                     handleFixedScheduleOk()
                                     }}>OK</Button>
-            </div>
-            </form>
+            </Grid>
         </div>
 
     )

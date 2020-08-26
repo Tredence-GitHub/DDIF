@@ -58,7 +58,7 @@ const targetformats = [
     },
 ];
 
-export default function ADLSGenOne(props){
+export default function ADLSGenOne(props) {
     const classes = useStyles();
     const [ApplicationID, setApplicationID] = React.useState('');
     const [ApplicationCredential, setApplicationCredential] = React.useState('');
@@ -68,55 +68,55 @@ export default function ADLSGenOne(props){
     const [TargetFileDelimiter, setTargetFileDelimiter] = React.useState('');
     const [Disabled, setDisabled] = React.useState(true);
     const [errorinfo, seterrorinfo] = React.useState(false);
-    const [error, seterror]= React.useState('');
+    const [error, seterror] = React.useState('');
 
-   
 
-    const handleChangeApplicationID= (event) => {
+
+    const handleChangeApplicationID = (event) => {
         setApplicationID(event.target.value);
     };
 
-    const handleChangeApplicationCredential= (event) => {
+    const handleChangeApplicationCredential = (event) => {
         setApplicationCredential(event.target.value);
     };
 
-    const handleChangeDirectoryID= (event) => {
+    const handleChangeDirectoryID = (event) => {
         setDirectoryID(event.target.value);
     };
 
-    const handleChangeadlAccountName= (event) => {
+    const handleChangeadlAccountName = (event) => {
         setadlAccountName(event.target.value);
     };
 
-    const handleChangeTargetFileDelimiter= (event) => {
+    const handleChangeTargetFileDelimiter = (event) => {
         setTargetFileDelimiter(event.target.value);
 
-        if((event.target.value !== ',') && (event.target.value !== ';')){
+        if ((event.target.value !== ',') && (event.target.value !== ';')) {
             seterrorinfo(true)
             seterror("Invalid Delimiter")
         }
-        else{
+        else {
             seterrorinfo(false)
             seterror("")
         }
     };
 
-    const handleChangeTargetFileType= (event) => {
+    const handleChangeTargetFileType = (event) => {
         setTargetFileType(event.target.value);
-        if (event.target.value==='csv') {
+        if (event.target.value === 'csv') {
             setDisabled(false)
         }
-        else{setDisabled(true)}
+        else { setDisabled(true) }
     };
 
-    const handleADLSGenOneOk =()=>{
-        let data ={
-            "ApplicationID":ApplicationID,
-            "ApplicationCredential":ApplicationCredential,
-            "DirectoryID":DirectoryID,
-            "adlAccountName":adlAccountName,
-            "TargetFileType":TargetFileType,
-            "TargetFileDelimiter":TargetFileDelimiter,
+    const handleADLSGenOneOk = () => {
+        let data = {
+            "ApplicationID": ApplicationID,
+            "ApplicationCredential": ApplicationCredential,
+            "DirectoryID": DirectoryID,
+            "adlAccountName": adlAccountName,
+            "TargetFileType": TargetFileType,
+            "TargetFileDelimiter": TargetFileDelimiter,
         }
 
         props.onPassADLSGenOne(data);
@@ -124,121 +124,125 @@ export default function ADLSGenOne(props){
 
 
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+    return (
         <div>
-                            <TextField
-                                    id="ApplicationID"
-                                    label="Enter ApplicationID"
-                                    placeholder="ApplicationID"
-                                    onChange={handleChangeApplicationID}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+        <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="ApplicationID"
+                    label="Enter ApplicationID"
+                    placeholder="ApplicationID"
+                    onChange={handleChangeApplicationID}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" ApplicationCredential"
-                                    label="Enter ApplicationCredential"
-                                    placeholder="ApplicationCredential"
-                                    onChange={handleChangeApplicationCredential}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" ApplicationCredential"
+                    label="Enter ApplicationCredential"
+                    placeholder="ApplicationCredential"
+                    onChange={handleChangeApplicationCredential}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id="DirectoryID"
-                                    label="Enter DirectoryID"
-                                    placeholder="DirectoryID"
-                                    onChange={handleChangeDirectoryID}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="DirectoryID"
+                    label="Enter DirectoryID"
+                    placeholder="DirectoryID"
+                    onChange={handleChangeDirectoryID}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id="adlAccountName"
-                                    label="Enter adlAccountName"
-                                    placeholder="adlAccountName"
-                                    onChange={handleChangeadlAccountName}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="adlAccountName"
+                    label="Enter adlAccountName"
+                    placeholder="adlAccountName"
+                    onChange={handleChangeadlAccountName}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id="TargetFileType"
-                                    select
-                                    label="Enter Format"
-                                    value={TargetFileType}
-                                    onChange={handleChangeTargetFileType}
-                                    helperText="Please select the format"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <VerifiedUserIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                >
-                                    {targetformats.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="TargetFileType"
+                    select
+                    label="Enter Format"
+                    value={TargetFileType}
+                    onChange={handleChangeTargetFileType}
+                    helperText="Please select the format"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <VerifiedUserIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                >
+                    {targetformats.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id="TargetFileDelimiter"
-                                    label="Enter Delimiter"
-                                    placeholder="Delimiter"
-                                    disabled={Disabled}
-                                    error = {errorinfo}
-                                    helperText= {error}
-                                    onChange={handleChangeTargetFileDelimiter}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleADLSGenOneOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* ADLS Gen 1 parameter ends */}
-                        </form>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="TargetFileDelimiter"
+                    label="Enter Delimiter"
+                    placeholder="Delimiter"
+                    disabled={Disabled}
+                    error={errorinfo}
+                    helperText={error}
+                    onChange={handleChangeTargetFileDelimiter}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid >
+            <Grid item container spacing={2}>
+                <Button variant="contained" color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    handleADLSGenOneOk()
+                }}>Ok</Button>
+            </Grid>
+            </Grid>
+            {/* ADLS Gen 1 parameter ends */}
+        </div>
     )
 }

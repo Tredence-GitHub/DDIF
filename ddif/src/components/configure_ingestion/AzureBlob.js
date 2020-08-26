@@ -58,7 +58,7 @@ const formats = [
     },
 ];
 
-export default function AzureBlob(props){
+export default function AzureBlob(props) {
     const classes = useStyles();
     const [StorageAccountAccessKey, setStorageAccountAccessKey] = React.useState('');
     const [StorageAccountName, setStorageAccountName] = React.useState('');
@@ -68,166 +68,170 @@ export default function AzureBlob(props){
     const [blobDelimiter, setblobDelimiter] = React.useState('');
     const [Disabled, setDisabled] = React.useState(true)
 
-    
 
-    const handleChangeStorageAccountAccessKey= (event) => {
+
+    const handleChangeStorageAccountAccessKey = (event) => {
         setStorageAccountAccessKey(event.target.value);
     };
 
-    const handleChangeStorageAccountName= (event) => {
+    const handleChangeStorageAccountName = (event) => {
         setStorageAccountName(event.target.value);
     };
 
-    const handleChangeContainerName= (event) => {
+    const handleChangeContainerName = (event) => {
         setContainerName(event.target.value);
     };
 
-    const handleChangePath= (event) => {
+    const handleChangePath = (event) => {
         setPath(event.target.value);
     };
 
-    const handleChangeblobDelimiter= (event) => {
+    const handleChangeblobDelimiter = (event) => {
         setblobDelimiter(event.target.value);
     };
 
-    const handleChangeFormat= (event) => {
+    const handleChangeFormat = (event) => {
         setFormat(event.target.value);
-        if (event.target.value==='csv') {
+        if (event.target.value === 'csv') {
             setDisabled(false)
         }
-        else{setDisabled(true)}
+        else { setDisabled(true) }
     };
 
 
-    const handleAzureBlobOk =()=>{
-        let data ={
-            "StorageAccountAccessKey":StorageAccountAccessKey,
-            "StorageAccountName":StorageAccountName,
-            "StorageAccountName":StorageAccountName,
-            "ContainerName":ContainerName,
-            "Path":Path,
-            "Format":Format,
-            "blobDelimiter":blobDelimiter,
-            "sourceQuery":""
+    const handleAzureBlobOk = () => {
+        let data = {
+            "StorageAccountAccessKey": StorageAccountAccessKey,
+            "StorageAccountName": StorageAccountName,
+            "StorageAccountName": StorageAccountName,
+            "ContainerName": ContainerName,
+            "Path": Path,
+            "Format": Format,
+            "blobDelimiter": blobDelimiter,
+            "sourceQuery": ""
         }
 
         props.onPassAzureBlob(data);
     }
 
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+    return (
         <div>
-                            <TextField
-                                    id="StorageAccountAccessKey"
-                                    label="Enter StorageAccountAccessKey"
-                                    placeholder="StorageAccountAccessKey"
-                                    onChange={handleChangeStorageAccountAccessKey}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container spacing={2}>
+                <Grid item xs={4} direction="column" container>
+                    <TextField
+                        id="StorageAccountAccessKey"
+                        label="Enter StorageAccountAccessKey"
+                        placeholder="StorageAccountAccessKey"
+                        onChange={handleChangeStorageAccountAccessKey}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" StorageAccountName"
-                                    label="Enter StorageAccountName"
-                                    placeholder="StorageAccountName"
-                                    onChange={handleChangeStorageAccountName}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+                <Grid item xs={4} direction="column" container>
+                    <TextField
+                        id=" StorageAccountName"
+                        label="Enter StorageAccountName"
+                        placeholder="StorageAccountName"
+                        onChange={handleChangeStorageAccountName}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" ContainerName"
-                                    label="Enter ContainerName"
-                                    placeholder="ContainerName"
-                                    onChange={handleChangeContainerName}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+                <Grid item xs={4} direction="column" container>
+                    <TextField
+                        id=" ContainerName"
+                        label="Enter ContainerName"
+                        placeholder="ContainerName"
+                        onChange={handleChangeContainerName}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Grid>
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" Path"
-                                    label="Enter Path"
-                                    placeholder="Path"
-                                    onChange={handleChangePath}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+                <Grid container spacing={2}>
+                    <Grid item xs={4} direction="column" container>
+                        <TextField
+                            id=" Path"
+                            label="Enter Path"
+                            placeholder="Path"
+                            onChange={handleChangePath}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <PersonIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
 
-                            <div>
-                            <TextField
-                                    id="Format"
-                                    select
-                                    label="Enter Format"
-                                    value={Format}
-                                    onChange={handleChangeFormat}
-                                    helperText="Please select the format"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <VerifiedUserIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                >
-                                    {formats.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
+                    <Grid item xs={4} direction="column" container>
+                        <TextField
+                            id="Format"
+                            select
+                            label="Enter Format"
+                            value={Format}
+                            onChange={handleChangeFormat}
+                            helperText="Please select the format"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <VerifiedUserIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        >
+                            {formats.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" blobDelimiter"
-                                    label="Enter Delimiter"
-                                    placeholder="Delimiter"
-                                    disabled={Disabled}
-                                    onChange={handleChangeblobDelimiter}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleAzureBlobOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* AzureBlob parameter ends */}
-                        </form>
+                    <Grid item xs={4} direction="column" container>
+                        <TextField
+                            id=" blobDelimiter"
+                            label="Enter Delimiter"
+                            placeholder="Delimiter"
+                            disabled={Disabled}
+                            onChange={handleChangeblobDelimiter}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <PersonIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Grid>
+                    <Grid item container spacing={2}>
+                        <Button variant="contained" color="primary" onClick={(e) => {
+                            e.preventDefault();
+                            handleAzureBlobOk()
+                        }}>Ok</Button>
+                    </Grid>
+                </Grid>
+                </div>
+            // {/* AzureBlob parameter ends */}
     )
 }

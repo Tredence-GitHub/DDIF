@@ -62,9 +62,11 @@ export default function OnDemand(props){
     }
 
     return(
+        <Grid container spacing={2}>
         <Button className={classes.buttonRoot} variant='contained' color ='primary' onClick={(e)=>{
             e.preventDefault();
             handleOnDemandOk()
             }}>OK</Button>
+        </Grid>
     )
 }

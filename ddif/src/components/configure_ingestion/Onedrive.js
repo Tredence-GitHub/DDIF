@@ -43,86 +43,86 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Onedrive(props){
+export default function Onedrive(props) {
     const classes = useStyles();
     const [odlink, setodLink] = React.useState('');
     const [oddelimiter, setodDelimiter] = React.useState('');
     const [errorinfo, seterrorinfo] = React.useState(false);
-    const [error, seterror]= React.useState('');
+    const [error, seterror] = React.useState('');
 
-    const handleChangeodLink= (event) => {
+    const handleChangeodLink = (event) => {
         setodLink(event.target.value);
-        // props.onPassOneDrive(event.target.value);
     };
 
-    const handleChangeodDelimiter= (event) => {
+    const handleChangeodDelimiter = (event) => {
         setodDelimiter(event.target.value);
-        // props.onPassOneDrive(event.target.value);
-        if((event.target.value !== ',') && (event.target.value !== ';')){
+        if ((event.target.value !== ',') && (event.target.value !== ';')) {
             seterrorinfo(true)
             seterror("Invalid Delimiter")
         }
-        else{
+        else {
             seterrorinfo(false)
             seterror("")
         }
-        
+
     };
 
-    const handleOneDriveOk =()=>{
-        let data ={
-            "Link":odlink,
-            "Delimiter":oddelimiter,
-            "sourceQuery":""
+    const handleOneDriveOk = () => {
+        let data = {
+            "Link": odlink,
+            "Delimiter": oddelimiter,
+            "sourceQuery": ""
         }
 
         props.onPassOneDrive(data);
     }
 
-    
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+
+    return (
         <div>
-                            <TextField
-                                    id="link"
-                                    label="Enter One Drive Link"
-                                    placeholder="Link"
-                                    onChange={handleChangeodLink}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container  spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="link"
+                    label="Enter One Drive Link"
+                    placeholder="Link"
+                    onChange={handleChangeodLink}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" odDelimiter"
-                                    label="Enter Delimiter"
-                                    placeholder="Delimiter"
-                                    onChange={handleChangeodDelimiter}
-                                    error = {errorinfo}
-                                    helperText= {error}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleOneDriveOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* One drive parameter ends */}
-                        </form>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" odDelimiter"
+                    label="Enter Delimiter"
+                    placeholder="Delimiter"
+                    onChange={handleChangeodDelimiter}
+                    error={errorinfo}
+                    helperText={error}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item container spacing={2} >
+                <Button variant="contained" color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    handleOneDriveOk()
+                }}>Ok</Button>
+            </Grid>
+            </Grid>
+            {/* One drive parameter ends */}
+            </div>
     )
 }

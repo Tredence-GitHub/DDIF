@@ -77,6 +77,8 @@ export default function OneTime(props){
 
     return(
         <div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
             {/* <KeyboardDatePicker
           margin="normal"
@@ -107,6 +109,8 @@ export default function OneTime(props){
                                     handleOneTimeOk()
                                     }}>OK</Button>
         </div>
+        </Grid>
+        </Grid>
         </div>
         
     )

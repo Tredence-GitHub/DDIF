@@ -43,81 +43,83 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Googledrive(props){
+export default function Googledrive(props) {
     const classes = useStyles();
     const [fileid, setFileid] = React.useState('');
     const [gddelimiter, setgdDelimiter] = React.useState('');
     const [errorinfo, seterrorinfo] = React.useState(false);
-    const [error, seterror]= React.useState('');
+    const [error, seterror] = React.useState('');
 
-    const handleChangeFileid= (event) => {
+    const handleChangeFileid = (event) => {
         setFileid(event.target.value);
     };
 
-    const handleChangegdDelimiter= (event) => {
+    const handleChangegdDelimiter = (event) => {
         setgdDelimiter(event.target.value);
-        if((event.target.value !== ',') && (event.target.value !== ';')){
+        if ((event.target.value !== ',') && (event.target.value !== ';')) {
             seterrorinfo(true)
             seterror("Invalid Delimiter")
         }
-        else{
+        else {
             seterrorinfo(false)
             seterror("")
         }
     };
 
-    const handleGoogleDriveOk =()=>{
-        let data ={
-            "Fileid":fileid,
-            "Delimiter":gddelimiter,
-            "sourceQuery":""
+    const handleGoogleDriveOk = () => {
+        let data = {
+            "Fileid": fileid,
+            "Delimiter": gddelimiter,
+            "sourceQuery": ""
         }
 
         props.onPassGoogleDrive(data);
     }
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+    return (
         <div>
-                            <TextField
-                                    id="FileId"
-                                    label="Enter File ID"
-                                    placeholder="File ID"
-                                    onChange={handleChangeFileid}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="FileId"
+                    label="Enter File ID"
+                    placeholder="File ID"
+                    onChange={handleChangeFileid}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id="gdDelimiter"
-                                    label="Enter Delimiter"
-                                    placeholder="Delimiter"
-                                    onChange={handleChangegdDelimiter}
-                                    error = {errorinfo}
-                                    helperText= {error}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleGoogleDriveOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* One drive parameter ends */}
-                        </form>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="gdDelimiter"
+                    label="Enter Delimiter"
+                    placeholder="Delimiter"
+                    onChange={handleChangegdDelimiter}
+                    error={errorinfo}
+                    helperText={error}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item container spacing={2}>
+                <Button variant="contained" color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    handleGoogleDriveOk()
+                }}>Ok</Button>
+            </Grid>
+            </Grid>
+            {/* One drive parameter ends */}
+            </div>
     )
 }

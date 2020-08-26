@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Hive(props){
+export default function Hive(props) {
     const classes = useStyles();
     const [odbcHostname, setodbcHostname] = React.useState('');
     const [odbcUsername, setodbcUsername] = React.useState('');
@@ -51,33 +51,33 @@ export default function Hive(props){
     const [odbcDatabaseName, setodbcDatabaseName] = React.useState('');
     const [sourceQuery, setsourceQuery] = React.useState('');
 
-    const handleChangeodbcHostname= (event) => {
+    const handleChangeodbcHostname = (event) => {
         setodbcHostname(event.target.value);
     };
 
-    const handleChangeodbcUsername= (event) => {
+    const handleChangeodbcUsername = (event) => {
         setodbcUsername(event.target.value);
     };
 
-    const handleChangeodbcPassword= (event) => {
+    const handleChangeodbcPassword = (event) => {
         setodbcPassword(event.target.value);
     };
 
-    const handleChangeodbcDatabaseName= (event) => {
+    const handleChangeodbcDatabaseName = (event) => {
         setodbcDatabaseName(event.target.value);
     };
 
-    const handleChangesourceQuery= (event) => {
+    const handleChangesourceQuery = (event) => {
         setsourceQuery(event.target.value);
     };
 
-    const handleHiveOk =()=>{
-        let data ={
-            "odbcHostname":odbcHostname,
-            "odbcUsername":odbcUsername,
-            "odbcPassword":odbcPassword,
-            "odbcDatabaseName":odbcDatabaseName,
-            "sourceQuery":sourceQuery
+    const handleHiveOk = () => {
+        let data = {
+            "odbcHostname": odbcHostname,
+            "odbcUsername": odbcUsername,
+            "odbcPassword": odbcPassword,
+            "odbcDatabaseName": odbcDatabaseName,
+            "sourceQuery": sourceQuery
         }
 
         props.onPassHive(data);
@@ -85,94 +85,99 @@ export default function Hive(props){
 
 
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+    return (
         <div>
-                            <TextField
-                                    id="odbcHostname"
-                                    label="Enter odbcHostname"
-                                    placeholder="odbcHostname"
-                                    onChange={handleChangeodbcHostname}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="odbcHostname"
+                    label="Enter odbcHostname"
+                    placeholder="odbcHostname"
+                    onChange={handleChangeodbcHostname}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" odbcUsername"
-                                    label="Enter odbcUsername"
-                                    placeholder="odbcUsername"
-                                    onChange={handleChangeodbcUsername}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" odbcUsername"
+                    label="Enter odbcUsername"
+                    placeholder="odbcUsername"
+                    onChange={handleChangeodbcUsername}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" odbcPassword"
-                                    label="Enter odbcPassword"
-                                    placeholder="odbcPassword"
-                                    type="password"
-                                    onChange={handleChangeodbcPassword}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" odbcPassword"
+                    label="Enter odbcPassword"
+                    placeholder="odbcPassword"
+                    type="password"
+                    onChange={handleChangeodbcPassword}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" odbcDatabaseName"
-                                    label="Enter odbcDatabaseName"
-                                    placeholder="odbcDatabaseName"
-                                    onChange={handleChangeodbcDatabaseName}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                            <TextField
-                                    id=" sourceQuery"
-                                    label="Enter Source Query"
-                                    placeholder="Source Query"
-                                    onChange={handleChangesourceQuery}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleHiveOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* Mysql parameter ends */}
-                        </form>
+            <Grid container spacing={2}>
+
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" odbcDatabaseName"
+                    label="Enter odbcDatabaseName"
+                    placeholder="odbcDatabaseName"
+                    onChange={handleChangeodbcDatabaseName}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" sourceQuery"
+                    label="Enter Source Query"
+                    placeholder="Source Query"
+                    onChange={handleChangesourceQuery}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item container spacing={2}>
+                <Button variant="contained" color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    handleHiveOk()
+                }}>Ok</Button>
+            </Grid>
+            </Grid>
+            {/* Mysql parameter ends */}
+            </div>
     )
 }

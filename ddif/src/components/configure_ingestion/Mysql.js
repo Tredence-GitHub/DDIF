@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Mysql(props){
+export default function Mysql(props) {
     const classes = useStyles();
     const [jdbcHostname, setjdbcHostname] = React.useState('');
     const [jdbcUsername, setjdbcUsername] = React.useState('');
@@ -51,128 +51,133 @@ export default function Mysql(props){
     const [jdbcDatabaseName, setjdbcDatabaseName] = React.useState('');
     const [sourceQuery, setsourceQuery] = React.useState('');
 
-    const handleChangejdbcHostname= (event) => {
+    const handleChangejdbcHostname = (event) => {
         setjdbcHostname(event.target.value);
     };
 
-    const handleChangejdbcUsername= (event) => {
+    const handleChangejdbcUsername = (event) => {
         setjdbcUsername(event.target.value);
     };
 
-    const handleChangejdbcPassword= (event) => {
+    const handleChangejdbcPassword = (event) => {
         setjdbcPassword(event.target.value);
     };
 
-    const handleChangejdbcDatabaseName= (event) => {
+    const handleChangejdbcDatabaseName = (event) => {
         setjdbcDatabaseName(event.target.value);
     };
 
-    const handleChangesourceQuery= (event) => {
+    const handleChangesourceQuery = (event) => {
         setsourceQuery(event.target.value);
     };
 
-    const handleMysqlOk =()=>{
-        let data ={
-            "jdbcHostname":jdbcHostname,
-            "jdbcUsername":jdbcUsername,
-            "jdbcPassword":jdbcPassword,
-            "jdbcDatabaseName":jdbcDatabaseName,
-            "sourceQuery":sourceQuery
+    const handleMysqlOk = () => {
+        let data = {
+            "jdbcHostname": jdbcHostname,
+            "jdbcUsername": jdbcUsername,
+            "jdbcPassword": jdbcPassword,
+            "jdbcDatabaseName": jdbcDatabaseName,
+            "sourceQuery": sourceQuery
         }
 
         props.onPassMysql(data);
     }
 
 
-    return(
-        <form className={classes.root} noValidate autoComplete="off">
+    return (
         <div>
-                            <TextField
-                                    id="jdbcHostname"
-                                    label="Enter jdbcHostname"
-                                    placeholder="jdbcHostname"
-                                    required
-                                    onChange={handleChangejdbcHostname}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid container spacing={2}>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id="jdbcHostname"
+                    label="Enter jdbcHostname"
+                    placeholder="jdbcHostname"
+                    required
+                    onChange={handleChangejdbcHostname}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" jdbcUsername"
-                                    label="Enter jdbcUsername"
-                                    placeholder="jdbcUsername"
-                                    onChange={handleChangejdbcUsername}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" jdbcUsername"
+                    label="Enter jdbcUsername"
+                    placeholder="jdbcUsername"
+                    onChange={handleChangejdbcUsername}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" jdbcPassword"
-                                    label="Enter jdbcPassword"
-                                    placeholder="jdbcPassword"
-                                    type="password"
-                                    onChange={handleChangejdbcPassword}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" jdbcPassword"
+                    label="Enter jdbcPassword"
+                    placeholder="jdbcPassword"
+                    type="password"
+                    onChange={handleChangejdbcPassword}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            </Grid>
 
-                            <div>
-                            <TextField
-                                    id=" jdbcDatabaseName"
-                                    label="Enter jdbcDatabaseName"
-                                    placeholder="jdbcDatabaseName"
-                                    onChange={handleChangejdbcDatabaseName}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                            <TextField
-                                    id=" sourceQuery"
-                                    label="Enter Source Query"
-                                    placeholder="Source Query"
-                                    onChange={handleChangesourceQuery}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PersonIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <Button variant="contained" color="primary" onClick={(e)=>{
-                                    e.preventDefault();
-                                    handleMysqlOk()
-                                    }}>Ok</Button>
-                            </div>
-                            {/* Mysql parameter ends */}
-                        </form>
+            <Grid container spacing={2}>
+
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" jdbcDatabaseName"
+                    label="Enter jdbcDatabaseName"
+                    placeholder="jdbcDatabaseName"
+                    onChange={handleChangejdbcDatabaseName}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item xs={4} direction="column" container>
+                <TextField
+                    id=" sourceQuery"
+                    label="Enter Source Query"
+                    placeholder="Source Query"
+                    onChange={handleChangesourceQuery}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <PersonIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Grid>
+            <Grid item container spacing={2}>
+                <Button variant="contained" color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    handleMysqlOk()
+                }}>Ok</Button>
+            </Grid>
+            </Grid>
+            {/* Mysql parameter ends */}
+            </div>
     )
 }

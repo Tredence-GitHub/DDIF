@@ -187,7 +187,7 @@ export default function Metadata() {
       />
 
       <div className={classes.root} style={{marginTop:"20px"}}>
-        <Grid container>
+        {/* <Grid container>
                 <Grid item xs={6} direction="column" container justify="flex-start" alignItems="flex-start">
                     <Button variant="contained" color='primary'  onClick = {(e)=>{
                       e.preventDefault();
@@ -200,7 +200,7 @@ export default function Metadata() {
                       // window.location.href = "/ingestion/customrules";
                   }}>Next</Button>
                 </Grid>
-                </Grid>
+                </Grid> */}
         </div>
         </div>
     )

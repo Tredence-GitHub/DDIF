@@ -120,11 +120,11 @@ if(!loading){
         <div style={{marginTop:" 20px"}}>
             <Grid container>
         <Grid direction="column" container justify="flex-start" alignItems="flex-start">
-            <Button variant="contained" color='primary' onClick = {(e)=>{
+            <Button variant="contained" color='secondary' onClick = {(e)=>{
                 e.preventDefault();
                 // window.location.href = "/ingestion/setup";
                 window.location.href = "/ingestion";
-            }}>Fill form </Button>
+            }}>Create Ingestion </Button>
         </Grid>
         </Grid>
         </div>
