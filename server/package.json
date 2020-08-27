@@ -19,6 +19,7 @@
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.4",
     "path": "^0.12.7",
+    "react-awesome-query-builder": "^2.1.9",
     "sequelize": "^6.3.4"
   }
 }

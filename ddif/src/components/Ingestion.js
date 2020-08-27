@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Metadata from './configure_ingestion/Metadata';
 import SetupTest from './configure_ingestion/SetupTest';
 import Setup from './configure_ingestion/Setup';
-import Customerules from './configure_ingestion/Customrules';
+import Custom from './configure_ingestion/Custom';
 import { Link } from 'react-router-dom';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Axios from 'axios';
@@ -254,11 +254,11 @@ export default function CustomizedSteppers(props) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Setup onPassSetup={handleSetup} entryid={entryid} />;
+        return <SetupTest onPassSetup={handleSetup} entryid={entryid} />;
       case 1:
         return <Metadata entryid={entryid}/>;
       case 2:
-        return <Customerules />;
+        return <Custom />;
       case 3:
         return 'Review & Ingest';
       default:

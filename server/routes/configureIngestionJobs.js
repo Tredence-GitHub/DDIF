@@ -29,7 +29,7 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
-
+ 
     let target_types = new Promise((resolve, reject)=>{
         db.DataTargets.findAll()
         .then((result)=>{
@@ -38,7 +38,7 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
-
+ 
     let project_types = new Promise((resolve, reject)=>{
         db.ProjectTypes.findAll()
         .then((result)=>{
@@ -47,15 +47,25 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
-
-    Promise.all([source_types, target_types, project_types])
+ 
+    let connections_types = new Promise((resolve, reject)=>{
+        db.Connections.findAll()
+        .then((result)=>{
+            resolve(JSON.parse(JSON.stringify(result)));
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+ 
+    Promise.all([source_types, target_types, project_types, connections_types])
     .then((response)=>{
         let frameResponse = {}
-
+ 
         frameResponse['data_sources'] = response[0];
         frameResponse['data_targets'] = response[1];
         frameResponse['project_types'] = response[2];
-
+        frameResponse['connection_types'] = response[3];
+ 
         res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify(frameResponse)) })
     })
 });

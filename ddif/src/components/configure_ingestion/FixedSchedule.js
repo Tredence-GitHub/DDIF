@@ -75,10 +75,7 @@ export default function FixedSchedule(props) {
     const classes = useStyles();
     const [selectedTime, setSelectedTime] = React.useState(new Date().toISOString());
     const [scheduleType, setscheduleType] = React.useState('');
-    // const [minutes, setMinutes] = React.useState(0);
-    // const [hours, setHours] = React.useState(0);
     const [hours_minutes,setHoursMinutes]= React.useState(0);
-    // const [days, setDays] = React.useState(0);
     const [weeks, setWeeks] = React.useState('');
     const [hiddenminute, setHiddenMinute] = React.useState("none");
     const [hiddenhour, setHiddenHour] = React.useState("none");
@@ -90,7 +87,6 @@ export default function FixedSchedule(props) {
 
     const handleTimeChange = (date) => {
         setSelectedTime(date);
-        // console.log(selectedTime)
     };
 
     const handleChangescheduleType = (event) => {
@@ -124,20 +120,9 @@ export default function FixedSchedule(props) {
         }
     };
 
-    // const handleChangeminutes = (event) => {
-    //     setMinutes(event.target.value);
-    // };
-
-    // const handleChangehours = (event) => {
-    //     setHours(event.target.value);
-    // };
     const handleChangehoursminutes = (event) => {
         setHoursMinutes(event.target.value);
     };
-
-    // const handleChangeday = (event) => {
-    //     setDays(event.target.value);
-    // };
 
     const handleChangeweek = (event) => {
         setWeeks(event.target.value);
@@ -248,21 +233,6 @@ export default function FixedSchedule(props) {
                 </Grid>
             </div>
 
-            {/* <div style={{ display: hiddenday}}>
-                <TextField
-                    id="daily"
-                    label="Enter your choice"
-                    placeholder="Daily"
-                    onChange={handleChangeday}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <PersonIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </div> */}
 
             <div style={{ display: hiddenweek }}>
             <Grid item xs={4} direction="column" container>

@@ -80,18 +80,6 @@ export default function OneTime(props){
             <Grid container spacing={2}>
             <Grid item xs={4} direction="column" container>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            {/* <KeyboardDatePicker
-          margin="normal"
-          id="date-picker-dialog"
-          label="Select Date"
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        /> */}
-
             <KeyboardTimePicker
                     margin="normal"
                     id="time-picker"
