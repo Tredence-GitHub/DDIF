@@ -296,6 +296,8 @@ export default function SourceDetails(){
 
     function updateData(data){
         setEdited(true)
+        setMsg('Updating... ')
+        handleOpen()
         Axios.post(`${local}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
@@ -303,6 +305,7 @@ export default function SourceDetails(){
                 setMsg(msg) 
                 handleOpen() 
                  setEdited(false);
+                
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -313,6 +316,8 @@ export default function SourceDetails(){
 
     function saveSubmit(data) {
         setSubmitted(true);
+        setMsg('Saving... ')
+        handleOpen()
         Axios.post(`${local}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){

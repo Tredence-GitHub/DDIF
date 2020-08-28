@@ -220,79 +220,79 @@ Router.post('/saveConnection', async (req, res)=>{
 Router.post('/updateConnection', async(req, res)=>{
     let request_data = req.body;
 
-    if(request_data.format !== 'link'){
-        let odbc_connection_test = await triggerNotebook({
-            type_id: request_data.type_id,
-            type: request_data.type,
-            connection_type: request_data.format,
-            hostname: request_data.hostname,
-            account_name: request_data.account_name,
-            account_key: request_data.account_key,
-            location_name: request_data.location_name,
-            port: request_data.port,
-            source_query: request_data.source_query,
-            path: request_data.path,
-            delimiter: request_data.delimiter})
+    // if(request_data.format !== 'link'){
+    //     let odbc_connection_test = await triggerNotebook({
+    //         type_id: request_data.type_id,
+    //         type: request_data.type,
+    //         connection_type: request_data.format,
+    //         hostname: request_data.hostname,
+    //         account_name: request_data.account_name,
+    //         account_key: request_data.account_key,
+    //         location_name: request_data.location_name,
+    //         port: request_data.port,
+    //         source_query: request_data.source_query,
+    //         path: request_data.path,
+    //         delimiter: request_data.delimiter})
 
-        if(odbc_connection_test.result === 'Connection Succesfull'){
-            db.Connections.findAll({
-                where: {
-                connection_name: request_data.connection_name,
-                row_id: {
-                    [db.Op.not]: request_data.row_id
-                    }
-                }
-            }).then((result)=>{
-                if(result.length>0){
-                    res.status(200).json({message: 'Connection name is already defined.'});
-                }else{
-                    if(request_data.default === 1){
-                        db.Connections.update({
-                            default: 0
-                        }, {
-                            where: {
-                                type_id: request_data.type_id,
-                                type: request_data.type
-                            }
-                        }).then((res)=>{
-                            db.Connections.update(
-                                request_data,{
+    //     if(odbc_connection_test.result === 'Connection Succesfull'){
+    //         db.Connections.findAll({
+    //             where: {
+    //             connection_name: request_data.connection_name,
+    //             row_id: {
+    //                 [db.Op.not]: request_data.row_id
+    //                 }
+    //             }
+    //         }).then((result)=>{
+    //             if(result.length>0){
+    //                 res.status(200).json({message: 'Connection name is already defined.'});
+    //             }else{
+    //                 if(request_data.default === 1){
+    //                     db.Connections.update({
+    //                         default: 0
+    //                     }, {
+    //                         where: {
+    //                             type_id: request_data.type_id,
+    //                             type: request_data.type
+    //                         }
+    //                     }).then((res)=>{
+    //                         db.Connections.update(
+    //                             request_data,{
                                 
-                                where:{
-                                    row_id: request_data.row_id
-                                }
-                            }).then((result)=>{
-                                res.status(200).json({message: 'Succesfully updated'});
-                            }).catch((err)=>{
-                                res.status(400).json({message: 'Failed', error: [err]})
-                            })
-                        }).catch((err)=>{
-                            res.status(400).json({message: 'Failed', error: [err]})
-                        })
-                    }
-                    else{
-                        db.Connections.update(
-                            request_data,{                    
-                            where:{
-                                row_id: request_data.row_id
-                            }
-                        }).then((result)=>{
-                            res.status(200).json({message: 'Succesfully updated'});
-                        }).catch((err)=>{
-                            res.status(400).json({message: 'Failed', error: [err]})
-                        })
-                    }
-                }
-            }).catch((err)=>{
-                console.log(err)
-                res.status(400).json({message: 'Failed to update'})
-            })
-        }
-        else{
-            res.status(200).json({message: 'Test Connection failed! Please check your inputs.'})
-        }
-    }
-    else{
+    //                             where:{
+    //                                 row_id: request_data.row_id
+    //                             }
+    //                         }).then((result)=>{
+    //                             res.status(200).json({message: 'Succesfully updated'});
+    //                         }).catch((err)=>{
+    //                             res.status(400).json({message: 'Failed', error: [err]})
+    //                         })
+    //                     }).catch((err)=>{
+    //                         res.status(400).json({message: 'Failed', error: [err]})
+    //                     })
+    //                 }
+    //                 else{
+    //                     db.Connections.update(
+    //                         request_data,{                    
+    //                         where:{
+    //                             row_id: request_data.row_id
+    //                         }
+    //                     }).then((result)=>{
+    //                         res.status(200).json({message: 'Succesfully updated'});
+    //                     }).catch((err)=>{
+    //                         res.status(400).json({message: 'Failed', error: [err]})
+    //                     })
+    //                 }
+    //             }
+    //         }).catch((err)=>{
+    //             console.log(err)
+    //             res.status(400).json({message: 'Failed to update'})
+    //         })
+    //     }
+    //     else{
+    //         res.status(200).json({message: 'Test Connection failed! Please check your inputs.'})
+    //     }
+    // }
+    // else{
         
         db.Connections.findAll({
             where: {
@@ -346,7 +346,7 @@ Router.post('/updateConnection', async(req, res)=>{
             console.log(err)
             res.status(400).json({message: 'Failed to update'})
         })
-    }
+    // }
 })
 
 module.exports = Router;
