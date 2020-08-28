@@ -234,8 +234,13 @@ export default function Setup(props) {
     const [adlAccountName2, setadlAccountName2] = React.useState('');
     const [TargetFileType2, setTargetFileType2] = React.useState('');
     const [TargetFileDelimiter2, setTargetFileDelimiter2] = React.useState('');
-    const [startTime, setStartTime] = React.useState(new Date().toISOString());
-    const [selectedTime, setSelectedTime] = React.useState(new Date().toISOString());
+    const [jdbcHostname2, setjdbcHostname2] = React.useState('');
+    const [jdbcUsername2, setjdbcUsername2] = React.useState('');
+    const [jdbcPassword2, setjdbcPassword2] = React.useState('');
+    const [jdbcDatabaseName2, setjdbcDatabaseName2] = React.useState('');
+    const [jdbcsourceQuery2, setjdbcsourceQuery2] = React.useState('');
+    // const [startTime, setStartTime] = React.useState(new Date().toISOString());
+    const [selectedTime, setSelectedTime] = React.useState(new Date());
     const [scheduleType, setscheduleType] = React.useState('');
     const [hours_minutes, setHoursMinutes] = React.useState(0);
     const [weeks, setWeeks] = React.useState('');
@@ -256,6 +261,7 @@ export default function Setup(props) {
     const [hiddenhour, setHiddenHour] = React.useState("none");
     const [hiddenday, setHiddenDay] = React.useState("none");
     const [hiddenweek, setHiddenWeek] = React.useState("none");
+    const [entryId, setEntryId] = React.useState(0);
 
     // const {enqueueSnackbar} = useSnackbar();
     let local = 'http://localhost:4000';
@@ -304,12 +310,12 @@ export default function Setup(props) {
             })
     }
 
-    function getEdit() {
-        let entryid = props.entryid;
+    function getEdit(entryid) {
+        // let entryid = props.entryid;
         console.log(entryid, "Edit Mode");
         Promise.all(
-            // [Axios.get(`${local}/ingestion/api/getEntryData/${entryid}`),
-            [Axios.get(`${local}/ingestion/api/getEntryData/30`),
+            [Axios.get(`${local}/ingestion/api/getEntryData/${entryid}`),
+            // [Axios.get(`${local}/ingestion/api/getEntryData/52`),
             Axios.get(`${local}/ingestion/getDropdowns`)
 
             ]).then((res) => {
@@ -343,11 +349,29 @@ export default function Setup(props) {
                     setProject(response[0][0].data.data[0].project_type)
                     setRationale(response[0][0].data.data[0].rationale)
                     setSourcetype(response[0][0].data.data[0].source_type)
-                    // console.log(response[0][0].data.data[0].Parameter.SourceParameter)
+                    response[0][1].data.data.data_sources.map((item,index)=>{
+                        if(item.typeId===response[0][0].data.data[0].source_type){
+                            setSourcetypeAbbrv(item.abbrv)
+                        }
+                    })
                     setTargettype(response[0][0].data.data[0].target_type)
+                    response[0][1].data.data.data_targets.map((item,index)=>{
+                        if(item.typeId===response[0][0].data.data[0].target_type){
+                            setTargettypeAbbrv(item.abbrv)
+                        }
+                    })
+                    // console.log(response[0][0].data.data[0].Parameter.SourceParameter)
                     setValue(response[0][0].data.data[0].Schedule.schedule_type)
+                    setSelectedTime(new Date(response[0][0].data.data[0].Schedule.start_time))
+                    // setSelectedTime(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
+                    console.log(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
+                    setscheduleType(response[0][0].data.data[0].Schedule.recurrence_type)
+                    setHoursMinutes((response[0][0].data.data[0].Schedule.recurrence))
+                    setWeeks(response[0][0].data.data[0].Schedule.days)
+                    setStartDate(response[0][0].data.data[0].Schedule.start_date)
+                    setEndDate(response[0][0].data.data[0].Schedule.end_date)
                     setValue2(response[0][0].data.data[0].operation)
-                    setsourceParams(response[0][0].data.data[0].Parameter.SourceParameter)
+                    setsourceParams(JSON.parse(response[0][0].data.data[0].Parameter.SourceParameter));
                     let SourceParameters = JSON.parse(response[0][0].data.data[0].Parameter.SourceParameter);
                     // console.log(SourceParameters.type, "AA");
 
@@ -366,9 +390,10 @@ export default function Setup(props) {
                     setodbcDatabaseName(SourceParameters.location_name)
                     setodbcsourceQuery(SourceParameters.source_query)
                     setStorageAccountAccessKey(SourceParameters.account_key)
+                    setStorageAccountName(SourceParameters.account_name)
                     setContainerName(SourceParameters.location_name)
                     setPath(SourceParameters.path)
-                    setFormat(SourceParameters.format)
+                    setFormat(SourceParameters.file_type)
                     setblobDelimiter(SourceParameters.delimiter)
                     setsourceConnection(SourceParameters.connection_name)
 
@@ -445,9 +470,51 @@ export default function Setup(props) {
                     }
 
 
+                    if(response[0][0].data.data[0].Schedule.schedule_type==="One-Time"){
+                        sethiddenFixedSchedule(true)
+                        sethiddenOneTime(false)
+                    }
+                    else if(response[0][0].data.data[0].Schedule.schedule_type==="Fixed Schedule"){
+                        sethiddenFixedSchedule(false)
+                        sethiddenOneTime(true)
+                    }
+                    else{
+                        sethiddenFixedSchedule(true)
+                        sethiddenOneTime(true)
+                    }
+                    //////////////////////////////////////////////////////
+
+                    if (response[0][0].data.data[0].Schedule.recurrence_type=== "minute") {
+                        setHiddenHour("none")
+                        setHiddenDay("none")
+                        setHiddenWeek("none")
+                        setHiddenMinute("block")
+            
+                    }
+                    else if (response[0][0].data.data[0].Schedule.recurrence_type === "hourly") {
+                        setHiddenMinute("none")
+                        setHiddenDay("none")
+                        setHiddenWeek("none")
+                        setHiddenHour("block")
+            
+                    }
+                    else if (response[0][0].data.data[0].Schedule.recurrence_type === "daily") {
+                        setHiddenMinute("none")
+                        setHiddenHour("none")
+                        setHiddenWeek("none")
+                        setHiddenDay("block")
+                    }
+                    else {
+                        setHiddenMinute("none")
+                        setHiddenHour("none")
+                        setHiddenDay("none")
+                        setHiddenWeek("block")
+                    }
 
 
-                    settargetParams(response[0][0].data.data[0].Parameter.TargetParameter)
+
+
+                    settargetParams(JSON.parse(response[0][0].data.data[0].Parameter.TargetParameter))
                     let TargetParameters = JSON.parse(response[0][0].data.data[0].Parameter.TargetParameter);
 
                     setApplicationID(TargetParameters.hostname)
@@ -462,11 +529,11 @@ export default function Setup(props) {
                     setadlAccountName2(TargetParameters.account_name)
                     setTargetFileType2(TargetParameters.file_type)
                     setTargetFileDelimiter2(TargetParameters.delimiter)
-                    setjdbcHostname(TargetParameters.hostname)
-                    setjdbcUsername(TargetParameters.account_name)
-                    setjdbcPassword(TargetParameters.account_key)
-                    setjdbcDatabaseName(TargetParameters.location_name)
-                    setjdbcsourceQuery(TargetParameters.source_query)
+                    setjdbcHostname2(TargetParameters.hostname)
+                    setjdbcUsername2(TargetParameters.account_name)
+                    setjdbcPassword2(TargetParameters.account_key)
+                    setjdbcDatabaseName2(TargetParameters.location_name)
+                    setjdbcsourceQuery2(TargetParameters.source_query)
                     settargetConnection(TargetParameters.connection_name)
 
 
@@ -485,14 +552,30 @@ export default function Setup(props) {
 
 
 
+
+
     useEffect(() => {
+        console.log(window.location.href.split('/'))
+        if((window.location.href.split('/').length === 4) && (props.entryid === 0) ){
+            getInfo();
+        }else if(props.entryid>0)
+        {
+            setEntryId(props.entryid)
+            getEdit(props.entryid);
+
+        }
+        else if(window.location.href.split('/').length>4)
+        {   setEntryId(window.location.href.split('/')[4])
+            getEdit(window.location.href.split('/')[4]);
+        }
+
         // if (props.entryid === 0) {
         //     getInfo();
         // }
         // else {
         //     getEdit();
         // }
-        getEdit()
+        // getEdit()
 
     }, [])
 
@@ -673,14 +756,43 @@ export default function Setup(props) {
         }
         else { setDisabled(true) }
     };
+    // Azure sql
 
-    const handleTimeChangeOneTime = (date) => {
-        setStartTime(date);
-        // console.log(startTime)
+    const handleChangejdbcHostname2 = (event) => {
+        setjdbcHostname2(event.target.value);
     };
 
-    const handleTimeChange = (date) => {
-        setSelectedTime(date);
+    const handleChangejdbcUsername2 = (event) => {
+        setjdbcUsername2(event.target.value);
+    };
+
+    const handleChangejdbcPassword2 = (event) => {
+        setjdbcPassword2(event.target.value);
+    };
+
+    const handleChangejdbcDatabaseName2 = (event) => {
+        setjdbcDatabaseName2(event.target.value);
+    };
+
+    const handleChangejdbcsourceQuery2 = (event) => {
+        setjdbcsourceQuery2(event.target.value);
+    };
+
+
+
+
+    // const handleTimeChangeOneTime = (date) => {
+    //     setStartTime(date);
+    //     // console.log(startTime)
+    // };
+
+    // const handleTimeChange = (date) => {
+    //     setSelectedTime(date);
+    // };
+
+    const handleTimeChange = (time) => {
+        console.log(time);
+        setSelectedTime(time);
     };
 
     const handleChangescheduleType = (event) => {
@@ -830,7 +942,7 @@ export default function Setup(props) {
                 setStorageAccountName(item1.account_name)
                 setContainerName(item1.location_name)
                 setPath(item1.path)
-                setFormat(item1.format)
+                setFormat(item1.file_type)
                 setblobDelimiter(item1.delimiter)
                 // console.log(item1,"00000");
             }
@@ -863,6 +975,13 @@ export default function Setup(props) {
             sethiddenGoogleDrive(true)
             sethiddenMysql(true)
             sethiddenHive(false)
+            sethiddenAzureBlob(true)
+        }
+        else if (sourcetype === 6) {
+            sethiddenOneDrive(true)
+            sethiddenGoogleDrive(true)
+            sethiddenMysql(false)
+            sethiddenHive(true)
             sethiddenAzureBlob(true)
         }
         else {
@@ -1020,28 +1139,28 @@ export default function Setup(props) {
 
     // };
 
-    // const isFormValid = () => {
+    // const isFormValidation = () => {
     //     // console.log(project,jobTitle ,rationale ,sourcetype ,targettype ,value, value2, Object.keys(sourceParams)[0], targetParams) ;
     //     // console.log(project>0 && jobTitle.length>0 && rationale.length>0 && sourcetype>0 && targettype>0 && value.length>0 && value2.length>0 && Object.keys(sourceParams)[0].length>0 && Object.keys(targetParams)[0].length>0);
     //     return project > 0 && jobTitle.length > 0 && rationale.length > 0 && sourcetype > 0 && targettype > 0 && value.length > 0 && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 && Object.keys(targetParams)[0].length > 0
     // };
     // console.log(sourceParams,"5%%%")
 
-    const ScheduleDisplay = () => {
-        if (value === 'On-Demand') {
-            return <OnDemand onPassOnDemandSchedule={handleOnDemandSchedule} />
-        }
-        else if (value === 'One-Time') {
-            return <OneTime onPassOneTimeSchedule={handleOneTimeSchedule} />
-        }
-        else if (value === 'Fixed Schedule') {
-            return <FixedSchedule onPassFixedSchedule={handleFixedSchedule} />
-        }
-        else {
-            return <div></div>
-        }
+    // const ScheduleDisplay = () => {
+    //     if (value === 'On-Demand') {
+    //         return <OnDemand onPassOnDemandSchedule={handleOnDemandSchedule} />
+    //     }
+    //     else if (value === 'One-Time') {
+    //         return <OneTime onPassOneTimeSchedule={handleOneTimeSchedule} />
+    //     }
+    //     else if (value === 'Fixed Schedule') {
+    //         return <FixedSchedule onPassFixedSchedule={handleFixedSchedule} />
+    //     }
+    //     else {
+    //         return <div></div>
+    //     }
 
-    };
+    // };
 
     const passParam = () => {
         let param = {
@@ -1066,35 +1185,100 @@ export default function Setup(props) {
             target_file_type: targetParams.file_type,
             target_file_delimiter: targetParams.delimiter,
             schedule_type: value,
-            recurrence_type: scheduleParams.scheduleType,
-            recurrence: Number(scheduleParams.hours_minutes),
-            days: scheduleParams.weeks,
-            start_time: scheduleParams.selectedTime,
-            start_date: scheduleParams.startDate,
-            end_date: scheduleParams.endDate
+            recurrence_type: scheduleType,
+            recurrence: Number(hours_minutes),
+            days: weeks,
+            start_time: selectedTime,
+            start_date: startDate,
+            end_date: endDate
+            // recurrence_type: scheduleParams.scheduleType,
+            // recurrence: Number(scheduleParams.hours_minutes),
+            // days: scheduleParams.weeks,
+            // start_time: scheduleParams.selectedTime,
+            // start_date: scheduleParams.startDate,
+            // end_date: scheduleParams.endDate
         }
         // console.log(param)
         // console.log(typeof(param.start_date))
-        props.onPassSetup(param)
+        props.onPassSetup(param,'save')
+
+        //API
+    }
+
+    const passEditParam = () => {
+        let param = {
+            username: localStorage.getItem('username'),
+            rationale: rationale,
+            project_type: project,
+            jobname: "",
+            projectname: jobTitle,
+            created_by: localStorage.getItem('username'),
+            created_at: new Date(),
+            source_type: sourcetype,
+            target_type: targettype,
+            operation: value2,
+            status: 'draft',
+            updated_at: new Date(),
+            updated_by: localStorage.getItem('username'),
+            source_abbrv: sourcetypeAbbrv,
+            target_abbrv: targettypeAbbrv,
+            source_parameter: sourceParams,
+            target_parameter: targetParams,
+            source_query: sourceParams.source_query,
+            target_file_type: targetParams.file_type,
+            target_file_delimiter: targetParams.delimiter,
+            schedule_type: value,
+            recurrence_type: scheduleType,
+            recurrence: Number(hours_minutes),
+            days: weeks,
+            start_time: selectedTime,
+            start_date: startDate,
+            end_date: endDate,
+            entryId: entryId
+            // recurrence_type: scheduleParams.scheduleType,
+            // recurrence: Number(scheduleParams.hours_minutes),
+            // days: scheduleParams.weeks,
+            // start_time: scheduleParams.selectedTime,
+            // start_date: scheduleParams.startDate,
+            // end_date: scheduleParams.endDate
+        }
+        // console.log(param)
+        // console.log(typeof(param.start_date))
+        props.onPassSetup(param,'edit')
 
         //API
     }
 
     const isFormValid = () => {
-        // console.log(project,jobTitle ,rationale ,sourcetype ,targettype ,value, value2, Object.keys(sourceParams)[0], targetParams) ;
-        // console.log(project>0 && jobTitle.length>0 && rationale.length>0 && sourcetype>0 && targettype>0 && value.length>0 && value2.length>0 && Object.keys(sourceParams)[0].length>0 && Object.keys(targetParams)[0].length>0);
-        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0 && sourcetype > 0 && targettype > 0 && value.length > 0 && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 && Object.keys(targetParams)[0].length > 0) === true) {
+        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0 
+                && sourcetype > 0 && targettype > 0 && value.length > 0 
+                && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 
+                && Object.keys(targetParams)[0].length > 0) === true) {
             passParam();
+        }
+        else{
+            handleOpen()
+            setMsg("Please Fill All the Details!")
         }
     };
 
-
+    const isFormValidEdit = () => {
+        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0 
+                && sourcetype > 0 && targettype > 0 && value.length > 0 
+                && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 
+                && Object.keys(targetParams)[0].length > 0) === true) {
+            passEditParam();
+        }
+        else{
+            handleOpen()
+            setMsg("Please Fill All the Details!")
+        }
+    };
 
 
     if (!loading) {
         return (
             <div>
-
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'top',
@@ -1126,11 +1310,11 @@ export default function Setup(props) {
                                         <TextField
                                             id="projects"
                                             select
-                                            label=""
+                                            label="Please select the Project Type"
                                             value={project}
                                             onChange={handleChangeProject}
                                             defaultValue={project}
-                                            helperText="Please select the Project Type"
+                                            // helperText="Please select the Project Type"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
@@ -1168,11 +1352,11 @@ export default function Setup(props) {
                                         <TextField
                                             id="rationale"
                                             label="Rationale"
-                                            placeholder="Rationale for onboarding the specific data"
+                                            placeholder="Rationale for onboarding"
                                             onChange={handleChangeRationale}
                                             defaultValue={rationale}
                                             multiline
-                                            rows={2}
+                                            // rows={2}
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
@@ -2006,8 +2190,8 @@ export default function Setup(props) {
                                                 label="Enter jdbcHostname"
                                                 placeholder="jdbcHostname"
                                                 required
-                                                onChange={handleChangejdbcHostname}
-                                                value={jdbcHostname}
+                                                onChange={handleChangejdbcHostname2}
+                                                value={jdbcHostname2}
                                                 disabled
                                                 InputProps={{
                                                     startAdornment: (
@@ -2026,8 +2210,8 @@ export default function Setup(props) {
                                                 id=" jdbcUsername2"
                                                 label="Enter jdbcUsername"
                                                 placeholder="jdbcUsername"
-                                                onChange={handleChangejdbcUsername}
-                                                value={jdbcUsername}
+                                                onChange={handleChangejdbcUsername2}
+                                                value={jdbcUsername2}
                                                 disabled
                                                 InputProps={{
                                                     startAdornment: (
@@ -2046,8 +2230,8 @@ export default function Setup(props) {
                                                 label="Enter jdbcPassword"
                                                 placeholder="jdbcPassword"
                                                 type="password"
-                                                onChange={handleChangejdbcPassword}
-                                                value={jdbcPassword}
+                                                onChange={handleChangejdbcPassword2}
+                                                value={jdbcPassword2}
                                                 disabled
                                                 InputProps={{
                                                     startAdornment: (
@@ -2067,8 +2251,8 @@ export default function Setup(props) {
                                                 id=" jdbcDatabaseName2"
                                                 label="Enter jdbcDatabaseName"
                                                 placeholder="jdbcDatabaseName"
-                                                onChange={handleChangejdbcDatabaseName}
-                                                value={jdbcDatabaseName}
+                                                onChange={handleChangejdbcDatabaseName2}
+                                                value={jdbcDatabaseName2}
                                                 disabled
                                                 InputProps={{
                                                     startAdornment: (
@@ -2087,8 +2271,8 @@ export default function Setup(props) {
                                                 id=" sourcejdbcQuery2"
                                                 label="Enter Source Query"
                                                 placeholder="Source Query"
-                                                onChange={handleChangejdbcsourceQuery}
-                                                value={jdbcsourceQuery}
+                                                onChange={handleChangejdbcsourceQuery2}
+                                                value={jdbcsourceQuery2}
                                                 disabled
                                                 InputProps={{
                                                     startAdornment: (
@@ -2108,7 +2292,7 @@ export default function Setup(props) {
                                 {/* {targetFormDisplay()} */}
                             </div>
 
-                            <div style={{ marginTop: "50px" }}>
+                            <div style={{margin:"50px 20px"}}>
                                 <strong>Schedule </strong>
                                 <hr />
                                 <Grid container spacing={2}>
@@ -2130,8 +2314,9 @@ export default function Setup(props) {
                                                 margin="normal"
                                                 id="timepicker"
                                                 label="Select Time"
-                                                value={startTime}
-                                                onChange={handleTimeChangeOneTime}
+                                                value={selectedTime}
+                                                helperText="Time format is GMT(+5:30)"
+                                                onChange={handleTimeChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change time',
                                                 }}
@@ -2150,12 +2335,29 @@ export default function Setup(props) {
                                                 id="time-picker"
                                                 label="Select Time"
                                                 value={selectedTime}
+                                                helperText="Time format is GMT(+5:30)"
                                                 onChange={handleTimeChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change time',
                                                 }}
                                             />
                                         </MuiPickersUtilsProvider>
+
+                                        {/* <TextField
+                                                id="time"
+                                                label="Alarm clock"
+                                                type="time"
+                                                // defaultValue="07:30"
+                                                className={classes.textField}
+                                                value={selectedTime}
+                                                onChange={handleTimeChange}
+                                                InputLabelProps={{
+                                                shrink: true,
+                                                }}
+                                                inputProps={{
+                                                step: 300, // 5 min
+                                                }}
+                                            /> */}
                                     </Grid>
 
                                     <Grid item xs={4} direction="column" container>
@@ -2165,7 +2367,7 @@ export default function Setup(props) {
                                             label="Recurrence"
                                             value={scheduleType}
                                             onChange={handleChangescheduleType}
-                                            helperText="Please select the Schedule Type"
+                                            // helperText="Please select the Schedule Type"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
@@ -2189,6 +2391,7 @@ export default function Setup(props) {
                                                 label="Enter minutes"
                                                 placeholder="Minutes"
                                                 type="number"
+                                                value={hours_minutes}
                                                 onChange={handleChangehoursminutes}
                                                 InputProps={{
                                                     startAdornment: (
@@ -2208,6 +2411,7 @@ export default function Setup(props) {
                                                 label="Enter Hour"
                                                 placeholder="Hour"
                                                 type="number"
+                                                value={hours_minutes}
                                                 onChange={handleChangehoursminutes}
                                                 InputProps={{
                                                     startAdornment: (
@@ -2284,7 +2488,7 @@ export default function Setup(props) {
                                 </div> */}
                             </div>
 
-                            <div style={{marginTop:"50px"}}>
+                            <div style={{margin:"50px 20px"}}>
                                 <strong>Ingestion Pattern </strong>
                                 <hr />
                                 <Grid container spacing={2}>
@@ -2301,17 +2505,52 @@ export default function Setup(props) {
                             </div>
 
                             <div className={classes.buttonRoot} style={{ marginTop: "20px" }}>
+                                {entryId===0 ?
+                                <Grid container>
+                                <Grid item xs={6} direction="column" container justify="flex-start" alignItems="flex-start">
+                                    <Button variant="contained" color='primary' onClick={(e) => {
+                                        e.preventDefault();
+                                        isFormValid();
+                                    }} >Save Details</Button>
+                                </Grid>
+                                </Grid> :
+                                <Grid container>
+                                <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
+                                        <Button variant="contained" color='primary' onClick={(e) => {
+                                            e.preventDefault();
+                                            isFormValidEdit();
+                                        }} >Update Details</Button>
+                                </Grid>
+                                </Grid>}
+                                {/* <Grid container>
+                                    <Grid item xs={6} direction="column" container justify="flex-start" alignItems="flex-start">
+                                        <Button variant="contained" color='primary' onClick={(e) => {
+                                            e.preventDefault();
+                                            isFormValid();
+                                        }} >Save Details</Button>
+                                    </Grid> */}
+
+                                    {/* <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
+                                        <Button variant="contained" color='primary' onClick={(e) => {
+                                            e.preventDefault();
+                                            isFormValidEdit();
+                                        }} >Update Details</Button>
+                                    </Grid> */}
+
+                                {/* </Grid> */}
+                            </div>
+
+                            {/* <div className={classes.buttonRoot} style={{ marginTop: "20px" }}>
                                 <Grid container>
                                     <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
                                         <Button variant="contained" color='primary' onClick={(e) => {
                                             e.preventDefault();
-                                            isFormValid();
-                                        }} >OK</Button>
-
+                                            isFormValidEdit();
+                                        }} >Update Details</Button>
                                     </Grid>
 
                                 </Grid>
-                            </div>
+                            </div> */}
                         </form>
                     </Paper>
                 </Grid>

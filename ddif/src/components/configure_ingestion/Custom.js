@@ -1,241 +1,104 @@
-import React, { useEffect, useState, Component } from 'react'
-import ReactDom from 'react-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from "@material-ui/core/Paper";
-import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import MenuItem from '@material-ui/core/MenuItem';
-import Axios from 'axios';
-import { lightBlue } from '@material-ui/core/colors';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Typography from "@material-ui/core/Typography";
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Checkbox from '@material-ui/core/Checkbox';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Customrules from './Customrules';
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import {Query, Builder, BasicConfig, Utils as QbUtils} from 'react-awesome-query-builder';
+import AntdConfig from 'react-awesome-query-builder/lib/config/antd';
+import "antd/dist/antd.css";
+import 'react-awesome-query-builder/lib/css/styles.css';
+import 'react-awesome-query-builder/lib/css/compact_styles.css'; //optional, for more compact styles
+const InitialConfig = AntdConfig; // or BasicConfig
 
 
-const functions = [
-    {
-        value: 'Add',
-        label: 'Add',
-    },
-    {
-        value: 'Subtract',
-        label: 'Subtract',
-    },
-    {
-        value: 'Multiply',
-        label: 'Multiply',
-    },
-    {
-        value: 'Divide',
-        label: 'Divide',
-    },
-    {
-        value: 'Average',
-        label: 'Average ',
-    },
-    {
-        value: 'Mode',
-        label: 'Mode',
-    },
-    {
-        value: 'Median',
-        label: 'Median ',
-    },
-];
-
-const fieldsA = [
-    {
-        value: 'colnum',
-        label: 'colnum',
-    },
-    {
-        value: 'colname',
-        label: 'colname',
-    },
-    {
-        value: 'datatype',
-        label: 'datatype',
-    },
-    {
-        value: 'nullable',
-        label: 'nullable',
-    },
-    {
-        value: 'description',
-        label: 'description ',
-    },
-];
-
-const operators = [
-    {
-        value: '+',
-        label: '+',
-    },
-    {
-        value: '-',
-        label: '-',
-    },
-    {
-        value: '*',
-        label: '*',
-    },
-    {
-        value: '/',
-        label: '/',
-    },
-];
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(2),
-            width: '30ch',
+// You need to provide your own config. See below 'Config format'
+const config = {
+    ...InitialConfig,
+    fields: {
+        qty: {
+            label: 'Qty',
+            type: 'number',
+            fieldSettings: {
+                min: 0,
+            },
+            valueSources: ['value'],
+            preferWidgets: ['number'],
         },
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    buttonRoot: {
-        '& > *': {
-            margin: theme.spacing(1),
+        price: {
+            label: 'Price',
+            type: 'number',
+            valueSources: ['value'],
+            fieldSettings: {
+                min: 10,
+                max: 100,
+            },
+            preferWidgets: ['slider', 'rangeslider'],
         },
-    },
-    progress: {
-        display: 'flex',
-        '& > * + *': {
-            marginLeft: theme.spacing(2),
+        color: {
+            label: 'Color',
+            type: 'select',
+            valueSources: ['value'],
+            fieldSettings: {
+                listValues: [
+                    {value: 'yellow', title: 'Yellow'},
+                    {value: 'green', title: 'Green'},
+                    {value: 'orange', title: 'Orange'}
+                ],
+            }
         },
-    },
-}));
-
-export default function Custom(){
-    const classes = useStyles();
-
-    const [Functions, setFunctions] = React.useState('');
-    const [FieldsA, setfieldsA] = React.useState('');
-    const [Operators, setOperators] = React.useState('')
-
-    const handleChangefunctions=(e)=>{
-        setFunctions(e.target.value)
+        is_promotion: {
+            label: 'Promo?',
+            type: 'boolean',
+            operators: ['equal'],
+            valueSources: ['value'],
+        },
     }
 
-    const handleChangefieldsA=(e)=>{
-        setfieldsA(e.target.value)
+
+};
+
+const queryValue = {"id": QbUtils.uuid(), "type": "group"};
+
+export default class DemoQueryBuilder extends Component {
+    state = {
+        tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
+        config: config
+    };
+
+    render() {
+        return (
+            <div>
+                <Query
+                    {...config}
+                    value={this.state.tree}
+                    onChange={this.onChange}
+                    renderBuilder={this.renderBuilder}
+                />
+               {this.renderResult(this.state)}
+            </div>
+        )
     }
 
-    const handleChangeOpeartors=(e)=>{
-        setOperators(e.target.value)
-    }
-    return(
-        <Grid container direction="column"
-                    alignItems="center"
-                    justify="center">
-                    <Paper className={classes.paper}>
-                        <form className={classes.root} noValidate autoComplete="off">
-                            <div style = {{marginBottom :"50px"}}>
-                                <strong>Custom Rules </strong>
-                                <hr />
-                                <Grid container spacing={2}>
-                                    <Grid item xs={3} direction="column" container >
-                                        <TextField
-                                            id="functions"
-                                            select
-                                            label=""
-                                            value={Functions}
-                                            onChange={handleChangefunctions}
-                                            defaultValue={Functions}
-                                            helperText="Please select the Functions"
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <VerifiedUserIcon />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        >
-                                            {functions.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-
-                                    <Grid item xs={3} direction="column" container >
-                                        <TextField
-                                            id="FieldsA"
-                                            select
-                                            label=""
-                                            value={FieldsA}
-                                            onChange={handleChangefieldsA}
-                                            defaultValue={FieldsA}
-                                            helperText="Please select the Fields"
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <VerifiedUserIcon />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        >
-                                            {fieldsA.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-
-                                    <Grid item xs={3} direction="column" container>
-                                        <TextField
-                                            id="Operators"
-                                            select
-                                            label=""
-                                            value={Operators}
-                                            onChange={handleChangeOpeartors}
-                                            defaultValue={Operators}
-                                            helperText="Please select the Fields"
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <VerifiedUserIcon />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        >
-                                            {operators.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                            </form>
-                            </Paper>
-                            </Grid>
+    renderBuilder = (props) => (
+        <div className="query-builder-container" style={{padding: '10px'}}>
+            <div className="query-builder qb-lite">
+                <Builder {...props} />
+            </div>
+        </div>
     )
 
+    renderResult = ({tree: immutableTree, config}) => (
+        <div className="query-builder-result">
+            <div>Query string: <pre>{JSON.stringify(QbUtils.queryString(immutableTree, config))}</pre></div>
+            <div>MongoDb query: <pre>{JSON.stringify(QbUtils.mongodbFormat(immutableTree, config))}</pre></div>
+            <div>SQL where: <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre></div>
+            <div>JsonLogic: <pre>{JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}</pre></div>
+        </div>
+      )
+
+    onChange = (immutableTree, config) => {
+        // Tip: for better performance you can apply `throttle` - see `examples/demo`
+        this.setState({tree: immutableTree, config: config});
+        const jsonTree = QbUtils.getTree(immutableTree);
+        console.log(jsonTree);
+        // `jsonTree` can be saved to backend, and later loaded to `queryValue`
+
+    }
 }

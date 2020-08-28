@@ -213,14 +213,19 @@ export default function CustomizedSteppers(props) {
   const [open, setOpen] = React.useState(false);
   const [msg, setMsg] = React.useState('');
   const [entryid, setEntryid] = React.useState(0);
+  const [fn, setfn] = React.useState('');
 
 
   let local = 'http://localhost:4000';
 
-  const handleSetup = (param) => {
-    // setSetupParam(param)
-    saveData(param)
-    // console.log(param, "****");
+  const handleSetup = (param,mode) => {
+
+    if(mode==='save'){
+      saveData(param)
+    }
+    else{
+      updateData(param)
+    }
   }
 
 
@@ -246,6 +251,11 @@ export default function CustomizedSteppers(props) {
     setActiveStep(0);
   };
 
+  const handleMetadata = (param, fn) => { 
+    setfn(fn)  
+    handleNext()
+  };
+
 
   function getSteps() {
     return ['Setup', 'Metadata Discovery', 'Custom Rules', 'Review & Ingest'];
@@ -254,17 +264,24 @@ export default function CustomizedSteppers(props) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <SetupTest onPassSetup={handleSetup} entryid={entryid} />;
-      case 1:
-        return <Metadata entryid={entryid}/>;
+        return <Setup onPassSetup={handleSetup} entryid={entryid} />;
+        case 1:    
+        { 
+          // console.log("ENTRYY ID -- ", entryid)  
+          if(entryid > 0)
+        { return <Metadata onPassMetadata={handleMetadata} entryid={entryid} editFn={fn}/>}
+          else{return <Metadata entryid="error"/>}}
       case 2:
-        return <Custom />;
+        return <Custom entryid={entryid} />;
       case 3:
         return 'Review & Ingest';
       default:
         return 'Unknown step';
     }
   }
+
+  
+
 
   const saveData = (param) => {
     let resp = Axios.post(`${local}/ingestion/setupDataSave`, param
@@ -277,6 +294,8 @@ export default function CustomizedSteppers(props) {
         // console.log(response.data.data.entry_id, "00000")
         handleOpen()
         setMsg(response.data.message)
+
+        handleNext();
 
         // enqueueSnackbar("Success", {
         //     variant: 'success',
@@ -300,6 +319,44 @@ export default function CustomizedSteppers(props) {
       // })
     });
   }
+
+
+  const updateData = (param) => {
+    let resp = Axios.post(`${local}/ingestion/updateSetupDBData`, param
+
+    ).then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        // console.log(response, "**********");
+        setEntryid(response.data.entryId)
+        // console.log(response.data.data.entry_id, "00000")
+        handleOpen()
+        setMsg(response.data.message)
+        handleNext();
+
+        // enqueueSnackbar("Success", {
+        //     variant: 'success',
+        // });
+
+      }
+      else if (response.status === 400) {
+        handleOpen()
+        setMsg('failed!')
+        // enqueueSnackbar("Failed", {
+        //     variant: 'warning',
+        // })
+      }
+
+    }).catch((err) => {
+      console.log(err);
+      handleOpen()
+      setMsg('Failed!')
+      // enqueueSnackbar("Failed", {
+      //     variant: 'warning',
+      // })
+    });
+  }
+
 
 
 

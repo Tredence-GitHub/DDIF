@@ -93,7 +93,9 @@ if(!loading){
                                 </TableHead>
                                 <TableBody>
                                 {tableData.map((row) => (
-                                        <TableRow key={row.entryId}>
+                                        <TableRow key={row.entryId} onClick={(e)=>{
+                                            window.location.href='/ingestion/'+row.entryId
+                                        }}>
                                             <TableCell component="th" scope="row">
                                                 {row.entryId}
                                             </TableCell>
@@ -107,8 +109,6 @@ if(!loading){
                                                     </Button>
                                                 </TableCell>:
                                                 <TableCell >{row.Schedule.schedule_type}</TableCell> }
-                                            
-
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -120,7 +120,7 @@ if(!loading){
         <div style={{marginTop:" 20px"}}>
             <Grid container>
         <Grid direction="column" container justify="flex-start" alignItems="flex-start">
-            <Button variant="contained" color='secondary' onClick = {(e)=>{
+            <Button variant="contained" color='primary' onClick = {(e)=>{
                 e.preventDefault();
                 // window.location.href = "/ingestion/setup";
                 window.location.href = "/ingestion";

@@ -81,6 +81,7 @@ export default function TargetDetails(){
     const [LocationName, setLocationName] = useState('');
     const [Port, setPort] = useState('');
     const [Submitted, setSubmitted] = useState(false);
+    const [Edited, setEdited] = useState(false);
     const [Fresh, setFresh] = useState(false);
 
     const targetformats = [
@@ -188,16 +189,16 @@ export default function TargetDetails(){
         let data ={
             "type_id":SourceType,
             "type":'target',
-            "connection_name":ConnectionName,
+            "connection_name":ConnectionName.trim(),
             "default":Default,
             "format":Format,
-            "hostname": Hostname,
-            "account_name": AccountName,
-            "account_key": AccountKey,
-            "source_query": SourceQuery,
-            "location_name": LocationName,
-            "path": Path,
-            "delimiter": gddelimiter,
+            "hostname": Hostname.trim(),
+            "account_name": AccountName.trim(),
+            "account_key": AccountKey.trim(),
+            "source_query": SourceQuery.trim(),
+            "location_name": LocationName.trim(),
+            "path": Path.trim(),
+            "delimiter": gddelimiter.trim(),
             "file_type": TargetFileType,
             "port": Port
         }
@@ -206,8 +207,8 @@ export default function TargetDetails(){
             SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                 saveSubmit(data);
             }
-         else if(blob===false && Hostname.trim().length>0 && SourceType > 0 && AccountKey.trim().length>0 && Path.trim().length > 0  && 
-                LocationName.trim().length>0 && ConnectionName.trim().length>0){
+         else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 && Path.trim().length > 0 
+         && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                     saveSubmit(data);
                 }
         else if(links===false && Path.trim().length>0 && gddelimiter.trim().length > 0 && ConnectionName.trim().length>0){
@@ -249,16 +250,16 @@ export default function TargetDetails(){
             "row_id":parseInt(window.location.href.split('/')[4]),
             "type_id":SourceType,
             "type":'target',
-            "connection_name":ConnectionName,
+            "connection_name":ConnectionName.trim(),
             "default":Default,
             "format":Format,
-            "hostname": Hostname,
-            "account_name": AccountName,
-            "account_key": AccountKey,
-            "source_query": SourceQuery,
-            "location_name": LocationName,
-            "path": Path,
-            "delimiter": gddelimiter,
+            "hostname": Hostname.trim(),
+            "account_name": AccountName.trim(),
+            "account_key": AccountKey.trim(),
+            "source_query": SourceQuery.trim(),
+            "location_name": LocationName.trim(),
+            "path": Path.trim(),
+            "delimiter": gddelimiter.trim(),
             "file_type": TargetFileType,
             "port": Port
         }
@@ -267,8 +268,8 @@ export default function TargetDetails(){
         SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
             updateData(data);
         }
-        else if(blob===false && Hostname.trim().length>0 && SourceType > 0 &&  AccountKey.trim().length>0  && 
-                LocationName.trim().length>0 && ConnectionName.trim().length>0){
+        else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 && Path.trim().length > 0 
+        && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                     updateData(data);
                 }
         else if(links===false && Path.trim().length>0 && SourceType > 0 &&  gddelimiter.trim().length > 0 && ConnectionName.trim().length>0){
@@ -282,12 +283,13 @@ export default function TargetDetails(){
     let local = 'http://localhost:4000';
 
     function updateData(data){
+        setEdited(true);
         Axios.post(`${local}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
                 setMsg(response.data.message) 
                 handleOpen() 
-                //  setSubmitted(true);
+                 setEdited(false);
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -297,13 +299,14 @@ export default function TargetDetails(){
     }
 
     function saveSubmit(data) {
+        setSubmitted(true);
         Axios.post(`${local}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){
                 let msg = response.data.message;
                 setMsg(msg) 
                 handleOpen() 
-                // setSubmitted(true);
+                setSubmitted(false);
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -695,7 +698,7 @@ export default function TargetDetails(){
                            e.preventDefault();
                            handleEdit();
                            
-                       }} hidden={Fresh} disabled={Submitted}>Update Target </Button>
+                       }} hidden={Fresh} disabled={Edited}>Update Target </Button>
        </div>
        
         </Paper>

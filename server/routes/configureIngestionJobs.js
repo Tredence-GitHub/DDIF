@@ -3,7 +3,6 @@ const express = require('express');
 const Router = express.Router();
 const notebook = require('./notebooks/notebook.js');
 const Moment = require('moment');
-const { resolve } = require('path');
 
 
 // get all the information for the data table
@@ -29,7 +28,7 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
- 
+
     let target_types = new Promise((resolve, reject)=>{
         db.DataTargets.findAll()
         .then((result)=>{
@@ -38,7 +37,7 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
- 
+
     let project_types = new Promise((resolve, reject)=>{
         db.ProjectTypes.findAll()
         .then((result)=>{
@@ -47,7 +46,7 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
- 
+
     let connections_types = new Promise((resolve, reject)=>{
         db.Connections.findAll()
         .then((result)=>{
@@ -56,16 +55,16 @@ Router.get('/getDropdowns',(req, res)=>{
             reject(err);
         })
     })
- 
+
     Promise.all([source_types, target_types, project_types, connections_types])
     .then((response)=>{
         let frameResponse = {}
- 
+
         frameResponse['data_sources'] = response[0];
         frameResponse['data_targets'] = response[1];
         frameResponse['project_types'] = response[2];
         frameResponse['connection_types'] = response[3];
- 
+
         res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify(frameResponse)) })
     })
 });
@@ -193,7 +192,7 @@ const triggerNotebook = async (jobId, entryId) => {
     const data = {
         'job_id': jobId,
         'notebook_params': {
-            'entryid': '300'
+        'entryid': entryId
         }
     }
     let notebookRes = await notebook.notebookTrigger(data);
@@ -214,6 +213,7 @@ const triggerNotebook = async (jobId, entryId) => {
 
 Router.post('/api/getMetadata',async (req, res) => {
     let request_data = req.body;
+    console.log(request_data.entryId);
 
     let finalRes = await triggerNotebook(31, request_data.entryId);
     if(finalRes !== 'Failed') {
@@ -232,7 +232,7 @@ Router.post('/api/getMetadata',async (req, res) => {
 Router.post('/updateSetupDBData', (req, res)=>{
     let request_data = req.body;
     
-    let jobID = `JOB_${request_data.source_abbrv}_${request_data.target_abbrv}_${result.entryId}`;
+    let jobID = `JOB_${request_data.source_abbrv}_${request_data.target_abbrv}_${request_data.entryId}`;
     
     let DataCatalogData = {
         username: request_data.username,
@@ -241,7 +241,7 @@ Router.post('/updateSetupDBData', (req, res)=>{
         project_type: request_data.project_type,
         jobname: jobID,
         created_by: request_data.created_by,
-        created_at: request_data.created_at,
+        created_at: Moment(request_data.created_at).format("YYYY-MM-DD HH:mm:ss"),
         source_type: request_data.source_type,
         target_type: request_data.target_type,
         status: request_data.status,
@@ -255,7 +255,7 @@ Router.post('/updateSetupDBData', (req, res)=>{
                 where: {
                     entryId: request_data.entryId
                 }
-            }).then((result1)=>{
+            }).then((resp)=>{
                 resolve(JSON.parse(JSON.stringify(resp)));
             }).catch((err)=>{
                 reject(err);
@@ -279,7 +279,7 @@ Router.post('/updateSetupDBData', (req, res)=>{
         where: {
             job_id: request_data.entryId
         }
-        }).then((result1)=>{
+        }).then((resp)=>{
             resolve(JSON.parse(JSON.stringify(resp)));
         }).catch((err)=>{
             reject(err);
@@ -299,9 +299,9 @@ Router.post('/updateSetupDBData', (req, res)=>{
     let updateParametersData = new Promise((resolve, reject) => {
             db.Parameters.update(ParametersData,{
             where: {
-                entry_id: request_data.entryId
+                entryId: request_data.entryId
             }
-                }).then((result1)=>{
+                }).then((resp)=>{
                     resolve(JSON.parse(JSON.stringify(resp)));
                 }).catch((err)=>{
                     reject(err);
@@ -310,24 +310,32 @@ Router.post('/updateSetupDBData', (req, res)=>{
 
         Promise.all([updateDataCatalog, updateScheduleData, updateParametersData])
             .then((results)=>{
+                let frameFinal = {};
+                frameFinal['entry_id'] = request_data.entryId;
+                frameFinal['parameters'] = JSON.parse(JSON.stringify(results[2]));
+                frameFinal['Schedule'] = JSON.parse(JSON.stringify(results[1]));
+                
                 console.log(results);
-                res.status(200).json({message: 'Updated successfully ', entryId: request_data.entryId ,data: JSON.parse(JSON.stringify(result))});
+                res.status(200).json({message: 'Updated successfully ', entryId: request_data.entryId ,data: JSON.parse(JSON.stringify(frameFinal))});
             }).catch((err)=>{
+                console.log(err)
                 res.status(400).json({message: 'Failed'});
             })
 })
 
 // create or update metadata records
 Router.post('/saveMetadata', (req, res)=>{
-    let entryId = req.body.entryId;
-    let request_data = req.body;
+    let entryId = parseInt(req.body.entryId);
+    let request_data = req.body.metadata;
 
     db.Metadata.destroy({
-        entry_id: entryId
+        where: {
+            entry_id: entryId
+        }
     }).then((result)=>{
         for(let i = 0; i < request_data.length; i++){
             request_data[i]['entry_id'] = entryId;
-            db.Metadata.create(request_data)
+            db.Metadata.create(request_data[i])
             .then((result)=>{
                 if(i === request_data.length-1){
                     res.status(200).json({message: 'Successful', data: [], entry_id: entryId});
@@ -345,7 +353,7 @@ Router.post('/saveMetadata', (req, res)=>{
 })
 
 // get Metadata for entryId
-Router.get('/getMetadata/:entryId', (req, res)=>{
+Router.get('/getSavedMetadata/:entryId', (req, res)=>{
     let entryId = req.params.entryId;
 
     db.Metadata.findAll({

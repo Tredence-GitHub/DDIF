@@ -1036,6 +1036,7 @@ export default function Setup(props) {
                 <Grid container direction="column"
                     alignItems="center"
                     justify="center">
+                    {/* <Paper className={classes.paper} style={{width:"1230px"}}> */}
                     <Paper className={classes.paper}>
                         <form className={classes.root} noValidate autoComplete="off">
                             <div style={{ marginBottom: "50px" }}>

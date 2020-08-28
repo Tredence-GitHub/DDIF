@@ -34,6 +34,7 @@ import IngestionTable from './configure_ingestion/IngestionTable';
 import Administration from './administrator/administration';
 import SourceDetails from './administrator/sourceDetails';
 import TargetDetails from './administrator/targetDetails';
+import Setup from './configure_ingestion/Setup';
 
 const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
@@ -242,7 +243,7 @@ export default function Layout() {
                                     <Route exact path="/home" >
                                         <Home />
                                     </Route>
-                                    <Route exact path="/ingestion" >
+                                    <Route exact path={['/ingestion','/ingestion/:param']} >
                                         <Ingestion />
                                     </Route>
                                     {/* <Route exact path="/ingestion/:page" render={props=> <Ingestion {...props}/>}>
@@ -260,6 +261,9 @@ export default function Layout() {
                                     <Route exact  path = {['/addTarget','/addTarget/:param']}>
                                         <TargetDetails/>
                                     </Route>
+                                    {/* <Route path = {['/ingestion','/ingestion/:param']}>
+                                        <Setup/>
+                                    </Route> */}
                                 </Fragment>
                             </Switch>
 
