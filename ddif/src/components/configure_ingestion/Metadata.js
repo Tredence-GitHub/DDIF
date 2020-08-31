@@ -189,7 +189,7 @@ export default function Metadata(props) {
             // console.log(item) 
 
             arr.push({
-              'column_id': item[0], "column_name": item[1], "data_type": item[2], "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 0, nullable: 1, dqcheck: 0, default: "", dateformat: ""
+              'column_id': item[0], "column_name": item[1], "data_type": item[2].trim(), "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 0, nullable: 1, dqcheck: 0, default: "", dateformat: ""
             })
 
           })
@@ -239,11 +239,10 @@ export default function Metadata(props) {
 
   useEffect(() => {
 
-    if (props.entryid != "error" && props.editFn == '') {
+    if (props.entryid != "error" && props.editFn !== 'edit') {
       console.log(props.entryid)
       getInfo()
     }
-
     else if (props.editFn === 'edit') {
       getSavedMetadata(props.entryid)
     }
@@ -287,6 +286,7 @@ export default function Metadata(props) {
                 setTimeout(() => {
                   const dataUpdate = [...dataTable];
                   const index = oldData.tableData.id;
+                  newData.column_name = newData.column_name.trim().replace(' ', '_');
                   dataUpdate[index] = newData;
                   setDataTable([...dataUpdate]);
                   resolve();
@@ -297,27 +297,26 @@ export default function Metadata(props) {
 
         <div className={classes.root} style={{ marginTop: "20px" }}>
           <Grid container>
-            <Grid item xs={4} direction="column" container justify="flex-start" alignItems="flex-start">
+            <Grid item  direction="row" container justify="flex-end" alignItems="flex-end">
               <Button variant="contained" color='primary' onClick={(e) => {
                 e.preventDefault();
                 updateMetadata();
+                props.onPassMetadata(props.entryid, 'edit');
                 // window.location.href = "/ingestion/setup"; 
-              }}>Update</Button>
-              </Grid>
-              <Grid item xs={4} direction="column" container justify="center" alignItems="center">
-
+              }}>Update & Next</Button>
+            
               <Button variant="contained" color='primary' onClick={(e) => {
                 e.preventDefault();
                 getInfo();
               }}>Reset</Button>
               </Grid>
-              <Grid item xs={4} direction="column" container justify="flex-end" alignItems="flex-end">
+              {/* <Grid item xs={4} direction="column" container justify="flex-end" alignItems="flex-end">
 
-              <Button variant="contained" color='primary' onClick={(e) => {
+              {/* <Button variant="contained" color='primary' onClick={(e) => {
                 e.preventDefault();
-                props.onPassMetadata(props.entryid, 'edit');
-              }}>Next</Button>
-              </Grid>
+                
+              }}>Next</Button> */}
+              {/* </Grid>  */}
           </Grid>
         </div>
       </div>

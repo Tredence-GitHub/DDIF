@@ -182,6 +182,11 @@ export default function Setup(props) {
     const [sourcetypeAbbrv, setSourcetypeAbbrv] = React.useState('');
     const [sourceConnection, setsourceConnection] = React.useState('');
     const [targetConnection, settargetConnection] = React.useState('');
+
+    // check old connection with new
+    const [oldsourceConnection, setoldsourceConnection] = React.useState('');
+    const [oldtargetConnection, setoldtargetConnection] = React.useState('');
+
     const [sourcetypeId, setSourcetypeId] = React.useState('');
     const [targettype, setTargettype] = React.useState('');
     const [targettypeAbbrv, setTargettypeAbbrv] = React.useState('');
@@ -396,6 +401,7 @@ export default function Setup(props) {
                     setFormat(SourceParameters.file_type)
                     setblobDelimiter(SourceParameters.delimiter)
                     setsourceConnection(SourceParameters.connection_name)
+                    setoldsourceConnection(SourceParameters.connection_name)
 
                     let sourcesecondDropdown = []
 
@@ -535,7 +541,7 @@ export default function Setup(props) {
                     setjdbcDatabaseName2(TargetParameters.location_name)
                     setjdbcsourceQuery2(TargetParameters.source_query)
                     settargetConnection(TargetParameters.connection_name)
-
+                    setoldtargetConnection(TargetParameters.connection_name)
 
                     seterror(false);
                     setloading(false);
@@ -1244,7 +1250,11 @@ export default function Setup(props) {
         }
         // console.log(param)
         // console.log(typeof(param.start_date))
-        props.onPassSetup(param,'edit')
+        if(oldsourceConnection === sourceConnection){
+            props.onPassSetup(param,'edit')
+        }else{
+            props.onPassSetup(param, 'saveEdit')
+        }
 
         //API
     }
@@ -2511,7 +2521,7 @@ export default function Setup(props) {
                                     <Button variant="contained" color='primary' onClick={(e) => {
                                         e.preventDefault();
                                         isFormValid();
-                                    }} >Save Details</Button>
+                                    }} >Save & Next</Button>
                                 </Grid>
                                 </Grid> :
                                 <Grid container>
@@ -2519,7 +2529,7 @@ export default function Setup(props) {
                                         <Button variant="contained" color='primary' onClick={(e) => {
                                             e.preventDefault();
                                             isFormValidEdit();
-                                        }} >Update Details</Button>
+                                        }} >Update & Next</Button>
                                 </Grid>
                                 </Grid>}
                                 {/* <Grid container>

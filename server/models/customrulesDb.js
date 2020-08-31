@@ -1,6 +1,8 @@
 module.exports = function (sequelize, Sequelize){
     return sequelize.define('CustomRules', {
+        
         entry_id: {
+            primaryKey: true,
             type: Sequelize.INTEGER
         },
         custom_rulename: {

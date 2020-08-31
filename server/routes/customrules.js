@@ -4,7 +4,7 @@ const Router = express.Router();
 
 // fetch the dropdown columns from metadata table 
 // fetch the business rules for the dropdown
-Router.get('/getCustomRuleDropdowns/:param', (req, res)=>{
+Router.get('/getCustomRuleDropdowns/:entryid', (req, res)=>{
     let entry_id = parseInt(req.params.entryid);
 
     let fetchMetadata = new Promise((resolve, reject)=>{
@@ -56,8 +56,12 @@ Router.post('/saveCustomRules', (req, res)=>{
             where: {
                 entry_id: entry_id
             }
-        }).then((res)=>{
-            db.CustomRules.create(request_data.customrules)
+        }).then((result)=>{
+            db.CustomRules.create({
+                entry_id: entry_id,
+                rule_definition: request_data.customrules.rule_definition.substring(1, request_data['customrules']['rule_definition'].length-1),
+                custom_rulename: request_data.customrules.custom_rulename
+            })
             .then((response)=>{
                 resolve(JSON.parse(JSON.stringify(response)))
             }).catch((err)=>{
@@ -70,34 +74,35 @@ Router.post('/saveCustomRules', (req, res)=>{
         })
     })
 
-    let savebusinessrules = new Promise((resolve, reject)=>{
-        let business_rules = request_data.businessrules;
+    // let savebusinessrules = new Promise((resolve, reject)=>{
+    //     let business_rules = request_data.businessrules;
         
-        db.BusinessRules.destroy({
-            where: {
-                entry_id: entry_id
-            }
-        }).then((res)=>{
-                for(let i = 0; i < business_rules.length; i++){
+    //     db.BusinessRules.destroy({
+    //         where: {
+    //             entry_id: entry_id
+    //         }
+    //     }).then((result)=>{
+    //             for(let i = 0; i < business_rules.length; i++){
                     
-                    db.BusinessRules.create(business_rules[i])
-                    .then((result)=>{
-                        if(i === business_rules.length-1){
-                            resolve('finished')
-                        }
-                    }).catch((err)=>{
-                        console.log(err, "()(()()()")
-                        res.status(400).json({message: 'Error while saving business rules'})
-                    });
-               }
-            }).catch((err)=>{
-            console.log(err)
-        })
-    })
+    //                 db.BusinessRules.create(business_rules[i])
+    //                 .then((result)=>{
+    //                     if(i === business_rules.length-1){
+    //                         resolve('finished')
+    //                     }
+    //                 }).catch((err)=>{
+    //                     console.log(err, "()(()()()")
+    //                     res.status(400).json({message: 'Error while saving business rules'})
+    //                 });
+    //            }
+    //         }).catch((err)=>{
+    //         console.log(err)
+    //     })
+    // })
 
-    Promise.all([savecustomrulesdata, savebusinessrules])
+    Promise.all([savecustomrulesdata])
     .then((result)=>{
-        if(result[0].length > 0 && result[1] === 'finished'){
+        console.log(result)
+        if(result[0] != {} ){
             res.status(200).json({message: 'successful', entry_id: entry_id})
         }else{
             res.status(400).json({message: 'Error while saving the rules'})

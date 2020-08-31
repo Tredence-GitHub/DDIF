@@ -155,12 +155,12 @@ export default function SourceDetails(){
             setLinks(true);
             setDbc(true);
         }else{
-            setHostname(' '); setAccountKey(' ');
-            setAccountName(' ');
-            setPort(' ');
-            setSourceQuery(' ');
+            setHostname(''); setAccountKey('');
+            setAccountName('');
+            setPort('');
+            setSourceQuery('');
             setTargetFileType('');
-            setLocationName(' ');
+            setLocationName('');
             setBlob(true);
             setFormat(event.target.value);
             setLinks(true);

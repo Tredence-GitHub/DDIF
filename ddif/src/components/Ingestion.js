@@ -222,8 +222,10 @@ export default function CustomizedSteppers(props) {
 
     if(mode==='save'){
       saveData(param)
+      setfn(mode)
     }
     else{
+      setfn(mode)
       updateData(param)
     }
   }
@@ -269,10 +271,10 @@ export default function CustomizedSteppers(props) {
         { 
           // console.log("ENTRYY ID -- ", entryid)  
           if(entryid > 0)
-        { return <Metadata onPassMetadata={handleMetadata} entryid={entryid} editFn={fn}/>}
+        { return <Metadata onPassMetadata={handleMetadata} entryid={entryid} editFn={fn} />}
           else{return <Metadata entryid="error"/>}}
       case 2:
-        return <Custom entryid={entryid} />;
+        return <Custom entryid={entryid} editFn={fn} />;
       case 3:
         return 'Review & Ingest';
       default:
@@ -290,13 +292,19 @@ export default function CustomizedSteppers(props) {
       // console.log(response);
       if (response.status === 200) {
         // console.log(response, "**********");
-        setEntryid(response.data.data.entry_id)
+        if(response.data.data.entry_id)
+        {
+          setEntryid(response.data.data.entry_id)
         // console.log(response.data.data.entry_id, "00000")
         handleOpen()
         setMsg(response.data.message)
 
         handleNext();
-
+        }
+        else{
+          handleOpen()
+        setMsg(response.data.message)
+        }
         // enqueueSnackbar("Success", {
         //     variant: 'success',
         // });
