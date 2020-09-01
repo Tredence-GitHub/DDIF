@@ -25,6 +25,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Summary from './configure_ingestion/Summary';
+import Customrules from './configure_ingestion/Customrules';
+import {useSnackbar} from 'notistack';
 
 const QontoConnector = withStyles({
   alternativeLabel: {
@@ -215,6 +217,7 @@ export default function CustomizedSteppers(props) {
   const [msg, setMsg] = React.useState('');
   const [entryid, setEntryid] = React.useState(0);
   const [fn, setfn] = React.useState('');
+  const {enqueueSnackbar} = useSnackbar();
 
 
   let local = 'http://localhost:4000';
@@ -275,7 +278,7 @@ export default function CustomizedSteppers(props) {
         { return <Metadata onPassMetadata={handleMetadata} entryid={entryid} editFn={fn} />}
           else{return <Metadata entryid="error"/>}}
       case 2:
-        return <Custom entryid={entryid} editFn={fn} />;
+        return <Customrules entryid={entryid} editFn={fn} />;
       case 3:
         return <Summary entryid={entryid} />;
       default:
@@ -297,35 +300,39 @@ export default function CustomizedSteppers(props) {
         {
           setEntryid(response.data.data.entry_id)
         // console.log(response.data.data.entry_id, "00000")
-        handleOpen()
-        setMsg(response.data.message)
+        // handleOpen()
+        // setMsg(response.data.message)
+        enqueueSnackbar(response.data.message, {
+          variant: 'success',
+      });
 
         handleNext();
         }
         else{
-          handleOpen()
-        setMsg(response.data.message)
-        }
-        // enqueueSnackbar("Success", {
-        //     variant: 'success',
-        // });
+        //   handleOpen()
+        // setMsg(response.data.message)
+        enqueueSnackbar("Failed", {
+          variant: 'warning',
+      })
+    };
+        
 
       }
       else if (response.status === 400) {
-        handleOpen()
-        setMsg('failed!')
-        // enqueueSnackbar("Failed", {
-        //     variant: 'warning',
-        // })
+        // handleOpen()
+        // setMsg('failed!')
+        enqueueSnackbar("Failed", {
+          variant: 'warning',
+      })
       }
 
     }).catch((err) => {
       console.log(err);
-      handleOpen()
-      setMsg('Failed!')
-      // enqueueSnackbar("Failed", {
-      //     variant: 'warning',
-      // })
+      // handleOpen()
+      // setMsg('Failed!')
+      enqueueSnackbar("Failed", {
+        variant: 'warning',
+    })
     });
   }
 
@@ -339,30 +346,30 @@ export default function CustomizedSteppers(props) {
         // console.log(response, "**********");
         setEntryid(response.data.entryId)
         // console.log(response.data.data.entry_id, "00000")
-        handleOpen()
-        setMsg(response.data.message)
+        // handleOpen()
+        // setMsg(response.data.message)
         handleNext();
 
-        // enqueueSnackbar("Success", {
-        //     variant: 'success',
-        // });
+        enqueueSnackbar(response.data.message, {
+            variant: 'success',
+        });
 
       }
       else if (response.status === 400) {
-        handleOpen()
-        setMsg('failed!')
-        // enqueueSnackbar("Failed", {
-        //     variant: 'warning',
-        // })
+        // handleOpen()
+        // setMsg('failed!')
+        enqueueSnackbar("Failed", {
+            variant: 'warning',
+        })
       }
 
     }).catch((err) => {
       console.log(err);
-      handleOpen()
-      setMsg('Failed!')
-      // enqueueSnackbar("Failed", {
-      //     variant: 'warning',
-      // })
+      // handleOpen()
+      // setMsg('Failed!')
+      enqueueSnackbar("Failed", {
+          variant: 'warning',
+      })
     });
   }
 

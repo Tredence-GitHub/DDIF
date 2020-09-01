@@ -50,7 +50,7 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-// import {useSnackbar} from 'notistack';
+import {useSnackbar} from 'notistack';
 
 const formats = [
     {
@@ -268,7 +268,7 @@ export default function Setup(props) {
     const [hiddenweek, setHiddenWeek] = React.useState("none");
     const [entryId, setEntryId] = React.useState(0);
 
-    // const {enqueueSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
     let local = 'http://localhost:4000';
 
     function getInfo() {
@@ -1267,8 +1267,11 @@ export default function Setup(props) {
             passParam();
         }
         else{
-            handleOpen()
-            setMsg("Please Fill All the Details!")
+            // handleOpen()
+            // setMsg("Please Fill All the Details!")
+            enqueueSnackbar('Please Fill All the Details!',{
+                variant: 'warning',
+            })
         }
     };
 
@@ -1280,8 +1283,11 @@ export default function Setup(props) {
             passEditParam();
         }
         else{
-            handleOpen()
-            setMsg("Please Fill All the Details!")
+            // handleOpen()
+            // setMsg("Please Fill All the Details!")
+            enqueueSnackbar('Please Fill All the Details!',{
+                variant: 'warning',
+            })
         }
     };
 
@@ -1310,7 +1316,7 @@ export default function Setup(props) {
                 <Grid container direction="column"
                     alignItems="center"
                     justify="center">
-                    <Paper className={classes.paper}>
+                    <Paper className={classes.paper} style={{width:"1148px"}}>
                         <form className={classes.root} noValidate autoComplete="off">
                             <div style={{ marginBottom: "50px" }}>
                                 <strong>Project Information </strong>
@@ -2517,7 +2523,7 @@ export default function Setup(props) {
                             <div className={classes.buttonRoot} style={{ marginTop: "20px" }}>
                                 {entryId===0 ?
                                 <Grid container>
-                                <Grid item xs={6} direction="column" container justify="flex-start" alignItems="flex-start">
+                                <Grid item  container justify="center" alignItems="center">
                                     <Button variant="contained" color='primary' onClick={(e) => {
                                         e.preventDefault();
                                         isFormValid();
@@ -2525,7 +2531,7 @@ export default function Setup(props) {
                                 </Grid>
                                 </Grid> :
                                 <Grid container>
-                                <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
+                                <Grid item  container justify="center" alignItems="center">
                                         <Button variant="contained" color='primary' onClick={(e) => {
                                             e.preventDefault();
                                             isFormValidEdit();
@@ -2569,7 +2575,8 @@ export default function Setup(props) {
     }
 
     else {
-        return (<div className={classes.progress} style={{ marginLeft: "550px" }}>
+        return (
+        <div className={classes.progress} style={{ marginLeft: "550px",height:"500px"  }}>
             <CircularProgress />
         </div>)
     }

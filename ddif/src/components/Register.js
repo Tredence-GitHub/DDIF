@@ -15,6 +15,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import { useSnackbar,withSnackbar } from 'notistack';
 
 
 const roles = [
@@ -51,12 +52,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [msg, setMsg] = React.useState('');
+    // const [open, setOpen] = React.useState(false);
+    // const [msg, setMsg] = React.useState('');
     const [name, setName] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [role, setRole] = React.useState('');
+
+    const [errorinfo, seterrorinfo] = React.useState('');
+    const [error, seterror] = React.useState(false);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     let local = "http://localhost:4000"
 
@@ -69,19 +74,30 @@ export default function Login() {
     };
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
+        // let strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
+        let strongRegex = new RegExp("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
+        if(!strongRegex.test(event.target.value)){
+        // if((event.target.value).length<8){
+            seterrorinfo("Password must contain at least 1 uppercase alphabet character, 1 numeric character, 1 special character and must be atleast 8 characters long.")
+            seterror(true)
+        }
+        else {
+            seterrorinfo("Strong Password")
+            seterror(false)
+        }
     };
     const handleChangeRole= (event) => {
         setRole(event.target.value);
     };
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
+    // const handleOpen = () => {
+    //     setOpen(true);
+    // };
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+    //     setOpen(false);
+    // };
 
 
     const passwordValidator = (e) => {
@@ -102,38 +118,50 @@ export default function Login() {
                 console.log(response);
                 if (response.status === 200) {
                     // alert(response.data.message)
-                     handleOpen() 
-                     setMsg(response.data.message) 
+                    //  handleOpen() 
+                    //  setMsg(response.data.message) 
+                    enqueueSnackbar(response.data.message, {
+                        variant: 'success',
+                    });
 
                      if(response.data.data.length > 0){
                          return window.location.href = "/";
                      }
                 }
                 else if (response.status === 400) {
-                     handleOpen() 
-                     setMsg('Failed to register the user!') 
+                    //  handleOpen() 
+                    //  setMsg('Failed to register the user!') 
                     // alert('Failed to register the user!')
                     // return window.location.href = "/";
+                    enqueueSnackbar('Failed to register the user!', {
+                        variant: 'error',
+                    });
                 }
             }).catch((err) => {
                 console.log(err);
-                 handleOpen() 
-                 setMsg('Failed to register the user!') 
+                //  handleOpen() 
+                //  setMsg('Failed to register the user!') 
+                 enqueueSnackbar('Failed to register the user!', {
+                    variant: 'error',
+                });
 
             });
 
         }
         else {
-            handleOpen();
-            setMsg("Please Check your Credentials")
+            // handleOpen();
+            // setMsg("Please Check your Credentials")
             // return false;
+            enqueueSnackbar('Please Check Your Credentials', {
+                variant: 'warning',
+            });
         }
 
     };
 
     return (
         <div className={classes.root} style={{backgroundColor:"lightblue"}}>
-            <Snackbar
+            {/* <Snackbar
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'center',
@@ -149,7 +177,7 @@ export default function Login() {
                         </IconButton>
                     </React.Fragment>
                 }
-            />
+            /> */}
             <Grid
                 container
                 spacing={0}
@@ -160,7 +188,7 @@ export default function Login() {
             >
 
                 <Grid item xs={3}>
-                    <Paper className={classes.paper} style={{ width: "300px" }}>
+                    <Paper className={classes.paper} style={{ width: "320px" }}>
                         <strong>Create Account</strong>
                         <hr />
 
@@ -202,6 +230,8 @@ export default function Login() {
                                     placeholder="Password"
                                     type="password"
                                     onChange={handleChangePassword}
+                                    error={error}
+                                    helperText={errorinfo}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">

@@ -15,7 +15,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Alert from '@material-ui/lab/Alert';
-// import Background from '../assets/Images/imagebg.jpg'
+import Typography from '@material-ui/core/Typography'
+import {ThemeProvider,createMuiTheme } from "@material-ui/core/styles"
+import Switch from '@material-ui/core/Switch';
+import { useSnackbar,withSnackbar } from 'notistack';
 
 const roles = [
     {
@@ -50,21 +53,22 @@ const useStyles = makeStyles((theme) => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-        marginLeft:"115px"
-      },
+        backgroundColor: theme.palette.primary.main,
+        marginLeft: "115px"
+    },
 
 }));
 
 
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [msg, setMsg] = React.useState('');
+    // const [open, setOpen] = React.useState(false);
+    // const [msg, setMsg] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [role, setRole] = React.useState('');
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     let local = "http://localhost:4000"
 
@@ -74,15 +78,15 @@ export default function Login() {
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
     };
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
+    // const handleOpen = () => {
+    //     setOpen(true);
+    // };
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+    //     setOpen(false);
+    // };
 
 
     const validator = (e) => {
@@ -96,32 +100,51 @@ export default function Login() {
             console.log(response);
             if (response.status === 200) {
                 // alert(response.data.message)
-                handleOpen()
-                setMsg(response.data.message)
+                // handleOpen()
+                // setMsg(response.data.message)
+                enqueueSnackbar(response.data.message, {
+                    variant: 'success',
+                });
                 localStorage.setItem('loggedIn', true);
-                localStorage.setItem('username',username);
+                localStorage.setItem('username', username);
                 return window.location.href = "/home";
             }
             else if (response.status === 400) {
-                handleOpen()
-                setMsg('You are not registered with us! Please register!')
+                // handleOpen()
+                // setMsg('You are not registered with us! Please register!')
                 // alert('You are not registered with us! Please register!')
                 // return window.location.href = "/";
+                enqueueSnackbar('You are not registered with us! Please register!', {
+                    variant: 'warning',
+                });
             }
 
         }).catch((err) => {
             console.log(err);
-            handleOpen()
-            setMsg('You are not registered with us! Please register!')
+            // handleOpen()
+            // setMsg('You are not registered with us! Please register!')
             // alert('You are not registered with us! Please register!')
             // return window.location.href = "/";
+            enqueueSnackbar('You are not registered with us! Please register!', {
+                variant: 'warning',
+            });
         });
     }
 
+    const [darkMode, setDarkMode] = React.useState(false);
+    const theme = createMuiTheme({
+        palette:{
+          type : darkMode ? "dark" : "light"
+        }
+      });
+
     return (
         // <div className={classes.root} style={{backgroundImage: `url(${Background})`}}>
-        <div className={classes.root} style={{backgroundColor:"lightblue"}}>
-            <Snackbar
+
+        <ThemeProvider theme={theme}>
+        <paper>
+        <div className={classes.root} style={{ backgroundColor: "lightblue" }}>
+            {/* <Snackbar
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'center',
@@ -137,7 +160,7 @@ export default function Login() {
                         </IconButton>
                     </React.Fragment>
                 }
-            />
+            /> */}
 
             <Grid
                 container
@@ -151,10 +174,16 @@ export default function Login() {
 
                 <Grid item xs={3} >
                     <Paper className={classes.paper} style={{ width: "300px" }}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                        <strong>Login</strong>
+                        <div style={{marginLeft:"150px"}}>
+                            <Switch checked={darkMode} onChange={()=>{setDarkMode(!darkMode)}}/>
+                            <small>Dark Mode</small>
+                        </div>
+                    
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography>Login</Typography>
+                        
                         <hr />
                         <form className={classes.root} noValidate autoComplete="off">
                             <div>
@@ -165,8 +194,8 @@ export default function Login() {
                                     onChange={handleChangeUsername}
                                     InputProps={{
                                         startAdornment: (
-                                            <InputAdornment  position="start">
-                                                <PersonIcon /> 
+                                            <InputAdornment position="start">
+                                                <PersonIcon />
                                             </InputAdornment>
                                         ),
                                     }}
@@ -190,7 +219,7 @@ export default function Login() {
                                 />
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Button variant="contained"  color="primary" onClick={(e) => { e.preventDefault(); validator() }}>
+                                <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); validator() }}>
                                     Login
                                 </Button>
 
@@ -219,10 +248,10 @@ export default function Login() {
                         </form>
                     </Paper>
                 </Grid>
-
-
             </Grid>
         </div>
+        </paper>
+        </ThemeProvider>
 
     )
 }

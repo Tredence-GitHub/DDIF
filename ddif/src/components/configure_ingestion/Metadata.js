@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -55,6 +56,7 @@ export default function Metadata(props) {
   const [dataTable, setDataTable] = useState({});
   const [open, setOpen] = React.useState(false);
   const [msg, setMsg] = React.useState('');
+  const {enqueueSnackbar} = useSnackbar();
 
   const [columns, setColumns] = useState([
 
@@ -150,20 +152,30 @@ export default function Metadata(props) {
     }).then((response) => {
       if (response.status === 200) {
         // alert(response.data.message);
-        handleOpen();
-        setMsg(response.data.message)
+        // handleOpen();
+        // setMsg(response.data.message)
+        enqueueSnackbar(response.data.message, {
+          variant: 'success',
+      });
         setloading(false)
+
         
       } else {
-        handleOpen();
-        setMsg('Something went wrong')
+        // handleOpen();
+        // setMsg('Something went wrong')
         // alert('Something went wrong');
+        enqueueSnackbar('Something went wrong', {
+          variant: 'error',
+      });
       }
 
     }).catch((err) => {
       console.log(err, ' Saving metadata')
-      handleOpen();
-      setMsg('Something went wrong')
+      // handleOpen();
+      // setMsg('Something went wrong')
+      enqueueSnackbar('Something went wrong', {
+        variant: 'error',
+    });
     })
 
   }
@@ -208,16 +220,22 @@ export default function Metadata(props) {
 
             if (response.status === 200) {
               // alert(response.data.message);
-              handleOpen();
-              setMsg(response.data.message)
+              // handleOpen();
+              // setMsg(response.data.message)
+              enqueueSnackbar(response.data.message, {
+                variant: 'success',
+            });
               setDataTable(arr);
               seterror(false);
               setloading(false);
 
             } else {
               // alert('Something went wrong');
-              handleOpen();
-              setMsg('Something went wrong')
+              // handleOpen();
+              // setMsg('Something went wrong')
+              enqueueSnackbar('Something went wrong', {
+                variant: 'error',
+            });
             }
 
           }).catch((err) => {
@@ -226,16 +244,22 @@ export default function Metadata(props) {
         }
 
         else if (response.status === 400) {
-          handleOpen();
-          setMsg('Something went wrong')
+          // handleOpen();
+          // setMsg('Something went wrong')
           // alert('Something went wrong');
+          enqueueSnackbar('Something went wrong', {
+            variant: 'error',
+        });
         }
 
       }).catch((err) => {
         console.log(err);
-        handleOpen()
-        setMsg('Something is wrong')
+        // handleOpen()
+        // setMsg('Something is wrong')
         // alert("Something is wrong")
+        enqueueSnackbar('Something went wrong', {
+          variant: 'error',
+      });
       });
 
   }
@@ -302,14 +326,14 @@ export default function Metadata(props) {
         <div className={classes.root} style={{ marginTop: "20px" }}>
           <Grid container>
             <Grid item  direction="row" container justify="flex-end" alignItems="flex-end">
-              <Button variant="contained" color='primary' onClick={(e) => {
+              <Button variant="contained" color='primary' style={{marginRight:"20px"}} onClick={(e) => {
                 e.preventDefault();
                 updateMetadata();
                 props.onPassMetadata(props.entryid, 'edit');
                 // window.location.href = "/ingestion/setup"; 
               }}>Update & Next</Button>
             
-              <Button variant="contained" color='primary' onClick={(e) => {
+              <Button variant="outlined" color='primary' onClick={(e) => {
                 e.preventDefault();
                 getInfo();
               }}>Reset</Button>

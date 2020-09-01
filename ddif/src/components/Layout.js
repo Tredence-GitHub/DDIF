@@ -35,6 +35,7 @@ import Administration from './administrator/administration';
 import SourceDetails from './administrator/sourceDetails';
 import TargetDetails from './administrator/targetDetails';
 import Setup from './configure_ingestion/Setup';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
@@ -199,21 +200,25 @@ export default function Layout() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.title} align={'left'}>
-                    <img src={TredenceLogo} height={'40px'} width={'70px'} /> &nbsp; Driverless Data Ingestion Framework
+                    <img src={TredenceLogo} height={'40px'} width={'80px'} /> &nbsp;  Driverless Data Ingestion Framework
                     </Typography>
                     <IconButton color='inherit'>
+                    <Tooltip title="Help" arrow>
                         <Badge color="secondary">
                             <HelpOutlineIcon  onClick={(e)=>{
                                 
                             }}/>
                         </Badge>
+                        </Tooltip>
                     </IconButton>
                     <IconButton color='inherit'>
+                        <Tooltip title="Sign Out" arrow>
                         <Badge color="secondary">
                             <PowerSettingsNewIcon  onClick={(e)=>{
                                 logout();
                             }}/>
                         </Badge>
+                        </Tooltip>
                     </IconButton>
                 </Toolbar>
             </AppBar>

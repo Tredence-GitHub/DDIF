@@ -35,16 +35,16 @@ export default function Custom(props) {
     const [rule, setRule] = React.useState();
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
-    
+
     const handleOpen = () => {
         setOpen(true);
-      };
-      const handleClose = (event, reason) => {
+    };
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
-      };
+    };
 
     let renderBuilder = (props) => (
         <div className="query-builder-container" style={{ padding: '10px' }}>
@@ -58,10 +58,10 @@ export default function Custom(props) {
         <div className="query-builder-result">
             {/* <div>Query string: <pre>{JSON.stringify(QbUtils.queryString(immutableTree, config))}</pre></div> */}
             {/* <div>MongoDb query: <pre>{JSON.stringify(QbUtils.mongodbFormat(immutableTree, config))}</pre></div> */}
-            
-                
-                 <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre>
-                
+
+
+            <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre>
+
             {/* <div>JsonLogic: <pre>{JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}</pre></div> */}
         </div>
     )
@@ -142,9 +142,9 @@ export default function Custom(props) {
                     // frame[item.column_name]['preferWidgets']=['number']
                     frame[item.column_name] = {}
                     frame[item.column_name]['label'] = item.column_name
-                    if(item.data_type.includes('varchar')){
+                    if (item.data_type.includes('varchar')) {
                         frame[item.column_name]['type'] = 'text'
-                    }else{
+                    } else {
 
                         frame[item.column_name]['type'] = 'number'
                     }
@@ -167,7 +167,7 @@ export default function Custom(props) {
                 console.log(err)
             })
 
-        
+
 
         let values = {};
         config['fields'] = frame;
@@ -181,13 +181,13 @@ export default function Custom(props) {
     }
 
     useEffect(() => {
-        if(props.entryid != "error" && props.editFn !== 'edit'){
+        if (props.entryid != "error" && props.editFn !== 'edit') {
             firstcall()
         }
         else if (props.editFn === 'edit') {
             // call populate API and first call
-             firstcall()
-          }
+            firstcall()
+        }
     }, [])
     const sendData = () => {
         console.log(props.entryid, "*** here ***")
@@ -203,38 +203,39 @@ export default function Custom(props) {
                 },
                 businessrules: {}
             }
-        }).then((response)=>{
-            if(response.status === 200){
+        }).then((response) => {
+            if (response.status === 200) {
                 handleOpen()
                 setMsg(response.data.message);
-            }else{
+            } else {
                 handleOpen()
                 setMsg(response.data.message);
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
         })
     }
+
     if (!loading) {
         return (
             <Paper>
                 <Snackbar
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          open={open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          message={<span id="message-id">{msg}</span>}
-          action={
-            <React.Fragment>
-              <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }
-        />
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    message={<span id="message-id">{msg}</span>}
+                    action={
+                        <React.Fragment>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                    }
+                />
                 <Query
                     {...configfield}
                     value={tree}
@@ -249,11 +250,11 @@ export default function Custom(props) {
                     </CardHeader>
                     <CardContent>
 
-                    {renderResult(allValues)}
+                        {renderResult(allValues)}
                     </CardContent>
                 </Card>
                 <div>
-                    <Button variant="contained" color="primary" onClick={(e)=>{
+                    <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         sendData();
 
@@ -268,7 +269,7 @@ export default function Custom(props) {
     }
     else {
         return (
-            <div  style={{ marginLeft: "550px" }}>
+            <div style={{ marginLeft: "550px" }}>
                 <CircularProgress />
             </div>
         )

@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-around',
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
-        
+
     },
     list: {
         width: 250,
@@ -122,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     },
     img: {
         height: "400px",
-        width:'100%',
+        width: '100%',
         maxWidth: '100%',
         overflow: 'hidden',
         display: 'block',
@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
         // color: '#fff',
         backgroundColor: blue[800],
         marginLeft: '0px'
-      },
+    },
 
 }));
 
@@ -142,12 +142,12 @@ const useStyles = makeStyles((theme) => ({
 
 const useStylesLoad = makeStyles((theme) => ({
     root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
     },
-  }));
+}));
 
 function Home() {
     const classes = useStyles();
@@ -170,30 +170,30 @@ function Home() {
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/dashboard/dashboardInformation`), 
+            [Axios.get(`${local}/dashboard/dashboardInformation`),
             Axios.post(`${local}/dashboard/getActivityLogs`),
             Axios.get(`${local}/dashboard/announcements`)
-            ]).then((res)=>{
+            ]).then((res) => {
                 return [res]
-            })  
-        .then((response)=>{
-            console.log("RESPONSE -- ", response[0][1].status)
-            if(response[0][0].status === 200 && response[0][1].status === 200){
-                setdashboardnumbers(response[0][0].data.data);
-                setlogData(response[0][1].data.data);
-                setnotficationsData(response[0][2].data.data);
+            })
+            .then((response) => {
+                console.log("RESPONSE -- ", response[0][1].status)
+                if (response[0][0].status === 200 && response[0][1].status === 200) {
+                    setdashboardnumbers(response[0][0].data.data);
+                    setlogData(response[0][1].data.data);
+                    setnotficationsData(response[0][2].data.data);
 
-                seterror(false);
-                setloading(false);
-                console.log('CAME !!!!!  ', response.length)
-            }else{
-                console.log(response)
-                seterror(true);
-            }
+                    seterror(false);
+                    setloading(false);
+                    console.log('CAME !!!!!  ', response.length)
+                } else {
+                    console.log(response)
+                    seterror(true);
+                }
 
-        }).catch((err)=>{
-            seterror(true)
-        })
+            }).catch((err) => {
+                seterror(true)
+            })
     }
 
     useEffect(() => {
@@ -218,7 +218,7 @@ function Home() {
 
     const handleStepChange = (step) => {
         setActiveStep(step);
-      };
+    };
 
 
     const list = (anchor) => (
@@ -239,271 +239,272 @@ function Home() {
                     </ListItem>
                 ))}
             </List>
-           
+
 
         </div>
     );
 
 
 
-if(!loading){
-    return (
-        <div className={classes.root} >
-            <Grid container spacing={4}>
-                <Grid item container xs={12} style={{
-                    paddingLeft: "25px"
-                }}  >
-                    <Grid item  className="cardDivs">
-                        <CardContent className="keyCards">
-                            <Grid item container> 
-                                <Avatar className = {classes.green}>
-                                    <PersonIcon fontSize='small'/>
-                                </Avatar>
-                                <Typography className={classes.title}  color="textSecondary" gutterBottom>
-                                    <span >Registered Users</span>
+    if (!loading) {
+        return (
+            <div className={classes.root} >
+                <Grid container spacing={4}>
+                    <Grid item container xs={12} style={{
+                        paddingLeft: "25px"
+                    }}  >
+                        <Grid item className="cardDivs">
+                            <CardContent className="keyCards">
+                                <Grid item container>
+                                    <Avatar className={classes.green}>
+                                        <PersonIcon fontSize='small' />
+                                    </Avatar>
+                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                        <span >Registered Users</span>
+                                    </Typography>
+                                </Grid>
+                                <Typography variant="h4" className="Numbers" >
+                                    {dashboardnumbers.total_users}
                                 </Typography>
-                            </Grid>
-                            <Typography variant="h4" className="Numbers" >
-                                {dashboardnumbers.total_users}
-                            </Typography>
-                        </CardContent>
+                            </CardContent>
+
+                        </Grid>
+
+                        <Grid item className="cardDivs">
+                            <CardContent className="keyCards">
+                                <Grid item container>
+                                    <Avatar className={classes.green}>
+                                        <CategoryIcon fontSize='small' />
+                                    </Avatar>
+                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                        <span >Project Categories</span>
+                                    </Typography>
+                                </Grid>
+                                <Typography variant="h4" className="Numbers" >
+                                    {dashboardnumbers.total_projecttypes}
+                                </Typography>
+                            </CardContent>
+                        </Grid>
+                        <Grid item className="cardDivs">
+                            <CardContent className="keyCards">
+                                <Grid item container>
+                                    <Avatar className={classes.green}>
+                                        <StorageIcon fontSize='small' />
+                                    </Avatar>
+                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                        <span >Data Sources</span>
+                                    </Typography>
+                                </Grid>
+                                <Typography variant="h4" className="Numbers" >
+                                    {dashboardnumbers.total_datasources}
+                                </Typography>
+                            </CardContent>
+                        </Grid>
+                        <Grid item className="cardDivs">
+                            <CardContent className="keyCards">
+                                <Grid item container>
+                                    <Avatar className={classes.green}>
+                                        <SettingsInputComponentIcon fontSize='small' />
+                                    </Avatar>
+                                    <Typography className={classes.title} variant="h6" color="textSecondary" gutterBottom>
+                                        <span >Ingested Datasets</span>
+                                    </Typography>
+                                </Grid>
+                                <Typography variant="h4" className="Numbers" >
+                                    {dashboardnumbers.total_datasets}
+                                </Typography>
+                            </CardContent>
+                        </Grid>
+                        <Grid item className="cardDivs">
+                            <CardContent className="keyCards">
+                                <Grid item container>
+                                    <Avatar className={classes.green}>
+                                        <AlarmAddIcon fontSize='small' />
+                                    </Avatar>
+                                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                        <span >Jobs Created</span>
+                                    </Typography>
+                                </Grid>
+                                <Typography variant="h4" className="Numbers" >
+                                    {dashboardnumbers.total_jobs}
+                                </Typography>
+                            </CardContent>
+                        </Grid>
 
                     </Grid>
-                    
-                    <Grid item  className="cardDivs">
-                        <CardContent className="keyCards">
-                        <Grid item container> 
-                                <Avatar className = {classes.green}>
-                                    <CategoryIcon fontSize='small'/>
-                                </Avatar>
-                                <Typography className={classes.title}  color="textSecondary" gutterBottom>
-                                    <span >Project Categories</span>
-                                </Typography>
-                            </Grid>
-                            <Typography variant="h4" className="Numbers" >
-                            {dashboardnumbers.total_projecttypes}
-                            </Typography>
-                        </CardContent>
-                    </Grid>
-                    <Grid item  className="cardDivs">
-                        <CardContent className="keyCards">
-                        <Grid item container> 
-                                <Avatar className = {classes.green}>
-                                    <StorageIcon fontSize='small'/>
-                                </Avatar>
-                                <Typography className={classes.title}  color="textSecondary" gutterBottom>
-                                    <span >Data Sources</span>
-                                </Typography>
-                            </Grid>
-                            <Typography variant="h4" className="Numbers" >
-                            {dashboardnumbers.total_datasources}
-                            </Typography>
-                        </CardContent>
-                    </Grid>
-                    <Grid item  className="cardDivs">
-                        <CardContent className="keyCards">
-                        <Grid item container> 
-                                <Avatar className = {classes.green}>
-                                    <SettingsInputComponentIcon fontSize='small'/>
-                                </Avatar>
-                                <Typography className={classes.title} variant="h6" color="textSecondary" gutterBottom>
-                                    <span >Ingested Datasets</span>
-                                </Typography>
-                            </Grid>
-                            <Typography variant="h4" className="Numbers" >
-                            {dashboardnumbers.total_datasets}
-                            </Typography>
-                        </CardContent>
-                    </Grid>
-                    <Grid item  className="cardDivs">
-                        <CardContent className="keyCards">
-                        <Grid item container> 
-                                <Avatar className = {classes.green}>
-                                    <AlarmAddIcon fontSize='small'/>
-                                </Avatar>
-                                <Typography className={classes.title}  color="textSecondary" gutterBottom>
-                                    <span >Jobs Created</span>
-                                </Typography>
-                            </Grid>
-                            <Typography variant="h4" className="Numbers" >
-                            {dashboardnumbers.total_jobs}
-                            </Typography>
-                        </CardContent>
-                    </Grid>
-                    
                 </Grid>
-            </Grid>
 
 
-            <Grid container spacing={3} style={{ height: "500px" }}>
-                <Grid item xs={8}>
-                    <Paper className={classes.paper} style={{ margin: "0 0 0 15px", padding: '1px' }}>
-                        {/* <img src={image} width={'700px'} /> */}
-                        {/* <Paper square elevation={0} className={classes.header}>
+                <Grid container spacing={3} style={{ height: "500px" }}>
+                    <Grid item xs={8}>
+                        <Paper className={classes.paper} style={{ margin: "0 0 0 15px", padding: '1px' }}>
+                            {/* <img src={image} width={'700px'} /> */}
+                            {/* <Paper square elevation={0} className={classes.header}>
                             <Typography>{"DDIF-Flowchart"}</Typography>
                         </Paper> */}
-                        {activeStep===0?  <Typography>{"Key Capabilities"}</Typography>: <Typography>{"Data Ingestion Framework"}</Typography>}
-                        {activeStep===1?
-                        <img
-                            className={classes.img}
-                            src={image}
-                            maxWidth="100%"
-                            alt={"DDIF-Flowchart"}
-                        /> : 
-                            
-                            <Grid container spacing={4} style={{
-                                position: "relative",
-                                maxWidth: "900px"
-                            }}>
-                                <Grid item container xs={12} style={{
-                                    // paddingLeft: "25px"
-                                    // border: '1px solid blue'
+                            {activeStep === 0 ? <Typography>{"Key Capabilities"}</Typography> : <Typography>{"Data Ingestion Framework"}</Typography>}
+                            {activeStep === 1 ?
+                                <img
+                                    className={classes.img}
+                                    src={image}
+                                    maxWidth="100%"
+                                    alt={"DDIF-Flowchart"}
+                                /> :
 
-                                }} >
-                                    {/* Row 1 */}
+                                <Grid container spacing={4} style={{
+                                    position: "relative",
+                                    maxWidth: "900px"
+                                }}>
+                                    <Grid item container xs={12} style={{
+                                        // paddingLeft: "25px"
+                                        // border: '1px solid blue'
 
-                                    <Grid item container xs = {12} style={{
-                                    // paddingLeft: "25px"
-                                    // border: '1px solid yellow',
-                                    padding: "1%",
-                                    height: '200px'
-                                }} >    
-                                    <div className="innerCircle">
-                                        <BuildIcon className="iconsize" ></BuildIcon>
-                                        <small className="subtext">Metadata driven data extractor</small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <StoreIcon className="iconsize"></StoreIcon>
-                                        <small className="subtext">Metadata store</small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <SettingsInputComponentIcon className="iconsize"></SettingsInputComponentIcon>
-                                        <br/>
-                                        <small className="subtext">Data Ingestion & Curation Engine </small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <StorageIcon className="iconsize"></StorageIcon>
-                                        <br/>
-                                        <small className="subtext">Metadata driven data writer </small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <PermDataSettingIcon className="iconsize"></PermDataSettingIcon>
-                                        <br/>
-                                        <small className="subtext">Operational Metadata </small>
-                                    </div>
+                                    }} >
+                                        {/* Row 1 */}
 
-                                    </Grid>
+                                        <Grid item container xs={12} style={{
+                                            // paddingLeft: "25px"
+                                            // border: '1px solid yellow',
+                                            padding: "1%",
+                                            height: '200px'
+                                        }} >
+                                            <div className="innerCircle">
+                                                <BuildIcon className="iconsize" ></BuildIcon>
+                                                <small className="subtext">Metadata driven data extractor</small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <StoreIcon className="iconsize"></StoreIcon>
+                                                <small className="subtext">Metadata store</small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <SettingsInputComponentIcon className="iconsize"></SettingsInputComponentIcon>
+                                                <br />
+                                                <small className="subtext">Data Ingestion & Curation Engine </small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <StorageIcon className="iconsize"></StorageIcon>
+                                                <br />
+                                                <small className="subtext">Metadata driven data writer </small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <PermDataSettingIcon className="iconsize"></PermDataSettingIcon>
+                                                <br />
+                                                <small className="subtext">Operational Metadata </small>
+                                            </div>
 
-                                    {/* Row 2 */}
+                                        </Grid>
 
-                                    <Grid item container xs = {12} style={{
-                                    // paddingLeft: "25px"
-                                    // border: '1px solid red',
-                                    padding: "1%",
-                                    height: '200px'
-                                }} >
-                                        <div className="innerCircle">
-                                        <BusinessCenterIcon className="iconsize" ></BusinessCenterIcon>
-                                        <small className="subtext">Business & Technical Metadata Input</small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <CompareIcon className="iconsize"></CompareIcon>
-                                        <small className="subtext">Metadata Auto-Discovery</small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <PieChartIcon className="iconsize"></PieChartIcon>
-                                        <br/>
-                                        <small className="subtext">Operational Dashboards & Analytics </small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <SupervisedUserCircleIcon className="iconsize"></SupervisedUserCircleIcon>
-                                        <br/>
-                                        <small className="subtext">Role based Access Control </small>
-                                    </div>
-                                    <div className="innerCircle">
-                                        <NotificationsIcon className="iconsize"></NotificationsIcon>
-                                        <br/>
-                                        <small className="subtext">Alerts & Notifications Framework </small>
-                                    </div>
+                                        {/* Row 2 */}
 
+                                        <Grid item container xs={12} style={{
+                                            // paddingLeft: "25px"
+                                            // border: '1px solid red',
+                                            padding: "1%",
+                                            height: '200px'
+                                        }} >
+                                            <div className="innerCircle">
+                                                <BusinessCenterIcon className="iconsize" ></BusinessCenterIcon>
+                                                <small className="subtext">Business & Technical Metadata Input</small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <CompareIcon className="iconsize"></CompareIcon>
+                                                <small className="subtext">Metadata Auto-Discovery</small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <PieChartIcon className="iconsize"></PieChartIcon>
+                                                <br />
+                                                <small className="subtext">Operational Dashboards & Analytics </small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <SupervisedUserCircleIcon className="iconsize"></SupervisedUserCircleIcon>
+                                                <br />
+                                                <small className="subtext">Role based Access Control </small>
+                                            </div>
+                                            <div className="innerCircle">
+                                                <NotificationsIcon className="iconsize"></NotificationsIcon>
+                                                <br />
+                                                <small className="subtext">Alerts & Notifications Framework </small>
+                                            </div>
+
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                            
-                            
-                            
-                            }
-                        <MobileStepper
-                            steps={maxSteps}
-                            position="static"
-                            variant="dots"
-                            activeStep={activeStep}
-                            nextButton={
-                                <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
-                                    
-                                    {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                                </Button>
-                            }
-                            backButton={
-                                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                                    {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-            
-          </Button>
-                            }
-                        />
-                    </Paper>
 
 
-                </Grid>
-                <Grid item container direction="column" xs={4}>
-                    <Paper className={classes.paper}>
-                        <Typography>Activity Log {['right'].map((anchor) => (
-                            <React.Fragment key={anchor}>
-                                <Button  color='default' style={{ width: '1px', border: 'none',backgroundColor: 'none' }} onClick={toggleDrawer(anchor, true)}><NotificationsIcon fontSize='small'/>({notficationsData.length})</Button>
-                                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-                                    {list(anchor)}
-                                </Drawer>
-                            </React.Fragment>
-                        ))}
-                        </Typography>
-                        <TableContainer component={Paper} style={{
+
+                            }
+                            <MobileStepper
+                                steps={maxSteps}
+                                position="static"
+                                variant="dots"
+                                activeStep={activeStep}
+                                nextButton={
+                                    <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+
+                                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                                    </Button>
+                                }
+                                backButton={
+                                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+
+                                    </Button>
+                                }
+                            />
+                        </Paper>
+
+
+                    </Grid>
+                    <Grid item container direction="column" xs={4}>
+                        <Paper className={classes.paper}>
+                            <Typography>Activity Log {['right'].map((anchor) => (
+                                <React.Fragment key={anchor}>
+                                    <Button color='default' style={{ width: '1px', border: 'none', backgroundColor: 'none' }} onClick={toggleDrawer(anchor, true)}><NotificationsIcon fontSize='small' />({notficationsData.length})</Button>
+                                    <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                                        {list(anchor)}
+                                    </Drawer>
+                                </React.Fragment>
+                            ))}
+                            </Typography>
+                            <TableContainer component={Paper} style={{
                                 maxHeight: "405px"
 
-                        }}>
-                            <Table className={classes.table} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell><b>Job ID</b></TableCell>
-                                        <TableCell align="right"><b>Status</b></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {logData.map((row) => (
-                                        <TableRow key={row.jobname}>
-                                            <TableCell component="th" scope="row">
-                                                {row.jobname}
-                                            </TableCell>
-                                            <TableCell align="right">{row.status}</TableCell>
-
+                            }}>
+                                <Table className={classes.table} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell><b>Job ID</b></TableCell>
+                                            <TableCell align="right"><b>Status</b></TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
+                                    </TableHead>
+                                    <TableBody>
+                                        {logData.map((row) => (
+                                            <TableRow key={row.jobname}>
+                                                <TableCell component="th" scope="row">
+                                                    {row.jobname}
+                                                </TableCell>
+                                                <TableCell align="right">{row.status}</TableCell>
+
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
 
 
+                    </Grid>
                 </Grid>
-            </Grid>
-        </div>
-    );
-}else{
-    
+            </div>
+        );
+    } else {
 
-    return(<div className={classesLoad.root}>
-      <LinearProgress />
-    </div>)
-}
+
+        return (
+        <div className={classesLoad.root}>
+            <LinearProgress />
+        </div>)
+    }
 }
 
 export default Home;

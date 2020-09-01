@@ -79,8 +79,9 @@ if(!loading){
         <div>
         <div>
         <Paper className={classes.paper}>
-                        <Typography>Report Log</Typography>
-                        <TableContainer component={Paper} style={{maxHeight:"460px"}}>
+                        <strong>Job Log</strong>
+                        <hr/>
+                        <TableContainer component={Paper} style={{maxHeight:"400px"}}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -119,7 +120,7 @@ if(!loading){
 
         <div style={{marginTop:" 20px"}}>
             <Grid container>
-        <Grid direction="column" container justify="flex-start" alignItems="flex-start">
+        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
             <Button variant="contained" color='primary' onClick = {(e)=>{
                 e.preventDefault();
                 // window.location.href = "/ingestion/setup";

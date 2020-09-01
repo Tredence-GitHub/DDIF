@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { useSnackbar,withSnackbar } from 'notistack';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,10 +42,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChangePassword() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [msg, setMsg] = React.useState('');
+    // const [open, setOpen] = React.useState(false);
+    // const [msg, setMsg] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+
+    const [errorinfo, seterrorinfo] = React.useState('');
+    const [error, seterror] = React.useState(false);
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
  
     let local = "http://localhost:4000"
 
@@ -53,16 +58,28 @@ export default function ChangePassword() {
     };
     const handleChangePassword = (event) => {
         setPassword(event.target.value);
-    };
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
+        // let strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
+        let strongRegex = new RegExp("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
+        if(!strongRegex.test(event.target.value)){
+            // if((event.target.value).length<8){
+            seterrorinfo("Password must contain at least 1 uppercase alphabet character, 1 numeric character, 1 special character and must be atleast 8 characters long.")
+            seterror(true)
         }
-        setOpen(false);
+        else {
+            seterrorinfo("Strong Password")
+            seterror(false)
+        }
     };
+
+    // const handleOpen = () => {
+    //     setOpen(true);
+    // };
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+    //     setOpen(false);
+    // };
 
 
     const validator = (e) => {
@@ -75,27 +92,36 @@ export default function ChangePassword() {
             console.log(response);
             if (response.status === 200) {
                 // alert(response.data.message)
-                handleOpen()
-                setMsg(response.data.message)
+                // handleOpen()
+                // setMsg(response.data.message)
                 // return window.location.href = "/";
+                enqueueSnackbar(response.data.message, {
+                    variant: 'success',
+                });
             }
             else if (response.status === 400) {
-                handleOpen() 
-                setMsg('Failed to change password!')
+                // handleOpen() 
+                // setMsg('Failed to change password!')
                 // alert('Failed to change password!')
+                enqueueSnackbar('Failed to change password!', {
+                    variant: 'error',
+                });
             }
 
         }).catch((err) => {
             console.log(err);
-            handleOpen()
-            setMsg('Failed to change password!')
+            // handleOpen()
+            // setMsg('Failed to change password!')
             // alert('Failed to change password!')
+            enqueueSnackbar('Failed to change password!', {
+                variant: 'error',
+            });
         });
     }
 
     return (
         <div className={classes.root} style={{backgroundColor:"lightblue"}}>
-            <Snackbar
+            {/* <Snackbar
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'center',
@@ -111,7 +137,7 @@ export default function ChangePassword() {
                         </IconButton>
                     </React.Fragment>
                 }
-            />
+            /> */}
 
             <Grid
                 container
@@ -152,6 +178,8 @@ export default function ChangePassword() {
                                     placeholder="New Password"
                                     type="password"
                                     onChange={handleChangePassword}
+                                    error={error}
+                                    helperText={errorinfo}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
