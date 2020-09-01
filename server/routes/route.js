@@ -9,7 +9,7 @@ Router.use('/administration', require('./administration'));
 Router.use('/customrules', require('./customrules'));
 Router.use('/summary', require('./summary.js'));
 
-
-
 Router.use('/ingestion', require('./configureIngestionJobs'));
+Router.use('/audit', require('./audit.js'))
+
 module.exports = Router;

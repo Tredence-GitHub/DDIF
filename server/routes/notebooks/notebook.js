@@ -25,7 +25,7 @@ function notebookTrigger(data) {
         })
         .catch((error) => {
             console.error('Error is ', error);
-            reject('Failed');
+            resolve('Failed');
         })
 }) 
 
@@ -57,7 +57,7 @@ function runJobResponse (runID) {
     
         }).catch((err)=>{
             console.log(err);
-            reject('Failed')
+            resolve('Failed')
         })
 
     })

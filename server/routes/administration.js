@@ -53,8 +53,13 @@ const triggerNotebook = async (info) => {
 // Save data
 Router.post('/saveConnection', async (req, res)=>{
     let request_data = req.body;
-    
+    let portnumber = 0;
     if(request_data.format !== 'link'){
+        if(request_data.port == ''){
+            portnumber = 0;
+        }else{
+            portnumber = parseInt(request_data.port)
+        }
         let odbc_connection_test = await triggerNotebook({
             type_id: request_data.type_id,
             type: request_data.type,
@@ -63,7 +68,7 @@ Router.post('/saveConnection', async (req, res)=>{
             account_name: request_data.account_name,
             account_key: request_data.account_key,
             location_name: request_data.location_name,
-            port: request_data.port,
+            port: portnumber,
             source_query: request_data.source_query,
             path: request_data.path,
             delimiter: request_data.delimiter
@@ -220,8 +225,13 @@ Router.post('/saveConnection', async (req, res)=>{
 // update data
 Router.post('/updateConnection', async(req, res)=>{
     let request_data = req.body;
-
+    let portnumber = 0;
     if(request_data.format !== 'link'){
+        if(request_data.port == ''){
+            portnumber = 0;
+        }else{
+            portnumber = parseInt(request_data.port)
+        }
         let odbc_connection_test = await triggerNotebook({
             type_id: request_data.type_id,
             type: request_data.type,
@@ -230,7 +240,7 @@ Router.post('/updateConnection', async(req, res)=>{
             account_name: request_data.account_name,
             account_key: request_data.account_key,
             location_name: request_data.location_name,
-            port: request_data.port,
+            port: portnumber,
             source_query: request_data.source_query,
             path: request_data.path,
             delimiter: request_data.delimiter})

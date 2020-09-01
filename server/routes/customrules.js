@@ -74,30 +74,7 @@ Router.post('/saveCustomRules', (req, res)=>{
         })
     })
 
-    // let savebusinessrules = new Promise((resolve, reject)=>{
-    //     let business_rules = request_data.businessrules;
-        
-    //     db.BusinessRules.destroy({
-    //         where: {
-    //             entry_id: entry_id
-    //         }
-    //     }).then((result)=>{
-    //             for(let i = 0; i < business_rules.length; i++){
-                    
-    //                 db.BusinessRules.create(business_rules[i])
-    //                 .then((result)=>{
-    //                     if(i === business_rules.length-1){
-    //                         resolve('finished')
-    //                     }
-    //                 }).catch((err)=>{
-    //                     console.log(err, "()(()()()")
-    //                     res.status(400).json({message: 'Error while saving business rules'})
-    //                 });
-    //            }
-    //         }).catch((err)=>{
-    //         console.log(err)
-    //     })
-    // })
+    
 
     Promise.all([savecustomrulesdata])
     .then((result)=>{
@@ -109,6 +86,48 @@ Router.post('/saveCustomRules', (req, res)=>{
         }
     })
 })
+
+Router.post('/saveBusinessRules',  (req, res)=>{
+    let request_data = req.body;
+
+    let entry_id = request_data.entryid;
+    console.log(request_data.businessrules)
+    let savebusinessrules = new Promise((resolve, reject)=>{
+        let business_rules = request_data.businessrules.rules;
+        
+        db.BusinessRules.destroy({
+            where: {
+                entry_id: entry_id
+            }
+        }).then((result)=>{
+                for(let i = 0; i < business_rules.length; i++){
+                    business_rules[i]['entry_id'] = entry_id
+                    db.BusinessRules.create(business_rules[i])
+                    .then((result)=>{
+                        if(i === business_rules.length-1){
+                            resolve('finished')
+                        }
+                    }).catch((err)=>{
+                        console.log(err, "()(()()()")
+                        res.status(400).json({message: 'Error while saving business rules'})
+                    });
+               }
+            }).catch((err)=>{
+            console.log(err)
+        })
+    })
+    Promise.all([savebusinessrules])
+    .then((result)=>{
+        console.log(result)
+        if(result[0] != {} ){
+            res.status(200).json({message: 'successful', entry_id: entry_id})
+        }else{
+            res.status(400).json({message: 'Error while saving the business rules'})
+        }
+    })
+
+})
+
 
 // fetch the rules 
 Router.post('/populateCustomRules', (req, res)=>{
@@ -130,12 +149,16 @@ Router.post('/populateCustomRules', (req, res)=>{
 
     let fetchbusinessrules = new Promise((resolve, reject)=>{
         db.BusinessRules.findAll({
+            attributes: ['id', 'entry_id', 'column_name', 'rule_name', 'rule_parameters'],
             where: {
                 entry_id: entry_id
             }
         }).then((response)=>{
+           
             resolve(JSON.parse(JSON.stringify(response)));
+            
         }).catch((err)=>{
+            console.log(err)
             res.status(400).json({message: 'error fetching business rules'})
         })
     })

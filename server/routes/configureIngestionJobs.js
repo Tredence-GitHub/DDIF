@@ -192,7 +192,8 @@ const triggerNotebook = async (jobId, entryId) => {
     const data = {
         'job_id': jobId,
         'notebook_params': {
-        'entryid': entryId
+        'entryid': entryId,
+        'EntryId': entryId
         }
     }
     let notebookRes = await notebook.notebookTrigger(data);
@@ -382,4 +383,16 @@ Router.get('/api/getEntryData/:entryId', (req, res)=>{
     })
 })
 
+
+Router.get('/api/triggerOnDemand/:entryid', async (req,res)=>{
+    let finalRes = await triggerNotebook(27, req.params.entryid.toString());
+    console.log(finalRes, "*&*&*&*&* here ")
+
+    if(finalRes != 'Failed') {
+        res.status(200).json({message: 'success', data: finalRes})
+    }else{
+        res.status(400).json({message: 'failed', data: finalRes})
+
+    }
+})
 module.exports = Router;

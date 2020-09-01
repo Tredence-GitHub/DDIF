@@ -86,14 +86,16 @@ export default function Customrules(props) {
   const [businessdropdownColumn, setBusinessdropdownColumn] = useState([])
   const [businessdropdownFunction, setBusinessdropdownFunction] = useState([])
   const [dataTable, setDataTable] = useState([]);
+  const [hideparameters, sethideParameters] = useState(true);
+  const [howtoenter, sethowtoenter] = useState('');
 
   const [column, setColumn] = useState([
 
-    { title: 'Columns', field: 'columns' },
+    { title: 'Columns', field: 'column_name' },
 
-    { title: 'Functions', field: 'functions', initialEditValue: 'initial edit value' },
+    { title: 'Functions', field: 'rule_name', initialEditValue: 'initial edit value' },
 
-    { title: 'Value', field: 'value' },
+    { title: 'Value', field: 'rule_parameters' },
 
     { title: 'id', field: 'id',options:{display:false}},  
 
@@ -103,30 +105,14 @@ export default function Customrules(props) {
     let lenDataTable = dataTable.length;
     let data = dataTable
     console.log(data)
-    data.push({ "columns": columns, 'functions': functions, 'value': givenValue, 'id':lenDataTable+1})
+    data.push({ "column_name": columns, 'rule_name': functions, 'rule_parameters': givenValue, 'id':lenDataTable+1})
     // Object.assign(dataTable,data)
     setDataTable(data);
 
-    setColumns("")
-    setFunctions("")
-    setGivenValue("")
+    setColumns('')
+    setFunctions('')
+    setGivenValue('')
   }
-
-  const dummyColumn = [
-    {
-      value: 'csv',
-      label: 'csv',
-    },
-    {
-      value: 'orc',
-      label: 'orc',
-    },
-    {
-      value: 'parquet',
-      label: 'parquet',
-    },
-  ];
-
 
 
   const handleChangeColumns = (event) => {
@@ -134,6 +120,19 @@ export default function Customrules(props) {
   }
 
   const handleChangefunctions = (event) => {
+    if(event.target.value.includes('Is')){
+      sethideParameters(true)
+    }else{
+      if(event.target.value === 'Range' || event.target.value.includes('list')){
+        sethowtoenter('Eg: 1,2')
+        sethideParameters(false)
+      }else{
+        sethowtoenter('Enter value')
+        sethideParameters(false)
+      }
+    }
+
+    
     setFunctions(event.target.value);
   }
 
@@ -190,37 +189,7 @@ export default function Customrules(props) {
     };
   }
 
-  let renderBuilder = (props) => (
-    <div className="query-builder-container" style={{ padding: '10px' }}>
-      <div className="query-builder qb-lite">
-        <Builder {...props} />
-      </div>
-    </div>
-  )
 
-  let renderResult = ({ tree: immutableTree, config }) => (
-    <div className="query-builder-result">
-      {/* <div>Query string: <pre>{JSON.stringify(QbUtils.queryString(immutableTree, config))}</pre></div> */}
-      {/* <div>MongoDb query: <pre>{JSON.stringify(QbUtils.mongodbFormat(immutableTree, config))}</pre></div> */}
-
-
-      <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre>
-
-      {/* <div>JsonLogic: <pre>{JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}</pre></div> */}
-    </div>
-  )
-
-  let onChangeSql = (immutableTree, config) => {
-    // Tip: for better performance you can apply `throttle` - see `examples/demo`
-    setallValues({ tree: immutableTree, config: config });
-    const jsonTree = QbUtils.getTree(immutableTree);
-    const text1 = JSON.stringify(QbUtils.sqlFormat(immutableTree, config));
-    console.log(jsonTree);
-    setText(text1);
-    console.log("bbbbbbbbb", text);
-    // `jsonTree` can be saved to backend, and later loaded to `queryValue`
-
-  }
   //entry,ruledef,custom
   function firstcall() {
     const config = {
@@ -268,64 +237,24 @@ export default function Customrules(props) {
 
     }
 
-    let frame = {};
-    let custom_rulename = "Custom Rule for JobId " + props.entryid;
-    setRule(custom_rulename);
-    console.log("aaaaaa", custom_rulename);
-    console.log("aaaaaaaaaaaaaaaaa", text);
-    Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`)
-      .then((response) => {
+    
+    Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${local}/populateCustomRules`, {
+                entryid: props.entryid
+            })
+            ]).then((result)=>{
+                return result
+        }).then((response) => {
         console.log("AAA", response)
-        setBusinessdropdownColumn(response.data.data.MetadataColumns)
-        setBusinessdropdownFunction(response.data.data.CentralRules)
-        response.data.data.MetadataColumns.map((item, index) => {
-          console.log(item)
-          // frame[item.column_name] = {}
-          // frame[item.column_name]['label'] = item.column_name
-          // frame[item.column_name]['operators'] = ['equal', 'greater', 'less', 'lower', 'between', 'not equal', 'Any in']
-          // frame[item.column_name]['type']=item.data_type
-          // frame[item.column_name]['valueSources']=['value']
-          // frame[item.column_name]['preferWidgets']=['number']
+        setBusinessdropdownColumn(response[0].data.data.MetadataColumns)
+        setBusinessdropdownFunction(response[0].data.data.CentralRules)
+        setDataTable(response[1].data.data.businessrules);
 
-          frame[item.column_name] = {}
-          frame[item.column_name]['label'] = item.column_name
-          if (item.data_type.includes('varchar')) {
-            frame[item.column_name]['type'] = 'text'
-          } else {
+        setloading(false);
 
-            frame[item.column_name]['type'] = 'number'
-          }
-          frame[item.column_name]['operators'] = ['equal', 'greater', 'less', 'lower', 'between', 'not equal', 'Any in']
-          frame[item.column_name]['valueSources'] = ['value']
-          frame[item.column_name]['preferWidgets'] = ['number']
-          //     if(item.data_type.includes('varchar')){
-          //     frame[item.column_name]['valueSources']=['value']
-          //     frame[item.column_name]['preferWidgets']=['string']
-          //     //frame[item.column_name]['fieldSettings']={}
-          //     }
-          //     else
-          //     {frame[item.column_name]['valueSources']=['value']
-          //     frame[item.column_name]['preferWidgets']=['number']}
-          //    // frame[item.column_name]['fieldSettings']={}}
-        })
-
-
-        console.log(frame);
-      }).catch((err) => {
+        }).catch((err) => {
         console.log(err)
       })
-
-
-
-    let values = {};
-    config['fields'] = frame;
-
-    values['tree'] = QbUtils.checkTree(QbUtils.loadTree(queryValue), config);
-    values['config'] = config;
-
-    setconfigfield(config)
-    setallValues(values);
-    setloading(false);
   }
 
   useEffect(() => {
@@ -342,7 +271,7 @@ export default function Customrules(props) {
     console.log(props.entryid, "*** here ***")
     Axios({
       method: 'post',
-      url: (`${local}` + "/saveCustomRules"),
+      url: (`${local}` + "/saveBusinessRules"),
       data: {
         entryid: props.entryid,
         customrules: {
@@ -350,8 +279,10 @@ export default function Customrules(props) {
           rule_definition: text,
           custom_rulename: rule
         },
-        businessrules: {}
+        businessrules: {
+          rules: dataTable
       }
+    }
     }).then((response) => {
       if (response.status === 200) {
         handleOpen()
@@ -366,10 +297,7 @@ export default function Customrules(props) {
   }
 
 
-
-
   if (!loading) {
-    console.log(businessdropdownColumn, "Patttttttternnnnn")
     return (
       <div>
         <AppBar position="static" style={{ background: "white",boxShadow:'none' }}>
@@ -379,63 +307,20 @@ export default function Customrules(props) {
             textColor="primary"
             variant="fullWidth"
             aria-label="simple tabs example">
-            <Tab label="Custom Rules" {...a11yProps(0)} />
-            <Tab label="Business Rules" {...a11yProps(1)} />
+            <Tab label="Business Rules" {...a11yProps(0)} />
+            <Tab label="Custom Rules" {...a11yProps(1)} />
           </Tabs>
         </AppBar>
-        <TabPanel value={tabValue} index={0}>
-          {/* <Paper style={{width:'100%'}}>
-            <Snackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              open={open}
-              autoHideDuration={3000}
-              onClose={handleClose}
-              message={<span id="message-id">{msg}</span>}
-              action={
-                <React.Fragment>
-                  <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </React.Fragment>
-              }
-            />
-            <Query
-              {...configfield}
-              value={tree}
-              onChange={onChangeSql}
-              renderBuilder={renderBuilder}
-            />
-            <Card>
-              <CardHeader>
-                <CardContent>
-                  Your SQL Query:
-                  </CardContent>
-              </CardHeader>
-              <CardContent>
+        <TabPanel value={tabValue} index={1} style={{background:"white"}}>
 
-                {renderResult(allValues)}
-              </CardContent>
-            </Card>
-            <div>
-              <Button variant="contained" color="primary" onClick={(e) => {
-                e.preventDefault();
-                sendData();
-              }}>
-                Save
-              </Button>
-            </div>
-          </Paper> */}
+                <strong>Create A Custom Rule </strong>
+            
+              <hr />
           <Custom entryid={props.entryid} editFn={props.fn} />
 
         </TabPanel>
-        <TabPanel value={tabValue} index={1} style={{background:"white"}}>
-          <div style={{
-            maxWidth:"100%"
-          }}>
-            <Snackbar
+        <TabPanel value={tabValue} index={0} style={{background:"white"}}>
+        <Snackbar
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'center',
@@ -452,14 +337,14 @@ export default function Customrules(props) {
                 </React.Fragment>
               }
             />
+          <div style={{
+            maxWidth:"100%"
+          }}>
+            
             <form className={classes.root} noValidate autoComplete="off">
-              {/* <center>
-                <strong textAlign="center">Business Rules </strong>
-              </center>
-              <hr /> */}
-
-              <Grid container spacing={2}>
-                <Grid item xs={4} direction="column" container >
+              
+              <Grid container spacing={0}>
+                <Grid item xs={3} direction="column" container >
                   <TextField
                     id="columns"
                     select
@@ -480,15 +365,11 @@ export default function Customrules(props) {
                         {option.column_name}
                       </MenuItem>
                     ))}
-                    {/* {businessdropdownColumn.forEach((option) => (
-                      <MenuItem key={option.column_name} value={option.column_name}>
-                        {option.column_name}
-                      </MenuItem>
-                    ))} */}
+                    
                   </TextField>
                 </Grid>
 
-                <Grid item xs={4} direction="column" container >
+                <Grid item xs={3} direction="column" container >
 
                   <TextField
                     id="functions"
@@ -513,51 +394,38 @@ export default function Customrules(props) {
                   </TextField>
                 </Grid>
 
-                <Grid item xs={4} direction="column" container >
+                <Grid item xs={3} direction="column" container hidden={hideparameters}>
 
                   <TextField
-                    id="Given Value"
-                    label="Value"
-                    placeholder="Enter the value"
-                    value={givenValue}
+                    id="given"
+                    label="Enter Value"
+                    placeholder={howtoenter}
                     onChange={handleChangeGivenValue}
+                    value={givenValue}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-
+                          <VerifiedUserIcon />
                         </InputAdornment>
                       ),
                     }}
-                  />
+                  >
+                    {givenValue}
+                    </TextField>
                 </Grid>
+                <Grid item xs={3} container  direction="column" >
+                  <Button variant="contained" color='primary' size="small" style={{ margin: '25px 10px' ,borderRadius: '5%', width:"30px", height: "30px" }} onClick={(e) => {
+                    e.preventDefault();
+                    populateTable();
+                  }} >+</Button>
+
+              </Grid>
               </Grid>
             </form>
 
-            <div style={{ margin: "50px 12px" }}>
-
-              <Button variant="contained" color='primary' size="small" justify="flex-right" onClick={(e) => {
-                e.preventDefault();
-                populateTable();
-              }} >OK </Button>
-
-            </div>
+            
 
             <div>
-              {/* <Paper className={classes.paper}> */}
-                {/* <TableContainer component={Paper} style={{ maxHeight: "500px" }}>
-                  <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell><b>Columns</b></TableCell>
-                        <TableCell><b>functions</b></TableCell>
-                        <TableCell><b>Value</b></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        
-                    </TableBody>
-                  </Table>
-                </TableContainer> */}
 
                 <MaterialTable
                   title=""
@@ -599,7 +467,17 @@ export default function Customrules(props) {
               {/* </Paper> */}
             </div>
           </div>
+          <div>
+                <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                    <Button variant="contained" color="primary" onClick={(e) => {
+                        e.preventDefault();
+                        sendData();
 
+                    }}>
+                        Set Business Rules
+                    </Button>
+                </Grid>
+          </div>
         </TabPanel>
       </div>
     )

@@ -8,21 +8,38 @@ import 'react-awesome-query-builder/lib/css/compact_styles.css'; //optional, for
 import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Paper, Card, CardHeader, CardContent } from '@material-ui/core';
+import { Paper, Card, CardHeader, CardContent, Grid } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 
 const InitialConfig = AntdConfig; // or BasicConfig
 
-
+const useStyles = makeStyles({
+    root: {
+      minWidth: 500,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
 // You need to provide your own config. See below 'Config format'
 
 
 
 export default function Custom(props) {
-
+    const classes = useStyles();
     let local = "http://localhost:4000/customrules";
 
     const queryValue = { "id": QbUtils.uuid(), "type": "group" };
@@ -35,6 +52,7 @@ export default function Custom(props) {
     const [rule, setRule] = React.useState();
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
+    const [previousQuery, setpreviousQuery] = React.useState('');
 
     const handleOpen = () => {
         setOpen(true);
@@ -82,45 +100,7 @@ export default function Custom(props) {
         const config = {
             ...InitialConfig,
             fields: {
-                qty: {
-                    label: 'Qty',
-                    type: 'number',
-                    fieldSettings: {
-                        min: 0,
-                    },
-                    valueSources: ['value'],
-                    preferWidgets: ['number'],
-                },
-                price: {
-                    label: 'Price',
-                    type: 'number',
-                    valueSources: ['value'],
-                    fieldSettings: {
-                        min: 10,
-                        max: 100,
-                    },
-                    preferWidgets: ['slider', 'rangeslider'],
-                },
-                color: {
-                    label: 'Color',
-                    type: 'select',
-                    valueSources: ['value'],
-                    fieldSettings: {
-                        listValues: [
-                            { value: 'yellow', title: 'Yellow' },
-                            { value: 'green', title: 'Green' },
-                            { value: 'orange', title: 'Orange' }
-                        ],
-                    }
-                },
-                is_promotion: {
-                    label: 'Promo?',
-                    type: 'boolean',
-                    operators: ['equal'],
-                    valueSources: ['value'],
-                },
             }
-
 
         }
 
@@ -129,10 +109,20 @@ export default function Custom(props) {
         setRule(custom_rulename);
         console.log("aaaaaa", custom_rulename);
         console.log("aaaaaaaaaaaaaaaaa", text);
-        Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`)
-            .then((response) => {
+        Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${local}/populateCustomRules`, {
+                entryid: props.entryid
+            })
+            ]).then((result)=>{
+                return result
+            }).then((response) => {
+                console.log(response)
+                // console.log(response[1].data.data.customrules[0].rule_definition, "*****!*!*!*")
+                if(response[1].data.data.customrules.length > 0){
 
-                response.data.data.MetadataColumns.map((item, index) => {
+                    setpreviousQuery(response[1].data.data.customrules[0].rule_definition)
+                }
+                response[0].data.data.MetadataColumns.map((item, index) => {
                     console.log(item)
                     // frame[item.column_name] = {}
                     // frame[item.column_name]['label'] = item.column_name
@@ -142,15 +132,16 @@ export default function Custom(props) {
                     // frame[item.column_name]['preferWidgets']=['number']
                     frame[item.column_name] = {}
                     frame[item.column_name]['label'] = item.column_name
-                    if (item.data_type.includes('varchar')) {
-                        frame[item.column_name]['type'] = 'text'
-                    } else {
-
+                    if (item.data_type.includes('int') || item.data_type.includes('number')) {
                         frame[item.column_name]['type'] = 'number'
-                    }
-                    frame[item.column_name]['operators'] = ['equal', 'greater', 'less', 'lower', 'between', 'not equal', 'Any in']
+                      } else {
+            
+                        frame[item.column_name]['type'] = 'text'
+                      }
+                    frame[item.column_name]['operators'] = ['equal', 'greater', 'less', 'lower',
+                     'between', 'like', 'greater_or_equal', 'less_or_equal', 'not_equal', 'not_like', 'IN', 'is_empty', 'is_not_empty']
                     frame[item.column_name]['valueSources'] = ['value']
-                    frame[item.column_name]['preferWidgets'] = ['number']
+                    // frame[item.column_name]['preferWidgets'] = ['number']
                     //     if(item.data_type.includes('varchar')){
                     //     frame[item.column_name]['valueSources']=['value']
                     //     frame[item.column_name]['preferWidgets']=['string']
@@ -218,52 +209,78 @@ export default function Custom(props) {
 
     if (!loading) {
         return (
-            <Paper>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
-                    open={open}
-                    autoHideDuration={3000}
-                    onClose={handleClose}
-                    message={<span id="message-id">{msg}</span>}
-                    action={
-                        <React.Fragment>
-                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                                <CloseIcon fontSize="small" />
-                            </IconButton>
-                        </React.Fragment>
-                    }
-                />
-                <Query
-                    {...configfield}
-                    value={tree}
-                    onChange={onChange}
-                    renderBuilder={renderBuilder}
-                />
-                <Card>
-                    <CardHeader>
-                        <CardContent>
-                            Your SQL Query:
-                        </CardContent>
-                    </CardHeader>
-                    <CardContent>
-
+            <div>
+                <Paper>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        open={open}
+                        autoHideDuration={3000}
+                        onClose={handleClose}
+                        message={<span id="message-id">{msg}</span>}
+                        action={
+                            <React.Fragment>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </React.Fragment>
+                        }
+                    />
+                    <Query
+                        {...configfield}
+                        value={tree}
+                        onChange={onChange}
+                        renderBuilder={renderBuilder}
+                        />
+                
+                </Paper>
+                <Grid spacing={1} style={{
+                    marginTop: '5px',
+                    padding: '0px',
+                    maxWidth: '100%'
+                }}>
+                <Card className={classes.root} variant="outlined">
+                <CardContent>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Your Customised Query
+                    </Typography>
+                    <Typography variant="h5" component="h2">
                         {renderResult(allValues)}
-                    </CardContent>
-                </Card>
+                    </Typography>
+                                        
+                </CardContent>               
+                </Card>     
+                <Card className={classes.root} variant="outlined">
+                <CardContent>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    Previously Customised Query
+                    </Typography>
+                    { previousQuery != '' ? <Typography variant="h5" component="h2">
+                        { previousQuery }
+                    </Typography> : 
+                    <Typography variant="h6" component="h5">
+                        Looks like you have not customised one!
+                    </Typography>
+                    }
+                    
+                </CardContent>
+                
+                </Card>     
+                </Grid>
                 <div>
+                <Grid direction="column" container justify="flex-end" alignItems="flex-end">
                     <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         sendData();
 
                     }}>
-                        Save
-                     </Button>
+                        {previousQuery != ''? 'Replace Query' : 'Add Query'}
+                    </Button>
+                </Grid>
                 </div>
-            </Paper>
-
+        </div>
         )
 
     }

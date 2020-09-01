@@ -13,6 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import {useSnackbar} from 'notistack';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,11 +41,52 @@ export default function IngestionTable(){
     const [tableData, settableData] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
+    const [open, setOpen] = React.useState(false);
+    const [msg, setMsg] = React.useState('');
+    const {enqueueSnackbar} = useSnackbar();
     
     let local = 'http://localhost:4000'
- 
+    
+    const handleOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };
+
     function scheduleNow(){
 
+    }
+
+    function triggerJob(btnId, entryId){
+        handleOpen();
+        setMsg('Job is triggered')
+        let b = document.getElementById(btnId);
+        console.log(b)
+        b.setAttribute('hidden', 'true');
+        Axios.get(`${local}/ingestion/api/triggerOnDemand/${entryId}`)
+        .then((response)=>{
+            if(response.data.message === 'success'){
+                handleOpen();
+                setMsg('Job is running ..')
+                b.setAttribute('hidden', 'false')
+                window.location.href='/ingestiontable';
+            }else{
+                handleOpen();
+                setMsg('Job is running ..')
+                b.setAttribute('hidden', 'false')
+                window.location.href='/ingestiontable';
+            }
+        }).catch((err)=>{
+            console.log(err);
+            b.setAttribute('hidden', 'false')
+            handleOpen();
+
+            setMsg('Failed to execute the job!')
+        })
     }
 
     function getInfo() {
@@ -77,11 +123,28 @@ export default function IngestionTable(){
 if(!loading){
     return(
         <div>
+            <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          message={<span id="message-id">{msg}</span>}
+          action={
+            <React.Fragment>
+              <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        />
         <div>
         <Paper className={classes.paper}>
                         <strong>Job Log</strong>
                         <hr/>
-                        <TableContainer component={Paper} style={{maxHeight:"400px"}}>
+                        <TableContainer component={Paper} style={{maxHeight:"100%"}}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -94,19 +157,24 @@ if(!loading){
                                 </TableHead>
                                 <TableBody>
                                 {tableData.map((row) => (
-                                        <TableRow key={row.entryId} onClick={(e)=>{
-                                            window.location.href='/ingestion/'+row.entryId
-                                        }}>
+                                        <TableRow key={row.entryId} >
                                             <TableCell component="th" scope="row">
                                                 {row.entryId}
                                             </TableCell>
-                                            <TableCell >{row.jobname}</TableCell>
-                                            <TableCell >{row.projectname}</TableCell>
+                                            <TableCell onClick={(e)=>{
+                                            window.location.href='/ingestion/'+row.entryId
+                                        }} >{row.jobname}</TableCell>
+                                            <TableCell onClick={(e)=>{
+                                            window.location.href='/ingestion/'+row.entryId
+                                        }}>{row.projectname}</TableCell>
                                             <TableCell >{row.status}</TableCell>
-                                            {row.Schedule.schedule_type==="On-Demand"?
+                                            {row.Schedule.schedule_type==="On-Demand" ?
                                                 <TableCell >
-                                                    <Button variant="contained" color='primary'> 
-                                                        {row.Schedule.schedule_type}
+                                                    <Button  id={row.entryId+'ID'} variant="contained" size="small" color='default' onClick={(e)=>{
+                                                        e.preventDefault();
+                                                        triggerJob(row.entryId+'ID', row.entryId)
+                                                    }}> 
+                                                        trigger
                                                     </Button>
                                                 </TableCell>:
                                                 <TableCell >{row.Schedule.schedule_type}</TableCell> }

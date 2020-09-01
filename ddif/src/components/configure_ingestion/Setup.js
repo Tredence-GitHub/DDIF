@@ -245,12 +245,12 @@ export default function Setup(props) {
     const [jdbcDatabaseName2, setjdbcDatabaseName2] = React.useState('');
     const [jdbcsourceQuery2, setjdbcsourceQuery2] = React.useState('');
     // const [startTime, setStartTime] = React.useState(new Date().toISOString());
-    const [selectedTime, setSelectedTime] = React.useState(new Date());
+    const [selectedTime, setSelectedTime] = React.useState();
     const [scheduleType, setscheduleType] = React.useState('');
     const [hours_minutes, setHoursMinutes] = React.useState(0);
     const [weeks, setWeeks] = React.useState('');
-    const [startDate, setStartDate] = React.useState(new Date().toISOString());
-    const [endDate, setEndDate] = React.useState(new Date().toISOString());
+    const [startDate, setStartDate] = React.useState();
+    const [endDate, setEndDate] = React.useState();
 
     const [hiddenOneDrive, sethiddenOneDrive] = React.useState(true);
     const [hiddenGoogleDrive, sethiddenGoogleDrive] = React.useState(true);
@@ -1169,6 +1169,7 @@ export default function Setup(props) {
     // };
 
     const passParam = () => {
+
         let param = {
             username: localStorage.getItem('username'),
             rationale: rationale,

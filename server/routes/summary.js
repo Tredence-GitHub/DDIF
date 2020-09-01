@@ -26,9 +26,14 @@ Router.get('/getSummary/:entryid', (req, res)=>{
             frame.push({fields: 'Job Title', values: item.projectname})
             frame.push({fields: 'Operation', values: item.operation});
             frame.push({fields: 'Schedule type', values: item.Schedule.schedule_type});
-            frame.push({fields: 'Start time', values: item.Schedule.start_time});
-            frame.push({fields: 'Start date', values: item.Schedule.start_date});
-            frame.push({fields: 'End date', values: item.Schedule.end_date});
+            if(item.Schedule.schedule_type.includes('Fixed')){
+                frame.push({fields: 'Start time', values: item.Schedule.start_time});
+                frame.push({fields: 'Start date', values: item.Schedule.start_date});
+                frame.push({fields: 'End date', values: item.Schedule.end_date});
+            }else  if(item.Schedule.schedule_type.includes('One')){
+                frame.push({fields: 'Start time', values: item.Schedule.start_time});
+               
+            }
             frame.push({ fields: 'Source Connection Name', values: JSON.parse(item.Parameter.SourceParameter).connection_name })
             frame.push({ fields: 'Target Connection Name', values: JSON.parse(item.Parameter.TargetParameter).connection_name })
         })
@@ -49,12 +54,16 @@ Router.get('/status/Created/:entryid', (req, res)=>{
         }
     }
     ).then((response)=>{
-        db.Announcements.create({
+        db.Announcements.findOrCreate({
             entry_id: req.params.entryid,
             entry_status: 'draft',
             created_at: new Date(),
             recent: 0,
-            description: ''
+            description: '',
+            where: {
+                entry_id: req.params.entryid
+            }
+            
         }).then((response1)=>{
             res.status(200).json({message: 'Job Successfully Created'})
         }).catch((err)=>{

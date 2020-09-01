@@ -432,8 +432,10 @@ export default function CustomizedSteppers(props) {
             <Typography className={classes.instructions}>
               All steps completed - you&apos;re finished
             </Typography>
-            <Button onClick={handleReset} className={classes.button}>
-              Reset
+            <Button onClick={(e)=>{
+              window.location.href = "/ingestiontable"
+            }} className={classes.button}>
+              Take Me Back
             </Button>
           </div>
         ) : (
@@ -443,7 +445,7 @@ export default function CustomizedSteppers(props) {
                 <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                   Back
               </Button>
-                <Button
+               {activeStep >= 2 && activeStep != 3? <Button
                   variant="contained"
                   color="primary"
                   // onClick={handleNext}
@@ -454,8 +456,9 @@ export default function CustomizedSteppers(props) {
                   }}
                   className={classes.button}
                 >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                  Next
+                </Button> : <> </>}
+
               </div>
             </div>
           )}

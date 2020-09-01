@@ -1,9 +1,15 @@
 module.exports = function (sequelize, Sequelize){
     return sequelize.define('BusinessRules', {
+        id: {
+            primaryKey: true,
+            type: Sequelize.INTEGER
+        },
         entry_id: {
+            primaryKey: true,
             type: Sequelize.INTEGER
         },
         column_name: {
+            primaryKey: true,
             type: Sequelize.STRING
         },
         description: {
