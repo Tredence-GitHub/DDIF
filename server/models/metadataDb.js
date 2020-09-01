@@ -36,6 +36,9 @@ module.exports = function(sequelize, Sequelize){
         },
         pii_type: {
             type: Sequelize.STRING
+        },
+        format: {
+            type: Sequelize.STRING
         }
     }, {
             freezeTableName: true,

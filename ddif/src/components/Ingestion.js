@@ -24,6 +24,7 @@ import { Paper } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Summary from './configure_ingestion/Summary';
 
 const QontoConnector = withStyles({
   alternativeLabel: {
@@ -260,14 +261,14 @@ export default function CustomizedSteppers(props) {
 
 
   function getSteps() {
-    return ['Setup', 'Metadata Discovery', 'Custom Rules', 'Review & Ingest'];
+    return ['Setup', 'Metadata Discovery', 'Custom Rules', 'Summary'];
   }
 
   function getStepContent(step) {
     switch (step) {
       case 0:
         return <Setup onPassSetup={handleSetup} entryid={entryid} />;
-        case 1:    
+      case 1:    
         { 
           // console.log("ENTRYY ID -- ", entryid)  
           if(entryid > 0)
@@ -276,7 +277,7 @@ export default function CustomizedSteppers(props) {
       case 2:
         return <Custom entryid={entryid} editFn={fn} />;
       case 3:
-        return 'Review & Ingest';
+        return <Summary entryid={entryid} />;
       default:
         return 'Unknown step';
     }

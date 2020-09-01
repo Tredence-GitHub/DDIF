@@ -70,7 +70,9 @@ export default function Metadata(props) {
 
       field: 'primary_key',
 
-      lookup: { 1: 'Yes', 0: 'No' },
+      lookup: { 'Yes': 'Yes', 'No': 'No' },
+
+      default: 'No'
 
     },
 
@@ -80,8 +82,9 @@ export default function Metadata(props) {
 
       field: 'nullable',
 
-      lookup: { 1: 'Yes', 0: 'No' },
+      lookup: { 'Yes': 'Yes', 'No': 'No' },
 
+      default: 'Yes'
     },
 
     {
@@ -90,7 +93,7 @@ export default function Metadata(props) {
 
       field: 'dqcheck',
 
-      lookup: { 1: 'Tier 1',2: 'Tier 2',3: 'Tier 3', 0: 'No' },
+      lookup: { 'Tier 1': 'Tier 1', 'Tier 2': 'Tier 2', 'Tier 3': 'Tier 3', 'NO': 'NO' },
 
     },
 
@@ -98,7 +101,8 @@ export default function Metadata(props) {
 
     { title: 'Default', field: 'default' },
 
-    { title: 'Date Format', field: 'dateformat' },
+    { title: 'Date Format', field: 'format', 
+     lookup: { '%d-%m-%Y': '%d-%m-%Y', '%d-%b-%Y': '%d-%b-%Y' , '%Y-%b-%d': '%Y-%b-%d', '%Y-%m-%d': '%Y-%m-%d', '%d-%m-%y %H:%M:%S': '%d-%m-%y %H:%M:%S' }, },
 
     { title: 'Description', field: 'description' },
 
@@ -189,7 +193,7 @@ export default function Metadata(props) {
             // console.log(item) 
 
             arr.push({
-              'column_id': item[0], "column_name": item[1], "data_type": item[2].trim(), "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 0, nullable: 1, dqcheck: 0, default: "", dateformat: ""
+              'column_id': item[0], "column_name": item[1], "data_type": item[2].trim(), "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 0, nullable: 1, dqcheck: 0, default: "", format: ""
             })
 
           })

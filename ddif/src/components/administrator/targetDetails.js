@@ -207,7 +207,7 @@ export default function TargetDetails(){
             SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                 saveSubmit(data);
             }
-         else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 && Path.trim().length > 0 
+         else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 
          && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                     saveSubmit(data);
                 }
@@ -268,7 +268,7 @@ export default function TargetDetails(){
         SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
             updateData(data);
         }
-        else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 && Path.trim().length > 0 
+        else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 
         && LocationName.trim().length>0 && ConnectionName.trim().length>0){
                     updateData(data);
                 }
