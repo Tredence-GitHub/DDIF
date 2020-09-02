@@ -6,9 +6,12 @@ const headers = {
 
 const headers2 = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer dapidfbb3e68492175075999542c388473d1'
+    'Authorization': 'Bearer dapi1b876592cc8332b32b5aa000a6b4cd92'
 }
 const api_url = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now'
+
+const create_api = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/create'
+const delete_api = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/delete'
 
 function notebookTrigger(data) {
     return new Promise((resolve, reject)=>{
@@ -94,4 +97,47 @@ function runTestConnection(runID){
     })
 }
 
-module.exports = {notebookTrigger, runJobResponse, runTestConnection}
+function jobTrigger(data) {
+    return new Promise((resolve, reject)=>{
+    axios.post(create_api, data, {
+        headers: headers2
+    })
+        .then((res) => {
+            console.log(`statusCode: ${res.status}`)
+            // console.log(`statusText is ${res.statusText}`)
+            console.log(res);
+
+            resolve(res.data)
+            
+        })
+        .catch((error) => {
+            console.error('Error is ', error);
+            resolve('Failed');
+        })
+}) 
+
+} 
+
+function killJob(data) {
+    return new Promise((resolve, reject)=>{
+    axios.post(delete_api, data, {
+        headers: headers2
+    })
+        .then((res) => {
+            console.log(`statusCode: ${res.status}`)
+            // console.log(`statusText is ${res.statusText}`)
+            console.log(res);
+
+            resolve(res.data)
+            
+        })
+        .catch((error) => {
+            console.error('Error is ', error);
+            resolve('Failed');
+        })
+}) 
+
+} 
+
+
+module.exports = {notebookTrigger, runJobResponse, runTestConnection, jobTrigger, killJob}

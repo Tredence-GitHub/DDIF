@@ -98,7 +98,9 @@ Router.post('/setupDataSave', (req, res)=>{
                 operation: request_data.operation,
                 updated_at: new Date(),
                 updated_by: request_data.updated_by,
-                status_changed_at: new Date()
+                status_changed_at: new Date(),
+                cront_time: request_data.cront_time,
+                schedule_job_id: 0
             }).then((resultCreated)=>{
                 let result = JSON.parse(JSON.stringify(resultCreated));
                 console.log(result);
@@ -249,7 +251,9 @@ Router.post('/updateSetupDBData', (req, res)=>{
         operation: request_data.operation,
         updated_at: new Date(),
         updated_by: request_data.updated_by,
-        status_changed_at: new Date()
+        status_changed_at: new Date(),
+        cront_time: request_data.cront_time,
+        schedule_job_id: request_data.schedule_job_id
     }
     let updateDataCatalog = new Promise((resolve, reject) => {
                 db.DataCatalog.update(DataCatalogData,{

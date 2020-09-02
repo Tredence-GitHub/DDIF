@@ -47,6 +47,12 @@ module.exports = function(sequelize, Sequelize) {
         },
         status_changed_at: {
             type: 'TIMESTAMP'
+        },
+        schedule_job_id:{
+            type: Sequelize.INTEGER
+        },
+        cron_time:{
+            type: Sequelize.STRING
         }
     }, {
             freezeTableName: true,
