@@ -23,20 +23,12 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import Onedrive from '../configure_ingestion/Onedrive';
-import Googledrive from '../configure_ingestion/Googledrive';
-import Mysql from '../configure_ingestion/Mysql';
-import Hive from '../configure_ingestion/Hive';
-import AzureBlob from '../configure_ingestion/AzureBlob';
-import ADLSGenOne from '../configure_ingestion/ADLSGenOne';
-import ADLSGenTwo from './ADLSGenTwo';
+
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import OnDemand from '../configure_ingestion/OnDemand';
-import OneTime from './OneTime'
-import FixedSchedule from './FixedSchedule';
+
 import Axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';

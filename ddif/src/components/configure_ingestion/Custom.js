@@ -48,8 +48,8 @@ export default function Custom(props) {
     const [configfield, setconfigfield] = React.useState({})
     const [tree, settree] = React.useState(QbUtils.checkTree(QbUtils.loadTree(queryValue), configfield))
     const [allValues, setallValues] = React.useState({});
-    const [text, setText] = React.useState();
-    const [rule, setRule] = React.useState();
+    const [text, setText] = React.useState('');
+    const [rule, setRule] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
     const [previousQuery, setpreviousQuery] = React.useState('');
@@ -139,8 +139,8 @@ export default function Custom(props) {
                         frame[item.column_name]['type'] = 'text'
                       }
                     frame[item.column_name]['operators'] = ['equal', 'greater', 'less', 'lower',
-                     'between', 'like', 'greater_or_equal', 'less_or_equal', 'not_equal', 'not_like', 'IN', 'is_empty', 'is_not_empty']
-                    frame[item.column_name]['valueSources'] = ['value']
+                      'like', 'greater_or_equal', 'less_or_equal', 'not_equal', 'not_like', 'IN', 'is_empty', 'is_not_empty']
+                    // frame[item.column_name]['valueSources'] = ['value']
                     // frame[item.column_name]['preferWidgets'] = ['number']
                     //     if(item.data_type.includes('varchar')){
                     //     frame[item.column_name]['valueSources']=['value']
@@ -181,30 +181,36 @@ export default function Custom(props) {
         }
     }, [])
     const sendData = () => {
-        console.log(props.entryid, "*** here ***")
-        Axios({
-            method: 'post',
-            url: (`${local}` + "/saveCustomRules"),
-            data: {
-                entryid: props.entryid,
-                customrules: {
-                    entry_id: props.entry_id,
-                    rule_definition: text,
-                    custom_rulename: rule
-                },
-                businessrules: {}
-            }
-        }).then((response) => {
-            if (response.status === 200) {
-                handleOpen()
-                setMsg(response.data.message);
-            } else {
-                handleOpen()
-                setMsg(response.data.message);
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
+        if(text.length > 0){
+            console.log(props.entryid, "*** here ***")
+            Axios({
+                method: 'post',
+                url: (`${local}` + "/saveCustomRules"),
+                data: {
+                    entryid: props.entryid,
+                    customrules: {
+                        entry_id: props.entry_id,
+                        rule_definition: text,
+                        custom_rulename: rule
+                    },
+                    businessrules: {}
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    handleOpen()
+                    setMsg(response.data.message);
+                } else {
+                    handleOpen()
+                    setMsg(response.data.message);
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+        else{
+            handleOpen();
+            setMsg('Please build your custom rules!')
+        }
     }
 
     if (!loading) {
@@ -246,7 +252,7 @@ export default function Custom(props) {
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Your Customised Query
                     </Typography>
-                    <Typography variant="h5" component="h2">
+                    <Typography variant="h5" component="h5">
                         {renderResult(allValues)}
                     </Typography>
                                         
@@ -257,10 +263,10 @@ export default function Custom(props) {
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Previously Customised Query
                     </Typography>
-                    { previousQuery != '' ? <Typography variant="h5" component="h2">
+                    { previousQuery != '' ? <Typography variant="h5" component="h5">
                         { previousQuery }
                     </Typography> : 
-                    <Typography variant="h6" component="h5">
+                    <Typography variant="h6" component="h6">
                         Looks like you have not customised one!
                     </Typography>
                     }

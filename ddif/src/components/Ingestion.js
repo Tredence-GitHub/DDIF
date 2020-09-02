@@ -13,7 +13,6 @@ import StepConnector from '@material-ui/core/StepConnector';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Metadata from './configure_ingestion/Metadata';
-import SetupTest from './configure_ingestion/SetupTest';
 import Setup from './configure_ingestion/Setup';
 import Custom from './configure_ingestion/Custom';
 import { Link } from 'react-router-dom';

@@ -4,7 +4,6 @@ import Layout from './Layout';
 import '../App.css';
 import Login from './Login';
 import Register from './Register';
-// import Registertest from './Registertest';
 import ChangePassword from './ChangePassword';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';

@@ -91,13 +91,14 @@ export default function Customrules(props) {
 
   const [column, setColumn] = useState([
 
-    { title: 'Columns', field: 'column_name' },
+    { title: 'Rule Id', field: 'id',options:{display:false, hidden:true}},  
 
-    { title: 'Functions', field: 'rule_name', initialEditValue: 'initial edit value' },
+    { title: 'Column Name', field: 'column_name' },
+
+    { title: 'Rule Applied', field: 'rule_name', initialEditValue: 'initial edit value' },
 
     { title: 'Value', field: 'rule_parameters' },
 
-    { title: 'id', field: 'id',options:{display:false}},  
 
   ]);
 
@@ -268,6 +269,7 @@ export default function Customrules(props) {
   }, [])
 
   const sendData = () => {
+    if(dataTable.length > 0){
     console.log(props.entryid, "*** here ***")
     Axios({
       method: 'post',
@@ -294,6 +296,11 @@ export default function Customrules(props) {
     }).catch((err) => {
       console.log(err)
     })
+  }
+  else{
+    handleOpen();
+    setMsg('Please set your business rules! Looks like you have 0 records!')
+  }
   }
 
 

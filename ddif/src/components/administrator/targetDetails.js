@@ -104,7 +104,10 @@ export default function TargetDetails(){
         if (event.target.value==='csv') {
             setDisabled(false)
         }
-        else{setDisabled(true)}
+        else{
+            setDisabled(true)
+            setgdDelimiter('-');
+        }
     };
     const handleChangeTarget = (event) =>{
         console.log(event.target.value);
@@ -284,12 +287,14 @@ export default function TargetDetails(){
 
     function updateData(data){
         setEdited(true);
+        setMsg('Updating... ')
+        handleOpen()
         Axios.post(`${local}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
                 setMsg(response.data.message) 
                 handleOpen() 
-                 setEdited(false);
+                setEdited(false);
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -300,6 +305,8 @@ export default function TargetDetails(){
 
     function saveSubmit(data) {
         setSubmitted(true);
+        setMsg('Saving... ')
+        handleOpen()
         Axios.post(`${local}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){
@@ -571,7 +578,7 @@ export default function TargetDetails(){
                         placeholder="Enter Port Number"
                         value={Port}
                         onChange={handleChangePort}
-                        number 
+                        type="number"  
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

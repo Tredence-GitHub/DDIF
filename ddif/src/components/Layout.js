@@ -23,8 +23,7 @@ import Divider from '@material-ui/core/Divider';
 import mainListItems from './ListItems';
 import List from '@material-ui/core/List';
 import Home from './Home';
-import HomeTest from './HomeTest';
-import Test from './Test';
+
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';

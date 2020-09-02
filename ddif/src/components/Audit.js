@@ -102,7 +102,7 @@ export default function Audit() {
                                         <TableCell><b>CR Check Failed</b></TableCell>
                                         <TableCell><b>Rejected Rows</b></TableCell>
                                         <TableCell><b>Status</b></TableCell>
-                                        <TableCell><b>Relative File Path</b></TableCell>
+                                        <TableCell width='500px'><b>Relative File Path</b></TableCell>
 
                                     </TableRow>
                                 </TableHead>
@@ -125,7 +125,7 @@ export default function Audit() {
                                             <TableCell >{row.cr_check_failed}</TableCell>
                                             <TableCell >{row.rejected_rows}</TableCell>
                                             <TableCell >{row.status}</TableCell>
-                                            <TableCell >{row.relative_file_path}</TableCell>
+                                            <TableCell width='500px' >{row.relative_file_path}</TableCell>
                                             
                                         </TableRow>
                                     )) : <>No records to display</>}

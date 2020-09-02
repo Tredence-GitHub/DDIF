@@ -122,7 +122,10 @@ export default function SourceDetails(){
         if (event.target.value==='csv') {
             setDisabled(false)
         }
-        else{setDisabled(true)}
+        else{
+            setDisabled(true)
+            setgdDelimiter('-');
+        }
     };
 
     const handleChangeSource = (event) =>{
@@ -625,7 +628,7 @@ export default function SourceDetails(){
                         placeholder="Enter Port Number"
                         value={Port}
                         onChange={handleChangePort}
-                        number 
+                        type="number" 
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
