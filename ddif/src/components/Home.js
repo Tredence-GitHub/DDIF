@@ -233,7 +233,8 @@ function Home() {
             <List>
                 {notficationsData.map((text, index) => (
                     <ListItem button key={index}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                        {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                        <ListItemIcon> <MailIcon /></ListItemIcon>
                         <ListItemText primary={text.description} />
                         <Divider />
                     </ListItem>

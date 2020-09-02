@@ -144,7 +144,7 @@ if(!loading){
         <Paper className={classes.paper}>
                         <strong>Job Log</strong>
                         <hr/>
-                        <TableContainer component={Paper} style={{maxHeight:"100%"}}>
+                        <TableContainer component={Paper} style={{maxHeight:"370px"}}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -161,16 +161,27 @@ if(!loading){
                                             <TableCell component="th" scope="row">
                                                 {row.entryId}
                                             </TableCell>
+
                                             <TableCell onClick={(e)=>{
                                             window.location.href='/ingestion/'+row.entryId
                                         }} >{row.jobname}</TableCell>
+
                                             <TableCell onClick={(e)=>{
                                             window.location.href='/ingestion/'+row.entryId
                                         }}>{row.projectname}</TableCell>
-                                            <TableCell >{row.status}</TableCell>
+
+
+                                        {row.status==="Completed"?
+                                           <TableCell onClick={(e)=>{
+                                            window.location.href='/audit/'+row.entryId
+                                        }}> 
+                                            <div style={{color:"green"}}> <a>{row.status} </a></div> </TableCell> :
+                                            <TableCell> {row.status} </TableCell>}
+                                            
+                                        
                                             {row.Schedule.schedule_type==="On-Demand" ?
                                                 <TableCell >
-                                                    <Button  id={row.entryId+'ID'} variant="contained" size="small" color='default' onClick={(e)=>{
+                                                    <Button  id={row.entryId+'ID'} variant="outlined" size="small" color='primary' onClick={(e)=>{
                                                         e.preventDefault();
                                                         triggerJob(row.entryId+'ID', row.entryId)
                                                     }}> 

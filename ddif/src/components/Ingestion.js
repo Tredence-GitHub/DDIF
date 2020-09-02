@@ -26,6 +26,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Summary from './configure_ingestion/Summary';
 import Customrules from './configure_ingestion/Customrules';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import {useSnackbar} from 'notistack';
 
 const QontoConnector = withStyles({
@@ -107,13 +108,13 @@ const ColorlibConnector = withStyles({
   active: {
     '& $line': {
       backgroundImage:
-        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        'linear-gradient( 95deg,rgb(42,113,233) 0%,rgb(33,64,187) 50%,rgb(138,35,135) 100%)',
     },
   },
   completed: {
     '& $line': {
       backgroundImage:
-        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        'linear-gradient( 95deg,rgb(42,113,233) 0%,rgb(33,64,187) 50%,rgb(138,35,135) 100%)',
     },
   },
   line: {
@@ -129,21 +130,23 @@ const useColorlibStepIconStyles = makeStyles({
     backgroundColor: '#ccc',
     zIndex: 1,
     color: '#fff',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     display: 'flex',
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   active: {
-    backgroundImage:
-      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+    // backgroundImage:
+    //   'linear-gradient( 136deg, rgb(63,81,181) 0%, rgb(33,64,187) 50%, rgb(138,35,235) 100%)',
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+    background:"#3f51b5"
   },
   completed: {
-    backgroundImage:
-      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+    // backgroundImage:
+    //   'linear-gradient( 136deg, rgb(63,81,181) 0%, rgb(33,64,187) 50%, rgb(138,35,235) 100%)',
+    background:"#3f51b5"
   },
 });
 
@@ -155,6 +158,7 @@ function ColorlibStepIcon(props) {
     1: <SettingsIcon />,
     2: <GroupAddIcon />,
     3: <VideoLabelIcon />,
+    4: <ThumbUpIcon/>
   };
 
   return (
@@ -405,13 +409,13 @@ export default function CustomizedSteppers(props) {
           </Grid>
         </Grid>
       </div> */}
-      <Stepper alternativeLabel activeStep={activeStep}>
+      {/* <Stepper alternativeLabel activeStep={activeStep}>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
-      </Stepper>
+      </Stepper> */}
       {/* <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
         {steps.map((label) => (
           <Step key={label}>
@@ -419,13 +423,13 @@ export default function CustomizedSteppers(props) {
           </Step>
         ))}
       </Stepper> */}
-      {/* <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
           </Step>
         ))}
-      </Stepper> */}
+      </Stepper>
       <div>
         {activeStep === steps.length ? (
           <div>

@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -42,101 +43,112 @@ export default function Summary(props) {
 
     const handleOpen = () => {
         setOpen(true);
-      };
-      const handleClose = (event, reason) => {
+    };
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
-      };
+    };
 
     const [dataTable, setDataTable] = useState([{}])
-    const getAlldetails = () =>{
+    const getAlldetails = () => {
         Axios.get(`${local}/getSummary/${props.entryid}`)
-        .then((response)=>{
-            setDataTable(response.data.data);
-            setloading(false);
-        }).catch((err)=>{
-            console.log(err);
-        })
+            .then((response) => {
+                setDataTable(response.data.data);
+                setloading(false);
+            }).catch((err) => {
+                console.log(err);
+            })
     }
 
-    const changeStatus = () =>{
+    const changeStatus = () => {
         Axios.get(`${local}/status/Created/${props.entryid}`)
-        .then((response)=>{
-            if(response.status ===  200){
-                handleOpen();
-                setMsg(response.data.message)
-                window.location.href="/ingestiontable"
-            }
-            else{
-                handleOpen();
-                setMsg(response.data.message)
-            }
-        }).catch((err)=>{
-            console.log(err)
-        })
+            .then((response) => {
+                if (response.status === 200) {
+                    handleOpen();
+                    setMsg(response.data.message)
+                    window.location.href = "/ingestiontable"
+                }
+                else {
+                    handleOpen();
+                    setMsg(response.data.message)
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
     }
-    useEffect(()=>{
+    useEffect(() => {
         getAlldetails()
     }, [])
 
-    if(!loading){
+    if (!loading) {
         return (
             <div>
-               <Snackbar
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              open={open}
-              autoHideDuration={3000}
-              onClose={handleClose}
-              message={<span id="message-id">{msg}</span>}
-              action={
-                <React.Fragment>
-                  <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </React.Fragment>
-              }
-            /> 
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
+                    open={open}
+                    autoHideDuration={3000}
+                    onClose={handleClose}
+                    message={<span id="message-id">{msg}</span>}
+                    action={
+                        <React.Fragment>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </React.Fragment>
+                    }
+                />
 
-                <TableContainer component={Paper} style={{maxHeight:"500px"}}>
-                                <Table className={classes.table} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell><b>Parameters</b></TableCell>
-                                            <TableCell><b>Values</b></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {dataTable.length> 0 ? dataTable.map((row) => (
-                                                <TableRow key={row.fields}>
-                                                    <TableCell component="th" scope="row">
-                                                        {row.fields}
-                                                    </TableCell>
-                                                    <TableCell >{row.values}</TableCell>
-                                                    
-                                                </TableRow>
-                                            )) : <>No records to display</>}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                <TableContainer component={Paper} style={{ maxHeight: "330px" }}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell><b>Parameters</b></TableCell>
+                                <TableCell><b>Values</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {dataTable.length > 0 ? dataTable.map((row) => (
+                                <TableRow key={row.fields}>
+                                    <TableCell component="th" scope="row">
+                                        {row.fields}
+                                    </TableCell>
+                                    <TableCell >{row.values}</TableCell>
 
-                    <div>
-                        <Button variant="contained" color="primary" onClick={(e)=>{
-                            e.preventDefault();
-                            changeStatus();
-                        }}>
-                            Create Job
+                                </TableRow>
+                            )) : <>No records to display</>}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                {/* <div>
+                    <Button variant="contained" color="primary" onClick={(e) => {
+                        e.preventDefault();
+                        changeStatus();
+                    }}>
+                        Create Job
                         </Button>
-                    </div>
+                </div> */}
+
+                <div style={{ marginTop: " 20px" }}>
+                    <Grid container>
+                        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                            <Button variant="contained" color='primary' onClick={(e) => {
+                                 e.preventDefault();
+                                 changeStatus();
+                            }}>Create Job </Button>
+                        </Grid>
+                    </Grid>
+                </div>
             </div>
         )
     }
-    else{
-        return(
+    else {
+        return (
             <div>
                 <div style={{ marginLeft: "550px" }}>
                     <CircularProgress />

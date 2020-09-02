@@ -35,6 +35,7 @@ import Administration from './administrator/administration';
 import SourceDetails from './administrator/sourceDetails';
 import TargetDetails from './administrator/targetDetails';
 import Setup from './configure_ingestion/Setup';
+import Audit from './Audit';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const drawerWidth = 70;
@@ -255,6 +256,9 @@ export default function Layout() {
                                     </Route> */}
                                     <Route exact path="/ingestiontable" >
                                         <IngestionTable/>
+                                    </Route>
+                                    <Route exact path={['/audit','/audit/:param']} >
+                                        <Audit />
                                     </Route>
                                     <Route exact path="/admin">
                                         <Administration/>

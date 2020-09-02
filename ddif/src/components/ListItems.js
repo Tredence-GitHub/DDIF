@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -87,13 +88,21 @@ export default function ListItems() {
                         </ListItemIcon>
                         <ListItemText primary="Configue Ingestion Job" />
                     </ListItem>
+                    <ListItem to="/Audit"  component={Link} button>
+                        <ListItemIcon>
+                        <Tooltip title="Audit">
+                            <VerifiedUserIcon fontSize="small" />
+                        </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary="Configue Ingestion Job" />
+                    </ListItem>
                     <ListItem to="/admin"  component={Link} button >
                         <ListItemIcon>
                         <Tooltip title="Administration">
                             <PersonIcon fontSize="small" />
                         </Tooltip>
                         </ListItemIcon>
-                        <ListItemText primary="Job Monitor" />
+                        <ListItemText primary="Administration" />
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     <ListItem button onClick={handleClick}>
