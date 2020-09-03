@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, '.././build')));
 app.use('/', require('./routes/route'));
 
 db.sequelize.sync({force: false}).then(() => {

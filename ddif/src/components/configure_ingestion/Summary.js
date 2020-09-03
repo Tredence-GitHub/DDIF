@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Summary(props) {
     const local = "http://localhost:4000/summary";
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net/summary';
+    
     const classes = useStyles()
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true);
@@ -42,7 +45,7 @@ export default function Summary(props) {
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+    const history = useHistory();
     const handleOpen = () => {
         setOpen(true);
     };
@@ -55,7 +58,7 @@ export default function Summary(props) {
 
     const [dataTable, setDataTable] = useState([{}])
     const getAlldetails = () => {
-        Axios.get(`${local}/getSummary/${props.entryid}`)
+        Axios.get(`${deploy}/getSummary/${props.entryid}`)
             .then((response) => {
                 setDataTable(response.data.data);
                 setloading(false);
@@ -65,7 +68,7 @@ export default function Summary(props) {
     }
 
     const changeStatus = () => {
-        Axios.get(`${local}/status/Created/${props.entryid}`)
+        Axios.get(`${deploy}/status/Created/${props.entryid}`)
             .then((response) => {
                 if (response.status === 200) {
                     // handleOpen();
@@ -73,7 +76,7 @@ export default function Summary(props) {
                     enqueueSnackbar(response.data.message, {
                         variant: 'success',
                     });
-                    window.location.href = "/ingestiontable"
+                    history.push("/ingestiontable")
                 }
                 else {
                     // handleOpen();
@@ -146,7 +149,7 @@ export default function Summary(props) {
                     <Grid container>
                         <Grid direction="column" container justify="flex-end" alignItems="flex-end">
                             {props.status==="Scheduled"? <Button variant="contained" color='primary' onClick={(e)=>{
-                                window.location.href="/ingestiontable"
+                                history.push("/ingestiontable")
                             }}>Take me back to Main Page</Button>:
                             <Button variant="contained" color='primary' onClick={(e) => {
                                  e.preventDefault();

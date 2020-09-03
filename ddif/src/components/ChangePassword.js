@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { useSnackbar,withSnackbar } from 'notistack';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +52,7 @@ export default function ChangePassword() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
  
     let local = "http://localhost:4000"
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
     };
@@ -84,7 +84,7 @@ export default function ChangePassword() {
 
     const validator = (e) => {
 
-        let resp = Axios.post(`${local}/auth/forgotpassword`, {
+        let resp = Axios.post(`${deploy}/auth/forgotpassword`, {
             username: username,
             password: password,
         }
@@ -199,7 +199,7 @@ export default function ChangePassword() {
                                 </Button> */}
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Link href="/" variant="body2">
+                                <Link to="/" variant="body2">
                                     {'Back To Login'}
                                 </Link>
                             </div>

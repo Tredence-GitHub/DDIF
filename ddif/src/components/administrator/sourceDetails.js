@@ -295,13 +295,13 @@ export default function SourceDetails(){
     }
 
     let local = 'http://localhost:4000';
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
     function updateData(data){
         setEdited(true)
         setMsg('Updating... ')
         handleOpen()
-        Axios.post(`${local}/administration/updateConnection`, data)
+        Axios.post(`${deploy}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
                 let msg = response.data.message;
@@ -321,7 +321,7 @@ export default function SourceDetails(){
         setSubmitted(true);
         setMsg('Saving... ')
         handleOpen()
-        Axios.post(`${local}/administration/saveConnection`, data)
+        Axios.post(`${deploy}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){
                 let msg = response.data.message;
@@ -338,7 +338,7 @@ export default function SourceDetails(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`), 
+            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
             
             ]).then((res)=>{
                 return [res]
@@ -366,8 +366,8 @@ export default function SourceDetails(){
     function getData(rowid){
         
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`), 
-            Axios.get(`${local}/administration/getById/${rowid}`)
+            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
+            Axios.get(`${deploy}/administration/getById/${rowid}`)
             ]).then((res)=>{
                 return [res]
             })  

@@ -65,11 +65,11 @@ export default function Audit() {
     ]);
 
     let local = 'http://localhost:4000'
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
     function getInfo(entryid) {
         Promise.all(
-            [Axios.get(`${local}/audit/getRecords/${entryid}`),
+            [Axios.get(`${deploy}/audit/getRecords/${entryid}`),
             ]).then((res) => {
                 return [res]
             })

@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
+import { Link, useHistory } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Axios from 'axios';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -62,9 +62,9 @@ export default function Login() {
     const [errorinfo, seterrorinfo] = React.useState('');
     const [error, seterror] = React.useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+    const history = useHistory();
     let local = "http://localhost:4000"
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
     const handleChangeName = (event) => {
         setName(event.target.value);
@@ -106,7 +106,7 @@ export default function Login() {
 
         if (password === confirmpassword.value && password !== "") {
             console.log(username,name);
-            let resp = Axios.post(`${local}/register`, {
+            let resp = Axios.post(`${deploy}/register`, {
                 name:name,
                 username:username,
                 password:password,
@@ -125,7 +125,7 @@ export default function Login() {
                     });
 
                      if(response.data.data.length > 0){
-                         return window.location.href = "/";
+                         history.push("/")
                      }
                 }
                 else if (response.status === 400) {
@@ -285,7 +285,7 @@ export default function Login() {
                             </Button>
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Link href="/" variant="body2">
+                                <Link to="/" variant="body2">
                                     {'Already have an account? Sign in'}
                                 </Link>
                             </div>

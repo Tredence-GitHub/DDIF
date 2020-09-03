@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography'
 import {ThemeProvider,createMuiTheme } from "@material-ui/core/styles"
 import Switch from '@material-ui/core/Switch';
 import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router-dom';
 
 const roles = [
     {
@@ -69,9 +70,10 @@ export default function Login(props) {
     const [password, setPassword] = React.useState('');
     const [role, setRole] = React.useState('');
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+    const history = useHistory();
+    
     let local = "http://localhost:4000"
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
     const handleChangeUsername = (event) => {
         setUsername(event.target.value);
     };
@@ -92,7 +94,7 @@ export default function Login(props) {
     const validator = (e) => {
 
 
-        let resp = Axios.post(`${local}/auth/authenticateUser`, {
+        let resp = Axios.post(`${deploy}/auth/authenticateUser`, {
             username: username,
             password: password,
         }
@@ -107,7 +109,8 @@ export default function Login(props) {
                 });
                 localStorage.setItem('loggedIn', true);
                 localStorage.setItem('username', username);
-                return window.location.href = "/home";
+                // return window.location.href = "/home";
+                setTimeout(history.push('/home'), 10000);
             }
             else if (response.status === 400) {
                 // handleOpen()
@@ -174,10 +177,10 @@ export default function Login(props) {
 
                 <Grid item xs={3} >
                     <Paper className={classes.paper} style={{ width: "300px" }}>
-                        <div style={{marginLeft:"150px"}}>
+                        {/* <div style={{marginLeft:"150px"}}>
                             <Switch checked={darkMode} onChange={()=>{setDarkMode(!darkMode)}}/>
                             <small>Dark Mode</small>
-                        </div>
+                        </div> */}
                     
                         <Avatar className={classes.avatar}>
                             <LockOutlinedIcon />
@@ -235,13 +238,13 @@ export default function Login(props) {
                                 </Button> */}
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Link href="/register" variant="body2">
+                                <Link to="/register" variant="body2">
                                     {'Not Registered? Create an account! '}
                                 </Link>
                             </div>
 
                             <div className={classes.buttonRoot}>
-                                <Link href="/recover" variant="body2">
+                                <Link to="/recover" variant="body2">
                                     {'Forgot Password?'}
                                 </Link>
                             </div>

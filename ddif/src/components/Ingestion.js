@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Metadata from './configure_ingestion/Metadata';
 import Setup from './configure_ingestion/Setup';
 import Custom from './configure_ingestion/Custom';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Axios from 'axios';
 import Grid from '@material-ui/core/Grid';
@@ -222,9 +222,10 @@ export default function CustomizedSteppers(props) {
   const [fn, setfn] = React.useState('');
   const {enqueueSnackbar} = useSnackbar();
 
+  const history = useHistory();
 
   let local = 'http://localhost:4000';
-
+  let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
   const handleSetup = (param,mode) => {
 
     if(mode==='save'){
@@ -307,7 +308,7 @@ export default function CustomizedSteppers(props) {
 
 
   const saveData = (param) => {
-    let resp = Axios.post(`${local}/ingestion/setupDataSave`, param
+    let resp = Axios.post(`${deploy}/ingestion/setupDataSave`, param
 
     ).then((response) => {
       // console.log(response);
@@ -355,7 +356,7 @@ export default function CustomizedSteppers(props) {
 
 
   const updateData = (param) => {
-    let resp = Axios.post(`${local}/ingestion/updateSetupDBData`, param
+    let resp = Axios.post(`${deploy}/ingestion/updateSetupDBData`, param
 
     ).then((response) => {
       console.log(response);
@@ -450,7 +451,7 @@ export default function CustomizedSteppers(props) {
               All steps completed - you&apos;re finished
             </Typography>
             <Button onClick={(e)=>{
-              window.location.href = "/ingestiontable"
+              history.push("/ingestiontable")
             }} className={classes.button}>
               Take Me Back
             </Button>

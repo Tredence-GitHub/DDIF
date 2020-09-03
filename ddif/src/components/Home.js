@@ -166,13 +166,13 @@ function Home() {
     const [notficationsData, setnotficationsData] = useState({});
 
     let local = 'http://localhost:4000'
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/dashboard/dashboardInformation`),
-            Axios.post(`${local}/dashboard/getActivityLogs`),
-            Axios.get(`${local}/dashboard/announcements`)
+            [Axios.get(`${deploy}/dashboard/dashboardInformation`),
+            Axios.post(`${deploy}/dashboard/getActivityLogs`),
+            Axios.get(`${deploy}/dashboard/announcements`)
             ]).then((res) => {
                 return [res]
             })

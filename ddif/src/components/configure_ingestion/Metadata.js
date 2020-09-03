@@ -132,9 +132,10 @@ export default function Metadata(props) {
 
   // }
   let local = 'http://localhost:4000';
+  let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
   function getSavedMetadata(entryid) {
-    Axios.get(`${local}/ingestion/getSavedMetadata/${entryid}`)
+    Axios.get(`${deploy}/ingestion/getSavedMetadata/${entryid}`)
       .then((response) => {
         console.log('IN EDIT OF METADATA ', response.data.data);
         setDataTable(response.data.data);
@@ -146,7 +147,7 @@ export default function Metadata(props) {
 
   function updateMetadata() {
     setloading(true)
-    let resp = Axios.post(`${local}/ingestion/saveMetadata`, {
+    let resp = Axios.post(`${deploy}/ingestion/saveMetadata`, {
       entryId: parseInt(props.entryid),
       metadata: dataTable
     }).then((response) => {
@@ -188,7 +189,7 @@ export default function Metadata(props) {
         // handleOpen()
         // setMsg("Resetting............ Please Wait")
         setloading(true)
-    let resp = Axios.post(`${local}/ingestion/api/getMetadata`,{entryId : entryid})
+    let resp = Axios.post(`${deploy}/ingestion/api/getMetadata`,{entryId : entryid})
       .then((response) => {
         console.log(response.data.data);
         
@@ -212,7 +213,7 @@ export default function Metadata(props) {
 
           console.log(arr)
 
-          Axios.post(`${local}/ingestion/saveMetadata`, {
+          Axios.post(`${deploy}/ingestion/saveMetadata`, {
             entryId: parseInt(props.entryid),
             metadata: arr
 

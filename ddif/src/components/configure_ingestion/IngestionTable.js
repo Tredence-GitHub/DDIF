@@ -21,6 +21,7 @@ import PanToolIcon from '@material-ui/icons/PanTool';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
 import PlayCircleFilledTwoToneIcon from '@material-ui/icons/PlayCircleFilledTwoTone';
+import { useHistory } from 'react-router-dom';
 
 
 
@@ -50,9 +51,9 @@ export default function IngestionTable() {
     const [msg, setMsg] = React.useState('');
     const { enqueueSnackbar } = useSnackbar();
 
-
+    const history = useHistory();
     let local = 'http://localhost:4000'
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
     const handleOpen = () => {
         setOpen(true);
     };
@@ -72,7 +73,7 @@ export default function IngestionTable() {
         console.log(b)
         b.setAttribute('hidden', 'true');
 
-        Axios.post(`${local}/job/killjob`, {
+        Axios.post(`${deploy}/job/killjob`, {
             job_id : jobId,
             entryid :entryId
             
@@ -84,14 +85,14 @@ export default function IngestionTable() {
                     //     variant: 'success',
                     // });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 } else {
                     
                     // enqueueSnackbar('Job is running ..', {
                     //     variant: 'success',
                     // });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -101,7 +102,7 @@ export default function IngestionTable() {
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.location.href = '/ingestiontable';
+                window.history.go(0);
             })
 
     }
@@ -117,7 +118,7 @@ export default function IngestionTable() {
         console.log(b)
         b.setAttribute('hidden', 'true');
 
-        Axios.post(`${local}/job/schedule`, {
+        Axios.post(`${deploy}/job/schedule`, {
             entryid: parseInt(entryId),
             crontime: cronTime
             
@@ -129,13 +130,13 @@ export default function IngestionTable() {
                         variant: 'success',
                     });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 } else {
                     enqueueSnackbar('Job is running ..', {
                         variant: 'success',
                     });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -144,7 +145,7 @@ export default function IngestionTable() {
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.location.href = '/ingestiontable';
+                window.history.go(0);
             })
 
     }
@@ -160,7 +161,7 @@ export default function IngestionTable() {
         let b = document.getElementById(btnId);
         console.log(b)
         b.setAttribute('hidden', 'true');
-        Axios.get(`${local}/ingestion/api/triggerOnDemand/${entryId}`)
+        Axios.get(`${deploy}/ingestion/api/triggerOnDemand/${entryId}`)
             .then((response) => {
                 if (response.data.message === 'success') {
                     // handleOpen();
@@ -169,7 +170,7 @@ export default function IngestionTable() {
                         variant: 'success',
                     });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 } else {
                     // handleOpen();
                     // setMsg('Job is running ..')
@@ -177,7 +178,7 @@ export default function IngestionTable() {
                         variant: 'success',
                     });
                     b.setAttribute('hidden', 'false')
-                    window.location.href = '/ingestiontable';
+                    window.history.go(0);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -188,13 +189,13 @@ export default function IngestionTable() {
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.location.href = '/ingestiontable';
+                window.history.go(0);
             })
     }
 
     function getInfo() {
         Promise.all(
-            [Axios.post(`${local}/ingestion/getRecords`),
+            [Axios.post(`${deploy}/ingestion/getRecords`),
             ]).then((res) => {
                 return [res]
             })
@@ -267,17 +268,17 @@ export default function IngestionTable() {
                                             </TableCell>
 
                                             <TableCell onClick={(e) => {
-                                                window.location.href = '/ingestion/' + row.entryId
+                                                 history.push('/ingestion/' + row.entryId)
                                             }} >{row.jobname}</TableCell>
 
                                             <TableCell onClick={(e) => {
-                                                window.location.href = '/ingestion/' + row.entryId
+                                                 history.push('/ingestion/' + row.entryId)
                                             }}>{row.projectname}</TableCell>
 
 
                                             {row.status === "Completed" ?
                                                 <TableCell onClick={(e) => {
-                                                    window.location.href = '/audit/' + row.entryId
+                                                    history.push('/audit/' + row.entryId)
                                                 }}>
                                                     <div style={{ color: "green" }}> <a>{row.status} </a></div> </TableCell> :
 
@@ -310,13 +311,16 @@ export default function IngestionTable() {
                                                 </Button> </TableCell> :
                                                 row.Schedule.schedule_type === "Fixed Schedule" && row.status != 'draft' ?
                                                     <TableCell>
-                                                        <Button id={row.entryId + 'ID'} variant="outlined" size="small" color='secondary' onClick={(e) => {
+                                                        <Button id={row.entryId + 'ID'} variant="default" size="small" color='secondary' style={{
+                                                            borderRadius:"80%",
+                                                            color: "maroon"
+                                                        }} onClick={(e) => {
                                                             e.preventDefault();
                                                             killScheduled(row.entryId+'ID',row.entryId, row.schedule_job_id)
                                                         }}>
-                                                            <PanToolIcon/>
+                                                            <PanToolIcon color="red"/><small> &nbsp; <i>Stop to Edit Details</i></small>
                                                         </Button> 
-                                                        <small id={row.entryId + 'ID'}> &nbsp; <i>Stop to Edit Details</i></small></TableCell> :
+                                                        </TableCell> :
                                                         
                                                         <TableCell>
                                                             {row.Schedule.schedule_type}
@@ -339,7 +343,7 @@ export default function IngestionTable() {
                             <Button variant="contained" color='primary' onClick={(e) => {
                                 e.preventDefault();
                                 // window.location.href = "/ingestion/setup";
-                                window.location.href = "/ingestion";
+                                history.push("/ingestion");
                             }}>Create Ingestion </Button>
                         </Grid>
                     </Grid>

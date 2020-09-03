@@ -265,10 +265,10 @@ export default function Setup(props) {
 
     const { enqueueSnackbar } = useSnackbar();
     let local = 'http://localhost:4000';
-
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`),
+            [Axios.get(`${deploy}/ingestion/getDropdowns`),
 
             ]).then((res) => {
                 return [res]
@@ -314,9 +314,9 @@ export default function Setup(props) {
         // let entryid = props.entryid;
         console.log(entryid, "Edit Mode");
         Promise.all(
-            [Axios.get(`${local}/ingestion/api/getEntryData/${entryid}`),
-            // [Axios.get(`${local}/ingestion/api/getEntryData/52`),
-            Axios.get(`${local}/ingestion/getDropdowns`)
+            [Axios.get(`${deploy}/ingestion/api/getEntryData/${entryid}`),
+            // [Axios.get(`${deploy}/ingestion/api/getEntryData/52`),
+            Axios.get(`${deploy}/ingestion/getDropdowns`)
 
             ]).then((res) => {
                 return [res]

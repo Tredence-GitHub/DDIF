@@ -153,7 +153,7 @@ export default function Customrules(props) {
   };
 
   let local = "http://localhost:4000/customrules";
-
+  let deploy = 'https://driverless-data-ingestion.azurewebsites.net/customrules'
   const handleOpen = () => {
     setOpen(true);
   };
@@ -245,8 +245,8 @@ export default function Customrules(props) {
     }
 
     
-    Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
-            Axios.post(`${local}/populateCustomRules`, {
+    Promise.all([Axios.get(`${deploy}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${deploy}/populateCustomRules`, {
                 entryid: props.entryid
             })
             ]).then((result)=>{
@@ -279,7 +279,7 @@ export default function Customrules(props) {
     console.log(props.entryid, "*** here ***")
     Axios({
       method: 'post',
-      url: (`${local}` + "/saveBusinessRules"),
+      url: (`${deploy}` + "/saveBusinessRules"),
       data: {
         entryid: props.entryid,
         customrules: {

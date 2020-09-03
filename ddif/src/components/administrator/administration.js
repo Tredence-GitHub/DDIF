@@ -52,6 +52,7 @@ export default function Administration(){
     };
 
     let local = 'http://localhost:4000'
+    let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
  
     function scheduleNow(){
 
@@ -59,7 +60,7 @@ export default function Administration(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/administration/getConnections`), 
+            [Axios.get(`${deploy}/administration/getConnections`), 
             ]).then((res)=>{
                 return [res]
             })  
@@ -151,7 +152,7 @@ if(!loading){
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell><b>Source ID</b></TableCell>
-                                                <TableCell><b>Connection name</b></TableCell>
+                                                <TableCell><b>Source Connection name</b></TableCell>
                                                 <TableCell><b>Location Name</b></TableCell>
                                                 <TableCell><b>Connection Type</b></TableCell>
                                             </TableRow>
@@ -197,7 +198,7 @@ if(!loading){
                                     <TableHead>
                                         <TableRow>
                                             <TableCell><b>Target ID</b></TableCell>
-                                            <TableCell><b>Target type</b></TableCell>
+                                            <TableCell><b>Target Connection Name</b></TableCell>
                                             <TableCell><b>Location Name</b></TableCell>
                                             <TableCell><b>Connection type</b></TableCell>
                                         </TableRow>

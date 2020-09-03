@@ -126,10 +126,9 @@ function killJob(data) {
         .then((res) => {
             console.log(`statusCode: ${res.status}`)
             // console.log(`statusText is ${res.statusText}`)
-            console.log(res.data);
+            console.log(res);
 
             resolve(res.data)
-            
             
         })
         .catch((error) => {
