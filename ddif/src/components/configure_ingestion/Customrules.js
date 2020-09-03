@@ -129,7 +129,11 @@ export default function Customrules(props) {
       if(event.target.value === 'Range' || event.target.value.includes('list')){
         sethowtoenter('Eg: 1,2')
         sethideParameters(false)
-      }else{
+      }else if(event.target.value === 'Like'){
+        sethowtoenter("Uses Python Regex For Complex Conditions")
+        sethideParameters(false)
+      }
+      else{
         sethowtoenter('Enter value')
         sethideParameters(false)
       }
@@ -416,8 +420,9 @@ export default function Customrules(props) {
 
                   <TextField
                     id="given"
-                    label="Enter Value"
-                    placeholder={howtoenter}
+                    label="Parameter"
+                    placeholder="Enter Here"
+                    helperText={howtoenter}
                     // onChange={handleChangeGivenValue}
                     onChange={(e, value) => {
                       setGivenValue(value)
@@ -426,7 +431,7 @@ export default function Customrules(props) {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <VerifiedUserIcon />
+                          
                         </InputAdornment>
                       ),
                     }}

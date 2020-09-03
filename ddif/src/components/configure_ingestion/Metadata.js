@@ -164,7 +164,7 @@ export default function Metadata(props) {
         // handleOpen();
         // setMsg('Something went wrong')
         // alert('Something went wrong');
-        enqueueSnackbar('Something went wrong', {
+        enqueueSnackbar('Failed to Update Metadata. Please try again.', {
           variant: 'error',
       });
       }
@@ -185,8 +185,8 @@ export default function Metadata(props) {
 
   function getInfo() {
     let entryid = props.entryid;
-        handleOpen()
-        setMsg("Resetting............ Please Wait")
+        // handleOpen()
+        // setMsg("Resetting............ Please Wait")
         setloading(true)
     let resp = Axios.post(`${local}/ingestion/api/getMetadata`,{entryId : entryid})
       .then((response) => {
@@ -233,7 +233,7 @@ export default function Metadata(props) {
               // alert('Something went wrong');
               // handleOpen();
               // setMsg('Something went wrong')
-              enqueueSnackbar('Something went wrong', {
+              enqueueSnackbar('Failed to Fetch Metadata. Please try again.', {
                 variant: 'error',
             });
             }

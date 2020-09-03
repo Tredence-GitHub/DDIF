@@ -283,6 +283,8 @@ export default function IngestionTable() {
 
                                                 row.status === "Scheduled" ?
                                                 <TableCell> <div style={{ color: "orange" }}> <a>{row.status} </a></div> </TableCell>:
+                                                row.status === "Created" ?
+                                                <TableCell> <div style={{ color: "navy" }}> <a>{row.status} </a></div> </TableCell>:
                                                 <TableCell>{row.status}</TableCell>
                                             }
 

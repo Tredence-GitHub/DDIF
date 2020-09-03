@@ -55,9 +55,9 @@ export default function Audit() {
         { title: 'Total Rows', field: 'total_rows' },
         { title: 'Ingested Rows', field: 'ingested_rows' },
         { title: 'Duplicate Records', field: 'duplicated_records' },
-        { title: 'DQ Check Failed', field: 'dq_check_failed' },
-        { title: 'BR Check Failed', field: 'br_check_failed' },
-        { title: 'CR Check Failed', field: 'cr_check_failed' },
+        { title: 'Data Quality Check Failed', field: 'dq_check_failed' },
+        { title: 'Business Rule Check Failed', field: 'br_check_failed' },
+        { title: 'Custom Rule Check Failed', field: 'cr_check_failed' },
         { title: 'Rejected Rows', field: 'rejected_rows' },
         { title: 'Status', field: 'status' },
         { title: 'Relative File Path', field:"relative_file_path",width:1100}
