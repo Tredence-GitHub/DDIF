@@ -23,6 +23,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -42,7 +44,7 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-import {useSnackbar} from 'notistack';
+import { useSnackbar } from 'notistack';
 
 const formats = [
     {
@@ -237,12 +239,18 @@ export default function Setup(props) {
     const [jdbcDatabaseName2, setjdbcDatabaseName2] = React.useState('');
     const [jdbcsourceQuery2, setjdbcsourceQuery2] = React.useState('');
     // const [startTime, setStartTime] = React.useState(new Date().toISOString());
-    const [selectedTime, setSelectedTime] = React.useState();
-    const [scheduleType, setscheduleType] = React.useState('');
-    const [hours_minutes, setHoursMinutes] = React.useState(0);
-    const [weeks, setWeeks] = React.useState('');
-    const [startDate, setStartDate] = React.useState();
-    const [endDate, setEndDate] = React.useState();
+    // const [selectedTime, setSelectedTime] = React.useState();
+    // const [scheduleType, setscheduleType] = React.useState('');
+    // const [hours_minutes, setHoursMinutes] = React.useState(0);
+    // const [weeks, setWeeks] = React.useState('');
+    // const [startDate, setStartDate] = React.useState();
+    // const [endDate, setEndDate] = React.useState();
+    const [minute, setMinute] = React.useState('');
+    const [hour, setHour] = React.useState('');
+    const [dayofmonth, setDayofMonth] = React.useState('');
+    const [month, setMonth] = React.useState('');
+    const [dayofweek, setDayofWeek] = React.useState('');
+    const [status, setStatus] = React.useState('');
 
     const [hiddenOneDrive, sethiddenOneDrive] = React.useState(true);
     const [hiddenGoogleDrive, sethiddenGoogleDrive] = React.useState(true);
@@ -252,15 +260,10 @@ export default function Setup(props) {
     const [hiddenADLS1, sethiddenADLS1] = React.useState(true);
     const [hiddenADLS2, sethiddenADLS2] = React.useState(true);
     const [hiddenAzureSql, sethiddenAzureSql] = React.useState(true);
-    const [hiddenOneTime, sethiddenOneTime] = React.useState(true);
     const [hiddenFixedSchedule, sethiddenFixedSchedule] = React.useState(true);
-    const [hiddenminute, setHiddenMinute] = React.useState("none");
-    const [hiddenhour, setHiddenHour] = React.useState("none");
-    const [hiddenday, setHiddenDay] = React.useState("none");
-    const [hiddenweek, setHiddenWeek] = React.useState("none");
     const [entryId, setEntryId] = React.useState(0);
 
-    const {enqueueSnackbar} = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
     let local = 'http://localhost:4000';
 
     function getInfo() {
@@ -339,6 +342,7 @@ export default function Setup(props) {
                     setsourceSecondDropdown(sources)
                     settargetSecondDropdown(targets)
 
+
                     setdropDownProject(response[0][1].data.data.project_types);
                     setdropDownSource(response[0][1].data.data.data_sources);
                     setdropDownTarget(response[0][1].data.data.data_targets);
@@ -346,27 +350,27 @@ export default function Setup(props) {
                     setProject(response[0][0].data.data[0].project_type)
                     setRationale(response[0][0].data.data[0].rationale)
                     setSourcetype(response[0][0].data.data[0].source_type)
-                    response[0][1].data.data.data_sources.map((item,index)=>{
-                        if(item.typeId===response[0][0].data.data[0].source_type){
+                    response[0][1].data.data.data_sources.map((item, index) => {
+                        if (item.typeId === response[0][0].data.data[0].source_type) {
                             setSourcetypeAbbrv(item.abbrv)
                         }
                     })
                     setTargettype(response[0][0].data.data[0].target_type)
-                    response[0][1].data.data.data_targets.map((item,index)=>{
-                        if(item.typeId===response[0][0].data.data[0].target_type){
+                    response[0][1].data.data.data_targets.map((item, index) => {
+                        if (item.typeId === response[0][0].data.data[0].target_type) {
                             setTargettypeAbbrv(item.abbrv)
                         }
                     })
                     // console.log(response[0][0].data.data[0].Parameter.SourceParameter)
                     setValue(response[0][0].data.data[0].Schedule.schedule_type)
-                    setSelectedTime(new Date(response[0][0].data.data[0].Schedule.start_time))
-                    // setSelectedTime(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
-                    console.log(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
-                    setscheduleType(response[0][0].data.data[0].Schedule.recurrence_type)
-                    setHoursMinutes((response[0][0].data.data[0].Schedule.recurrence))
-                    setWeeks(response[0][0].data.data[0].Schedule.days)
-                    setStartDate(response[0][0].data.data[0].Schedule.start_date)
-                    setEndDate(response[0][0].data.data[0].Schedule.end_date)
+                    // setSelectedTime(new Date(response[0][0].data.data[0].Schedule.start_time))
+                    // // setSelectedTime(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
+                    // console.log(new Date(new Date(response[0][0].data.data[0].Schedule.start_time).toGMTString()));
+                    // setscheduleType(response[0][0].data.data[0].Schedule.recurrence_type)
+                    // setHoursMinutes((response[0][0].data.data[0].Schedule.recurrence))
+                    // setWeeks(response[0][0].data.data[0].Schedule.days)
+                    // setStartDate(response[0][0].data.data[0].Schedule.start_date)
+                    // setEndDate(response[0][0].data.data[0].Schedule.end_date)
                     setValue2(response[0][0].data.data[0].operation)
                     setsourceParams(JSON.parse(response[0][0].data.data[0].Parameter.SourceParameter));
                     let SourceParameters = JSON.parse(response[0][0].data.data[0].Parameter.SourceParameter);
@@ -468,46 +472,40 @@ export default function Setup(props) {
                     }
 
 
-                    if(response[0][0].data.data[0].Schedule.schedule_type==="One-Time"){
-                        sethiddenFixedSchedule(true)
-                        sethiddenOneTime(false)
-                    }
-                    else if(response[0][0].data.data[0].Schedule.schedule_type==="Fixed Schedule"){
+                    if (response[0][0].data.data[0].Schedule.schedule_type === "Fixed Schedule") {
                         sethiddenFixedSchedule(false)
-                        sethiddenOneTime(true)
                     }
-                    else{
+                    else {
                         sethiddenFixedSchedule(true)
-                        sethiddenOneTime(true)
                     }
                     //////////////////////////////////////////////////////
 
-                    if (response[0][0].data.data[0].Schedule.recurrence_type=== "minute") {
-                        setHiddenHour("none")
-                        setHiddenDay("none")
-                        setHiddenWeek("none")
-                        setHiddenMinute("block")
-            
-                    }
-                    else if (response[0][0].data.data[0].Schedule.recurrence_type === "hourly") {
-                        setHiddenMinute("none")
-                        setHiddenDay("none")
-                        setHiddenWeek("none")
-                        setHiddenHour("block")
-            
-                    }
-                    else if (response[0][0].data.data[0].Schedule.recurrence_type === "daily") {
-                        setHiddenMinute("none")
-                        setHiddenHour("none")
-                        setHiddenWeek("none")
-                        setHiddenDay("block")
-                    }
-                    else {
-                        setHiddenMinute("none")
-                        setHiddenHour("none")
-                        setHiddenDay("none")
-                        setHiddenWeek("block")
-                    }
+                    // if (response[0][0].data.data[0].Schedule.recurrence_type=== "minute") {
+                    //     setHiddenHour("none")
+                    //     setHiddenDay("none")
+                    //     setHiddenWeek("none")
+                    //     setHiddenMinute("block")
+
+                    // }
+                    // else if (response[0][0].data.data[0].Schedule.recurrence_type === "hourly") {
+                    //     setHiddenMinute("none")
+                    //     setHiddenDay("none")
+                    //     setHiddenWeek("none")
+                    //     setHiddenHour("block")
+
+                    // }
+                    // else if (response[0][0].data.data[0].Schedule.recurrence_type === "daily") {
+                    //     setHiddenMinute("none")
+                    //     setHiddenHour("none")
+                    //     setHiddenWeek("none")
+                    //     setHiddenDay("block")
+                    // }
+                    // else {
+                    //     setHiddenMinute("none")
+                    //     setHiddenHour("none")
+                    //     setHiddenDay("none")
+                    //     setHiddenWeek("block")
+                    // }
 
 
 
@@ -535,6 +533,15 @@ export default function Setup(props) {
                     settargetConnection(TargetParameters.connection_name)
                     setoldtargetConnection(TargetParameters.connection_name)
 
+                    setStatus(response[0][0].data.data[0].status)
+                    setSchedulejobId(response[0][0].data.data[0].schedule_job_id)
+                    let cron = (response[0][0].data.data[0].cron_time).split(" ")
+                    setMinute(cron[1])
+                    setHour(cron[2])
+                    setDayofMonth(cron[3])
+                    setMonth(cron[4])
+                    setDayofWeek(cron[5])
+
                     seterror(false);
                     setloading(false);
                     console.log('CAME !!!!!  ', response.length)
@@ -554,16 +561,15 @@ export default function Setup(props) {
 
     useEffect(() => {
         console.log(window.location.href.split('/'))
-        if((window.location.href.split('/').length === 4) && (props.entryid === 0) ){
+        if ((window.location.href.split('/').length === 4) && (props.entryid === 0)) {
             getInfo();
-        }else if(props.entryid>0)
-        {
+        } else if (props.entryid > 0) {
             setEntryId(props.entryid)
             getEdit(props.entryid);
 
         }
-        else if(window.location.href.split('/').length>4)
-        {   setEntryId(window.location.href.split('/')[4])
+        else if (window.location.href.split('/').length > 4) {
+            setEntryId(window.location.href.split('/')[4])
             getEdit(window.location.href.split('/')[4]);
         }
 
@@ -788,56 +794,24 @@ export default function Setup(props) {
     //     setSelectedTime(date);
     // };
 
-    const handleTimeChange = (time) => {
-        console.log(time);
-        setSelectedTime(time);
+    const handleChangeMinute = (event) => {
+        setMinute(event.target.value);
     };
 
-    const handleChangescheduleType = (event) => {
-        setscheduleType(event.target.value);
-
-        if (event.target.value === "minute") {
-            setHiddenHour("none")
-            setHiddenDay("none")
-            setHiddenWeek("none")
-            setHiddenMinute("block")
-
-        }
-        else if (event.target.value === "hourly") {
-            setHiddenMinute("none")
-            setHiddenDay("none")
-            setHiddenWeek("none")
-            setHiddenHour("block")
-
-        }
-        else if (event.target.value === "daily") {
-            setHiddenMinute("none")
-            setHiddenHour("none")
-            setHiddenWeek("none")
-            setHiddenDay("block")
-        }
-        else {
-            setHiddenMinute("none")
-            setHiddenHour("none")
-            setHiddenDay("none")
-            setHiddenWeek("block")
-        }
+    const handleChangeHour = (event) => {
+        setHour(event.target.value);
     };
 
-    const handleChangehoursminutes = (event) => {
-        setHoursMinutes(event.target.value);
+    const handleChangeDayofMonth = (event) => {
+        setDayofMonth(event.target.value);
     };
 
-    const handleChangeweek = (event) => {
-        setWeeks(event.target.value);
+    const handleChangeMonth = (event) => {
+        setMonth(event.target.value);
     };
 
-    const handleChangeStartDate = (date) => {
-        setStartDate(date);
-    };
-
-    const handleChangeEndDate = (date) => {
-        setEndDate(date);
+    const handleChangeDayofWeek = (event) => {
+        setDayofWeek(event.target.value);
     };
 
 
@@ -857,18 +831,12 @@ export default function Setup(props) {
 
     const handleChangeSchedule = (event) => {
         setValue(event.target.value);
-        console.log(event.target.value,"QQQ")
-        if(event.target.value==="One-Time"){
-            sethiddenFixedSchedule(true)
-            sethiddenOneTime(false)
-        }
-        else if(event.target.value==="Fixed Schedule"){
+        console.log(event.target.value, "QQQ")
+        if (event.target.value === "Fixed Schedule") {
             sethiddenFixedSchedule(false)
-            sethiddenOneTime(true)
         }
-        else{
+        else {
             sethiddenFixedSchedule(true)
-            sethiddenOneTime(true)
         }
     };
 
@@ -1160,7 +1128,49 @@ export default function Setup(props) {
 
     // };
 
+    const[crontime, setCronTime] = React.useState('');
+    const [schedulejobid, setSchedulejobId] = React.useState(0);
+
+    
+    
+
+
     const passParam = () => {
+
+        const arr =['0','*','*','*','*','?']
+    if(minute===""){
+        arr[1]='*'
+    }
+    else{
+        arr[1]=minute
+    }
+    if(hour===""){
+        arr[2]='*'
+    }
+    else{
+        arr[2]=hour
+    }
+    if(dayofmonth===""){
+        arr[3]='*'
+    }
+    else{
+        arr[3]=dayofmonth
+    }
+    if(month===""){
+        arr[4]='*'
+    }
+    else{
+        arr[4]=month
+    }
+    if(minute===""){
+        arr[5]='?'
+    }
+    else{
+        arr[5]="?"
+    }
+
+    const arrs = arr.join(" ");
+    console.log(arrs)
 
         let param = {
             username: localStorage.getItem('username'),
@@ -1184,27 +1194,61 @@ export default function Setup(props) {
             target_file_type: targetParams.file_type,
             target_file_delimiter: targetParams.delimiter,
             schedule_type: value,
-            recurrence_type: scheduleType,
-            recurrence: Number(hours_minutes),
-            days: weeks,
-            start_time: selectedTime,
-            start_date: startDate,
-            end_date: endDate
-            // recurrence_type: scheduleParams.scheduleType,
-            // recurrence: Number(scheduleParams.hours_minutes),
-            // days: scheduleParams.weeks,
-            // start_time: scheduleParams.selectedTime,
-            // start_date: scheduleParams.startDate,
-            // end_date: scheduleParams.endDate
+            recurrence_type: '',
+            recurrence: 0,
+            days: '',
+            start_time: new Date(),
+            start_date: new Date(),
+            end_date: new Date(),
+            cron_time: arrs,
+            schedule_job_id: 0
+
+
         }
         // console.log(param)
         // console.log(typeof(param.start_date))
-        props.onPassSetup(param,'save')
+        props.onPassSetup(param, 'save')
 
         //API
     }
 
     const passEditParam = () => {
+
+        const arr =['0','*','*','*','*','?']
+        if(minute===""){
+            arr[1]='*'
+        }
+        else{
+            arr[1]=minute
+        }
+        if(hour===""){
+            arr[2]='*'
+        }
+        else{
+            arr[2]=hour
+        }
+        if(dayofmonth===""){
+            arr[3]='*'
+        }
+        else{
+            arr[3]=dayofmonth
+        }
+        if(month===""){
+            arr[4]='*'
+        }
+        else{
+            arr[4]=month
+        }
+        if(minute===""){
+            arr[5]='?'
+        }
+        else{
+            arr[5]="?"
+        }
+    
+        const arrs = arr.join(" ");
+        console.log(arrs)
+
         let param = {
             username: localStorage.getItem('username'),
             rationale: rationale,
@@ -1216,7 +1260,7 @@ export default function Setup(props) {
             source_type: sourcetype,
             target_type: targettype,
             operation: value2,
-            status: 'draft',
+            status: status,
             updated_at: new Date(),
             updated_by: localStorage.getItem('username'),
             source_abbrv: sourcetypeAbbrv,
@@ -1227,25 +1271,21 @@ export default function Setup(props) {
             target_file_type: targetParams.file_type,
             target_file_delimiter: targetParams.delimiter,
             schedule_type: value,
-            recurrence_type: scheduleType,
-            recurrence: Number(hours_minutes),
-            days: weeks,
-            start_time: selectedTime,
-            start_date: startDate,
-            end_date: endDate,
-            entryId: entryId
-            // recurrence_type: scheduleParams.scheduleType,
-            // recurrence: Number(scheduleParams.hours_minutes),
-            // days: scheduleParams.weeks,
-            // start_time: scheduleParams.selectedTime,
-            // start_date: scheduleParams.startDate,
-            // end_date: scheduleParams.endDate
+            recurrence_type: '',
+            recurrence: 0,
+            days: '',
+            start_time: new Date(),
+            start_date: new Date(),
+            end_date: new Date(),
+            entryId: entryId,
+            cron_time: arrs,
+            schedule_job_id : schedulejobid
         }
         // console.log(param)
         // console.log(typeof(param.start_date))
-        if(oldsourceConnection === sourceConnection){
-            props.onPassSetup(param,'edit')
-        }else{
+        if (oldsourceConnection === sourceConnection) {
+            props.onPassSetup(param, 'edit')
+        } else {
             props.onPassSetup(param, 'saveEdit')
         }
 
@@ -1253,32 +1293,32 @@ export default function Setup(props) {
     }
 
     const isFormValid = () => {
-        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0 
-                && sourcetype > 0 && targettype > 0 && value.length > 0 
-                && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 
-                && Object.keys(targetParams)[0].length > 0) === true) {
+        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0
+            && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
+            && Object.keys(targetParams)[0].length > 0) === true) {
             passParam();
         }
-        else{
+        else {
             // handleOpen()
             // setMsg("Please Fill All the Details!")
-            enqueueSnackbar('Please Fill All the Details!',{
+            enqueueSnackbar('Please Fill All the Details!', {
                 variant: 'warning',
             })
         }
     };
 
     const isFormValidEdit = () => {
-        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0 
-                && sourcetype > 0 && targettype > 0 && value.length > 0 
-                && value2.length > 0 && Object.keys(sourceParams)[0].length > 0 
-                && Object.keys(targetParams)[0].length > 0) === true) {
+        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0
+            && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
+            && Object.keys(targetParams)[0].length > 0) === true) {
             passEditParam();
         }
-        else{
+        else {
             // handleOpen()
             // setMsg("Please Fill All the Details!")
-            enqueueSnackbar('Please Fill All the Details!',{
+            enqueueSnackbar('Please Fill All the Details!', {
                 variant: 'warning',
             })
         }
@@ -1309,7 +1349,7 @@ export default function Setup(props) {
                 <Grid container direction="column"
                     alignItems="center"
                     justify="center">
-                    <Paper className={classes.paper} style={{width:"1148px"}}>
+                    <Paper className={classes.paper} style={{ width: "1230px" }}>
                         <form className={classes.root} noValidate autoComplete="off">
                             <div style={{ marginBottom: "50px" }}>
                                 <strong>Project Information </strong>
@@ -1443,7 +1483,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="link"
-                                                label="Enter One Drive Link"
+                                                label="One Drive Link"
                                                 placeholder="Link"
                                                 onChange={handleChangeodLink}
                                                 disabled
@@ -1451,7 +1491,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1463,7 +1503,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id=" odDelimiter"
-                                                label="Enter Delimiter"
+                                                label="Delimiter"
                                                 placeholder="Delimiter"
                                                 onChange={handleChangeodDelimiter}
                                                 disabled
@@ -1473,7 +1513,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1491,7 +1531,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="FileId"
-                                                label="Enter File ID"
+                                                label="File ID"
                                                 placeholder="File ID"
                                                 onChange={handleChangeFileid}
                                                 disabled
@@ -1499,7 +1539,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1511,7 +1551,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="gdDelimiter"
-                                                label="Enter Delimiter"
+                                                label="Delimiter"
                                                 placeholder="Delimiter"
                                                 onChange={handleChangegdDelimiter}
                                                 disabled
@@ -1521,7 +1561,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1531,22 +1571,21 @@ export default function Setup(props) {
                                     {/* Google drive parameter ends*/}
                                 </Grid>
 
-                                <Grid container spacing={2} hidden={hiddenMysql}>
+                                <Grid container spacing={2} hidden={hiddenMysql} style={{marginLeft:"0"}}>
                                     {/* Mysql parameters start */}
                                     <Grid item xs={4} direction="column" container>
                                         <div>
                                             <TextField
                                                 id="jdbcHostname"
-                                                label="Enter jdbcHostname"
+                                                label="jdbcHostname"
                                                 placeholder="jdbcHostname"
-                                                required
                                                 onChange={handleChangejdbcHostname}
                                                 disabled
                                                 value={jdbcHostname}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1558,7 +1597,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcUsername"
-                                                label="Enter jdbcUsername"
+                                                label="jdbcUsername"
                                                 placeholder="jdbcUsername"
                                                 onChange={handleChangejdbcUsername}
                                                 disabled
@@ -1566,7 +1605,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1577,7 +1616,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcPassword"
-                                                label="Enter jdbcPassword"
+                                                label="jdbcPassword"
                                                 placeholder="jdbcPassword"
                                                 type="password"
                                                 onChange={handleChangejdbcPassword}
@@ -1586,7 +1625,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1599,7 +1638,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcDatabaseName"
-                                                label="Enter jdbcDatabaseName"
+                                                label="jdbcDatabaseName"
                                                 placeholder="jdbcDatabaseName"
                                                 onChange={handleChangejdbcDatabaseName}
                                                 disabled
@@ -1607,7 +1646,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1619,7 +1658,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" sourcejdbcQuery"
-                                                label="Enter Source Query"
+                                                label="Source Query"
                                                 placeholder="Source Query"
                                                 onChange={handleChangejdbcsourceQuery}
                                                 disabled
@@ -1627,7 +1666,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1643,7 +1682,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="odbcHostname"
-                                                label="Enter odbcHostname"
+                                                label="odbcHostname"
                                                 placeholder="odbcHostname"
                                                 required
                                                 onChange={handleChangeodbcHostname}
@@ -1652,7 +1691,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1664,7 +1703,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" odbcUsername"
-                                                label="Enter odbcUsername"
+                                                label="odbcUsername"
                                                 placeholder="odbcUsername"
                                                 onChange={handleChangeodbcUsername}
                                                 disabled
@@ -1672,7 +1711,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1683,7 +1722,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" odbcPassword"
-                                                label="Enter odbcPassword"
+                                                label="odbcPassword"
                                                 placeholder="odbcPassword"
                                                 type="password"
                                                 onChange={handleChangeodbcPassword}
@@ -1692,7 +1731,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1705,7 +1744,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" odbcDatabaseName"
-                                                label="Enter odbcDatabaseName"
+                                                label="odbcDatabaseName"
                                                 placeholder="odbcDatabaseName"
                                                 onChange={handleChangeodbcDatabaseName}
                                                 disabled
@@ -1713,7 +1752,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1725,7 +1764,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" sourceodbcQuery"
-                                                label="Enter Source Query"
+                                                label="Source Query"
                                                 placeholder="Source Query"
                                                 onChange={handleChangeodbcsourceQuery}
                                                 disabled
@@ -1733,7 +1772,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1749,7 +1788,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="StorageAccountAccessKey"
-                                                label="Enter StorageAccountAccessKey"
+                                                label="StorageAccountAccessKey"
                                                 placeholder="StorageAccountAccessKey"
                                                 value={StorageAccountAccessKey}
                                                 onChange={handleChangeStorageAccountAccessKey}
@@ -1757,7 +1796,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1768,7 +1807,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" StorageAccountName"
-                                                label="Enter StorageAccountName"
+                                                label="StorageAccountName"
                                                 placeholder="StorageAccountName"
                                                 onChange={handleChangeStorageAccountName}
                                                 disabled
@@ -1776,7 +1815,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1787,7 +1826,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" ContainerName"
-                                                label="Enter ContainerName"
+                                                label="ContainerName"
                                                 placeholder="ContainerName"
                                                 onChange={handleChangeContainerName}
                                                 disabled
@@ -1795,7 +1834,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1808,7 +1847,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" Path"
-                                                label="Enter Path"
+                                                label="Path"
                                                 placeholder="Path"
                                                 onChange={handleChangePath}
                                                 value={Path}
@@ -1816,7 +1855,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1828,7 +1867,7 @@ export default function Setup(props) {
                                             <TextField
                                                 id="Format"
                                                 select
-                                                label="Enter Format"
+                                                label="Format"
                                                 value={Format}
                                                 disabled
                                                 onChange={handleChangeFormat}
@@ -1836,7 +1875,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <VerifiedUserIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1853,7 +1892,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" blobDelimiter"
-                                                label="Enter Delimiter"
+                                                label="Delimiter"
                                                 placeholder="Delimiter"
                                                 disabled={Disabled}
                                                 onChange={handleChangeblobDelimiter}
@@ -1861,7 +1900,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1935,7 +1974,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="ApplicationID"
-                                                label="Enter ApplicationID"
+                                                label="ApplicationID"
                                                 placeholder="ApplicationID"
                                                 onChange={handleChangeApplicationID}
                                                 value={ApplicationID}
@@ -1943,7 +1982,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1954,7 +1993,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id=" ApplicationCredential"
-                                                label="Enter ApplicationCredential"
+                                                label="ApplicationCredential"
                                                 placeholder="ApplicationCredential"
                                                 onChange={handleChangeApplicationCredential}
                                                 value={ApplicationCredential}
@@ -1962,7 +2001,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1973,7 +2012,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="DirectoryID"
-                                                label="Enter DirectoryID"
+                                                label="DirectoryID"
                                                 placeholder="DirectoryID"
                                                 onChange={handleChangeDirectoryID}
                                                 value={DirectoryID}
@@ -1981,7 +2020,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -1994,7 +2033,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="adlAccountName"
-                                                label="Enter adlAccountName"
+                                                label="adlAccountName"
                                                 placeholder="adlAccountName"
                                                 onChange={handleChangeadlAccountName}
                                                 value={adlAccountName}
@@ -2002,7 +2041,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2014,7 +2053,7 @@ export default function Setup(props) {
                                             <TextField
                                                 id="TargetFileType"
                                                 select
-                                                label="Enter Format"
+                                                label="Format"
                                                 value={TargetFileType}
                                                 defaultValue={TargetFileType}
                                                 onChange={handleChangeTargetFileType}
@@ -2023,7 +2062,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <VerifiedUserIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2039,7 +2078,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="TargetFileDelimiter"
-                                                label="Enter Delimiter"
+                                                label="Delimiter"
                                                 placeholder="Delimiter"
                                                 // disabled={Disabled}
                                                 value={TargetFileDelimiter}
@@ -2050,7 +2089,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2066,7 +2105,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="ApplicationID2"
-                                                label="Enter ApplicationID"
+                                                label="ApplicationID"
                                                 placeholder="ApplicationID"
                                                 onChange={handleChangeApplicationID2}
                                                 value={ApplicationID2}
@@ -2074,7 +2113,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2085,7 +2124,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id=" ApplicationCredential2"
-                                                label="Enter ApplicationCredential"
+                                                label="ApplicationCredential"
                                                 placeholder="ApplicationCredential"
                                                 onChange={handleChangeApplicationCredential2}
                                                 value={ApplicationCredential2}
@@ -2093,7 +2132,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2104,7 +2143,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="DirectoryID2"
-                                                label="Enter DirectoryID"
+                                                label="DirectoryID"
                                                 placeholder="DirectoryID"
                                                 onChange={handleChangeDirectoryID2}
                                                 value={DirectoryID2}
@@ -2112,7 +2151,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2125,7 +2164,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="adlAccountName2"
-                                                label="Enter adlAccountName"
+                                                label="adlAccountName"
                                                 placeholder="adlAccountName"
                                                 onChange={handleChangeadlAccountName2}
                                                 value={adlAccountName2}
@@ -2133,7 +2172,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2145,7 +2184,7 @@ export default function Setup(props) {
                                             <TextField
                                                 id="TargetFileType"
                                                 select
-                                                label="Enter Format"
+                                                label="Format"
                                                 value={TargetFileType2}
                                                 disabled
                                                 onChange={handleChangeTargetFileType2}
@@ -2153,7 +2192,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <VerifiedUserIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2169,7 +2208,7 @@ export default function Setup(props) {
                                         <div >
                                             <TextField
                                                 id="TargetFileDelimiter2"
-                                                label="Enter Delimiter"
+                                                label="Delimiter"
                                                 placeholder="Delimiter"
                                                 // disabled={Disabled}
                                                 // error={errorinfo}
@@ -2180,7 +2219,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2196,7 +2235,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id="jdbcHostname2"
-                                                label="Enter jdbcHostname"
+                                                label="jdbcHostname"
                                                 placeholder="jdbcHostname"
                                                 required
                                                 onChange={handleChangejdbcHostname2}
@@ -2205,7 +2244,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2217,7 +2256,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcUsername2"
-                                                label="Enter jdbcUsername"
+                                                label="jdbcUsername"
                                                 placeholder="jdbcUsername"
                                                 onChange={handleChangejdbcUsername2}
                                                 value={jdbcUsername2}
@@ -2225,7 +2264,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2236,7 +2275,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcPassword2"
-                                                label="Enter jdbcPassword"
+                                                label="jdbcPassword"
                                                 placeholder="jdbcPassword"
                                                 type="password"
                                                 onChange={handleChangejdbcPassword2}
@@ -2245,7 +2284,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                           
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2258,7 +2297,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" jdbcDatabaseName2"
-                                                label="Enter jdbcDatabaseName"
+                                                label="jdbcDatabaseName"
                                                 placeholder="jdbcDatabaseName"
                                                 onChange={handleChangejdbcDatabaseName2}
                                                 value={jdbcDatabaseName2}
@@ -2266,7 +2305,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2278,7 +2317,7 @@ export default function Setup(props) {
                                         <div>
                                             <TextField
                                                 id=" sourcejdbcQuery2"
-                                                label="Enter Source Query"
+                                                label="Source Query"
                                                 placeholder="Source Query"
                                                 onChange={handleChangejdbcsourceQuery2}
                                                 value={jdbcsourceQuery2}
@@ -2286,7 +2325,7 @@ export default function Setup(props) {
                                                 InputProps={{
                                                     startAdornment: (
                                                         <InputAdornment position="start">
-                                                            <PersonIcon />
+                                                            
                                                         </InputAdornment>
                                                     ),
                                                 }}
@@ -2301,7 +2340,7 @@ export default function Setup(props) {
                                 {/* {targetFormDisplay()} */}
                             </div>
 
-                            <div style={{margin:"50px 20px"}}>
+                            <div style={{ margin: "50px 20px" }}>
                                 <strong>Schedule </strong>
                                 <hr />
                                 <Grid container spacing={2}>
@@ -2309,74 +2348,23 @@ export default function Setup(props) {
                                         {/* <FormLabel component="legend">Gender</FormLabel> */}
                                         <RadioGroup aria-label="schedule" name="schedule" value={value} onChange={handleChangeSchedule} row >
                                             <FormControlLabel value="On-Demand" control={<Radio />} label="On-Demand" style={{ marginRight: "50px" }} />
-                                            <FormControlLabel value="One-Time" control={<Radio />} label="One-Time" style={{ margin: " 0 50px" }} />
                                             <FormControlLabel value="Fixed Schedule" control={<Radio />} label="Fixed Schedule" style={{ marginLeft: "50px" }} />
                                         </RadioGroup>
                                     </FormControl>
 
                                 </Grid>
-                                {/* One time schedule parameters */}
-                                <Grid container spacing={2} hidden={hiddenOneTime}>
-                                    <Grid item xs={4} direction="column" container>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardTimePicker
-                                                margin="normal"
-                                                id="timepicker"
-                                                label="Select Time"
-                                                value={selectedTime}
-                                                helperText="Time format is GMT(+5:30)"
-                                                onChange={handleTimeChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change time',
-                                                }}
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                    </Grid>
-                                </Grid>
-                                {/* One time schedule parameters */}
 
                                 {/* Fixed Schedule Parameters */}
                                 <Grid container spacing={2} hidden={hiddenFixedSchedule}>
                                     <Grid item xs={4} direction="column" container>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardTimePicker
-                                                margin="normal"
-                                                id="time-picker"
-                                                label="Select Time"
-                                                value={selectedTime}
-                                                helperText="Time format is GMT(+5:30)"
-                                                onChange={handleTimeChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change time',
-                                                }}
-                                            />
-                                        </MuiPickersUtilsProvider>
-
-                                        {/* <TextField
-                                                id="time"
-                                                label="Alarm clock"
-                                                type="time"
-                                                // defaultValue="07:30"
-                                                className={classes.textField}
-                                                value={selectedTime}
-                                                onChange={handleTimeChange}
-                                                InputLabelProps={{
-                                                shrink: true,
-                                                }}
-                                                inputProps={{
-                                                step: 300, // 5 min
-                                                }}
-                                            /> */}
-                                    </Grid>
-
-                                    <Grid item xs={4} direction="column" container>
-                                        <TextField
-                                            id="scheduletype"
+                                    <TextField
+                                            id="minute"
                                             select
-                                            label="Recurrence"
-                                            value={scheduleType}
-                                            onChange={handleChangescheduleType}
-                                            // helperText="Please select the Schedule Type"
+                                            label="Enter Minutes"
+                                            value={minute}
+
+                                            onChange={handleChangeMinute}
+                                            helperText="Please select the minute"
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
@@ -2385,119 +2373,266 @@ export default function Setup(props) {
                                                 ),
                                             }}
                                         >
-                                            {scheduletypes.map((option) => (
+                                            {/* {targetformats.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
-                                            ))}
+                                            ))} */}
+                                            <MenuItem value={0}>0</MenuItem>
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                            <MenuItem value={8}>8</MenuItem>
+                                            <MenuItem value={9}>9</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={11}>11</MenuItem>
+                                            <MenuItem value={12}>12</MenuItem>
+                                            <MenuItem value={13}>13</MenuItem>
+                                            <MenuItem value={14}>14</MenuItem>
+                                            <MenuItem value={15}>15</MenuItem>
+                                            <MenuItem value={16}>16</MenuItem>
+                                            <MenuItem value={17}>17</MenuItem>
+                                            <MenuItem value={18}>18</MenuItem>
+                                            <MenuItem value={19}>19</MenuItem>
+                                            <MenuItem value={20}>20</MenuItem>
+                                            <MenuItem value={21}>21</MenuItem>
+                                            <MenuItem value={22}>22</MenuItem>
+                                            <MenuItem value={23}>23</MenuItem>
+                                            <MenuItem value={24}>24</MenuItem>
+                                            <MenuItem value={25}>25</MenuItem>
+                                            <MenuItem value={26}>26</MenuItem>
+                                            <MenuItem value={27}>27</MenuItem>
+                                            <MenuItem value={28}>28</MenuItem>
+                                            <MenuItem value={29}>29</MenuItem>
+                                            <MenuItem value={30}>30</MenuItem>
+                                            <MenuItem value={31}>31</MenuItem>
+                                            <MenuItem value={32}>32</MenuItem>
+                                            <MenuItem value={33}>33</MenuItem>
+                                            <MenuItem value={34}>34</MenuItem>
+                                            <MenuItem value={35}>35</MenuItem>
+                                            <MenuItem value={36}>36</MenuItem>
+                                            <MenuItem value={37}>37</MenuItem>
+                                            <MenuItem value={38}>38</MenuItem>
+                                            <MenuItem value={39}>39</MenuItem>
+                                            <MenuItem value={40}>40</MenuItem>
+                                            <MenuItem value={41}>41</MenuItem>
+                                            <MenuItem value={42}>42</MenuItem>
+                                            <MenuItem value={43}>43</MenuItem>
+                                            <MenuItem value={44}>44</MenuItem>
+                                            <MenuItem value={45}>45</MenuItem>
+                                            <MenuItem value={46}>46</MenuItem>
+                                            <MenuItem value={47}>47</MenuItem>
+                                            <MenuItem value={48}>48</MenuItem>
+                                            <MenuItem value={49}>49</MenuItem>
+                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={51}>51</MenuItem>
+                                            <MenuItem value={52}>52</MenuItem>
+                                            <MenuItem value={53}>53</MenuItem>
+                                            <MenuItem value={54}>54</MenuItem>
+                                            <MenuItem value={55}>55</MenuItem>
+                                            <MenuItem value={56}>56</MenuItem>
+                                            <MenuItem value={57}>57</MenuItem>
+                                            <MenuItem value={58}>58</MenuItem>
+                                            <MenuItem value={59}>59</MenuItem>
+                                        </TextField>
+
+
+                                    </Grid>
+
+                                    <Grid item xs={4} direction="column" container>
+                                        <TextField
+                                            id="hour"
+                                            select
+                                            label="Enter Hours"
+                                            value={hour}
+
+                                            onChange={handleChangeHour}
+                                            helperText="Please select the hours"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VerifiedUserIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        >
+                                            {/* {targetformats.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))} */}
+                                            <MenuItem value={0}>0</MenuItem>
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                            <MenuItem value={8}>8</MenuItem>
+                                            <MenuItem value={9}>9</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={11}>11</MenuItem>
+                                            <MenuItem value={12}>12</MenuItem>
+                                            <MenuItem value={13}>13</MenuItem>
+                                            <MenuItem value={14}>14</MenuItem>
+                                            <MenuItem value={15}>15</MenuItem>
+                                            <MenuItem value={16}>16</MenuItem>
+                                            <MenuItem value={17}>17</MenuItem>
+                                            <MenuItem value={18}>18</MenuItem>
+                                            <MenuItem value={19}>19</MenuItem>
+                                            <MenuItem value={20}>20</MenuItem>
+                                            <MenuItem value={21}>21</MenuItem>
+                                            <MenuItem value={22}>22</MenuItem>
+                                            <MenuItem value={23}>23</MenuItem>
                                         </TextField>
                                     </Grid>
 
-                                    <div style={{ display: hiddenminute }}>
-                                        <Grid item xs={4} direction="column" container>
-                                            <TextField
-                                                id=" minutes"
-                                                label="Enter minutes"
-                                                placeholder="Minutes"
-                                                type="number"
-                                                value={hours_minutes}
-                                                onChange={handleChangehoursminutes}
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <PersonIcon />
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                    </div>
 
-                                    <div style={{ display: hiddenhour }}>
-                                        <Grid item xs={4} direction="column" container>
-                                            <TextField
-                                                id=" hours"
-                                                label="Enter Hour"
-                                                placeholder="Hour"
-                                                type="number"
-                                                value={hours_minutes}
-                                                onChange={handleChangehoursminutes}
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <PersonIcon />
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                    </div>
+                                    <Grid item xs={4} direction="column" container>
+                                        <TextField
+                                            id="dayofmonth"
+                                            select
+                                            label="Select Day of the Month"
+                                            value={dayofmonth}
+
+                                            onChange={handleChangeDayofMonth}
+                                            helperText="Please select the day of the month"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VerifiedUserIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        >
+                                            {/* {targetformats.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))} */}
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                            <MenuItem value={8}>8</MenuItem>
+                                            <MenuItem value={9}>9</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={11}>11</MenuItem>
+                                            <MenuItem value={12}>12</MenuItem>
+                                            <MenuItem value={13}>13</MenuItem>
+                                            <MenuItem value={14}>14</MenuItem>
+                                            <MenuItem value={15}>15</MenuItem>
+                                            <MenuItem value={16}>16</MenuItem>
+                                            <MenuItem value={17}>17</MenuItem>
+                                            <MenuItem value={18}>18</MenuItem>
+                                            <MenuItem value={19}>19</MenuItem>
+                                            <MenuItem value={20}>20</MenuItem>
+                                            <MenuItem value={21}>21</MenuItem>
+                                            <MenuItem value={22}>22</MenuItem>
+                                            <MenuItem value={23}>23</MenuItem>
+                                            <MenuItem value={24}>24</MenuItem>
+                                            <MenuItem value={25}>25</MenuItem>
+                                            <MenuItem value={26}>26</MenuItem>
+                                            <MenuItem value={27}>27</MenuItem>
+                                            <MenuItem value={28}>28</MenuItem>
+                                            <MenuItem value={29}>29</MenuItem>
+                                            <MenuItem value={30}>30</MenuItem>
+                                            <MenuItem value={31}>31</MenuItem>
+                                        </TextField>
+                                    </Grid>
 
 
-                                    <div style={{ display: hiddenweek }}>
-                                        <Grid item xs={4} direction="column" container>
-                                            <TextField
-                                                id="weekly"
-                                                label="Enter your choice"
-                                                placeholder="Weekday"
-                                                onChange={handleChangeweek}
-                                                InputProps={{
-                                                    startAdornment: (
-                                                        <InputAdornment position="start">
-                                                            <PersonIcon />
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                    </div>
+
+
                                 </Grid>
 
                                 <Grid container spacing={2} hidden={hiddenFixedSchedule}>
-                                    <Grid item xs={4} direction="column" container>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                margin="normal"
-                                                id="date-picker-dialog-start"
-                                                label="Select Start Date"
-                                                format="MM/dd/yyyy"
-                                                value={startDate}
-                                                onChange={handleChangeStartDate}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                    </Grid>
-                                    <Grid item xs={4} direction="column" container>
 
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                margin="normal"
-                                                id="date-picker-dialog-end"
-                                                label="Select End Date"
-                                                format="MM/dd/yyyy"
-                                                value={endDate}
-                                                onChange={handleChangeEndDate}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </MuiPickersUtilsProvider>
+                                    <Grid item xs={4} direction="column" container>
+                                        <TextField
+                                            id="month"
+                                            select
+                                            label="Select Month"
+                                            value={month}
+
+                                            onChange={handleChangeMonth}
+                                            helperText="Please select the month"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VerifiedUserIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        >
+                                            {/* {targetformats.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))} */}
+                                            <MenuItem value={0}>0</MenuItem>
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                            <MenuItem value={8}>8</MenuItem>
+                                            <MenuItem value={9}>9</MenuItem>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={11}>11</MenuItem>
+                                        </TextField>
                                     </Grid>
+
+
+                                    <Grid item xs={4} direction="column" container>
+                                        <TextField
+                                            id="dayofweek"
+                                            select
+                                            label="Select Day of the Week"
+                                            value={dayofweek}
+
+                                            onChange={handleChangeDayofWeek}
+                                            helperText="Please select the day of the week"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VerifiedUserIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        >
+                                            {/* {targetformats.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))} */}
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                            <MenuItem value={3}>3</MenuItem>
+                                            <MenuItem value={4}>4</MenuItem>
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                        </TextField>
+                                    </Grid>
+
                                 </Grid>
                                 {/* Fixed Schedule Parameters */}
-                                
 
-                                {/* On demand schedule parameters */}
-                                {/* On demand schedule parameters */}
 
-                                {/* <div style={{ marginTop: "30px" }}>
-                                    {ScheduleDisplay()}
-                                </div> */}
                             </div>
 
-                            <div style={{margin:"50px 20px"}}>
+                            <div style={{ margin: "50px 20px" }}>
                                 <strong>Ingestion Pattern </strong>
                                 <hr />
                                 <Grid container spacing={2}>
@@ -2514,23 +2649,31 @@ export default function Setup(props) {
                             </div>
 
                             <div className={classes.buttonRoot} style={{ marginTop: "20px" }}>
-                                {entryId===0 ?
-                                <Grid container>
-                                <Grid item  container justify="center" alignItems="center">
-                                    <Button variant="contained" color='primary' onClick={(e) => {
-                                        e.preventDefault();
-                                        isFormValid();
-                                    }} >Save & Next</Button>
-                                </Grid>
-                                </Grid> :
-                                <Grid container>
-                                <Grid item  container justify="center" alignItems="center">
-                                        <Button variant="contained" color='primary' onClick={(e) => {
-                                            e.preventDefault();
-                                            isFormValidEdit();
-                                        }} >Update & Next</Button>
-                                </Grid>
-                                </Grid>}
+                                {entryId === 0 ?
+                                    <Grid container>
+                                        <Grid item container justify="center" alignItems="center">
+                                            <Button variant="contained" color='primary' onClick={(e) => {
+                                                e.preventDefault();
+                                                isFormValid();
+                                            }} >Save & Next</Button>
+                                        </Grid>
+                                    </Grid> :
+                                    <Grid container>
+                                        <Grid item container justify="center" alignItems="center">
+                                            {status==="Scheduled"?
+                                            <Button variant="contained" color='primary' onClick={(e) => {
+                                                e.preventDefault();
+                                                props.onPassStatus(status)
+                                                props.onPassEntryId(entryId)
+                                            }} >Next</Button>:
+                                            
+                                            <Button variant="contained" color='primary' onClick={(e) => {
+                                                e.preventDefault();
+                                                isFormValidEdit();
+                                                
+                                            }} >Update & Next</Button>}
+                                        </Grid>
+                                    </Grid>}
                                 {/* <Grid container>
                                     <Grid item xs={6} direction="column" container justify="flex-start" alignItems="flex-start">
                                         <Button variant="contained" color='primary' onClick={(e) => {
@@ -2539,7 +2682,7 @@ export default function Setup(props) {
                                         }} >Save Details</Button>
                                     </Grid> */}
 
-                                    {/* <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
+                                {/* <Grid item xs={6} direction="column" container justify="flex-end" alignItems="flex-end">
                                         <Button variant="contained" color='primary' onClick={(e) => {
                                             e.preventDefault();
                                             isFormValidEdit();
@@ -2569,9 +2712,9 @@ export default function Setup(props) {
 
     else {
         return (
-        <div className={classes.progress} style={{ marginLeft: "550px",height:"500px"  }}>
-            <CircularProgress />
-        </div>)
+            <div className={classes.progress} style={{ marginLeft: "550px", height: "500px" }}>
+                <CircularProgress />
+            </div>)
     }
 }
 

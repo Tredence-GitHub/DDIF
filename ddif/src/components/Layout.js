@@ -200,7 +200,7 @@ export default function Layout() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" className={classes.title} align={'left'}>
-                    <img src={TredenceLogo} height={'40px'} width={'80px'} /> &nbsp;  Driverless Data Ingestion Framework
+                    <img src={TredenceLogo} height={'40px'} width={'100px'} /> &nbsp;  Driverless Data Ingestion Framework
                     </Typography>
                     <IconButton color='inherit'>
                     <Tooltip title="Help" arrow>

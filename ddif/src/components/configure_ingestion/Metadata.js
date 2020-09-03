@@ -308,6 +308,14 @@ export default function Metadata(props) {
           key="column_id"
           columns={columns}
           data={dataTable}
+          options={{
+            rowStyle: {
+              whiteSpace:"nowrap",
+            },
+            headerStyle: {
+                whiteSpace:"nowrap",
+              }
+          }}
           editable={{
             onRowUpdate: (newData, oldData) =>
               new Promise((resolve, reject) => {
@@ -326,17 +334,25 @@ export default function Metadata(props) {
         <div className={classes.root} style={{ marginTop: "20px" }}>
           <Grid container>
             <Grid item  direction="row" container justify="flex-end" alignItems="flex-end">
+
+              {props.status==="Scheduled"?
+              <Button variant="contained" color='primary' style={{marginRight:"20px"}} onClick={(e) => {
+                e.preventDefault();
+                props.onPassMetadata(props.entryid, 'edit');
+              }}>Next</Button> :
+              
               <Button variant="contained" color='primary' style={{marginRight:"20px"}} onClick={(e) => {
                 e.preventDefault();
                 updateMetadata();
                 props.onPassMetadata(props.entryid, 'edit');
                 // window.location.href = "/ingestion/setup"; 
-              }}>Update & Next</Button>
+              }}>Update & Next</Button>}
             
+            {props.status==="Scheduled"? <></>:
               <Button variant="outlined" color='primary' onClick={(e) => {
                 e.preventDefault();
                 getInfo();
-              }}>Reset</Button>
+              }}>Reset</Button>}
               </Grid>
               {/* <Grid item xs={4} direction="column" container justify="flex-end" alignItems="flex-end">
 
@@ -352,7 +368,7 @@ export default function Metadata(props) {
   }
 
   else if (loading && error === false) {
-    return (<div className={classes.progress} style={{ marginLeft: "550px" }}>
+    return (<div className={classes.progress} style={{ marginLeft: "550px",height:"500px" }}>
       <CircularProgress />
     </div>)
   }

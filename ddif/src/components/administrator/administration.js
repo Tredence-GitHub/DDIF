@@ -146,7 +146,7 @@ if(!loading){
             <TabPanel value={value} index={0}>
                 <div>
                 <Paper className={classes.paper}>
-                                <TableContainer component={Paper} style={{maxHeight:"500px"}}>
+                                <TableContainer component={Paper} style={{maxHeight:"420px"}}>
                                     <Table className={classes.table} aria-label="simple table">
                                         <TableHead>
                                             <TableRow>

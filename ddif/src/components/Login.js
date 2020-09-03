@@ -18,7 +18,7 @@ import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography'
 import {ThemeProvider,createMuiTheme } from "@material-ui/core/styles"
 import Switch from '@material-ui/core/Switch';
-import { useSnackbar,withSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 
 const roles = [
     {

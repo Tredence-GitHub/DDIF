@@ -33,6 +33,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import MenuItem from '@material-ui/core/MenuItem';
 import Custom from './Custom';
 import MaterialTable from 'material-table';
+import { useSnackbar } from 'notistack';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -88,6 +89,7 @@ export default function Customrules(props) {
   const [dataTable, setDataTable] = useState([]);
   const [hideparameters, sethideParameters] = useState(true);
   const [howtoenter, sethowtoenter] = useState('');
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [column, setColumn] = useState([
 
@@ -287,19 +289,28 @@ export default function Customrules(props) {
     }
     }).then((response) => {
       if (response.status === 200) {
-        handleOpen()
-        setMsg(response.data.message);
+        // handleOpen()
+        // setMsg(response.data.message);
+        enqueueSnackbar(response.data.message, {
+          variant: 'success',
+      });
       } else {
-        handleOpen()
-        setMsg(response.data.message);
+        // handleOpen()
+        // setMsg(response.data.message);
+        enqueueSnackbar(response.data.message, {
+          variant: 'success',
+      });
       }
     }).catch((err) => {
       console.log(err)
     })
   }
   else{
-    handleOpen();
-    setMsg('Please set your business rules! Looks like you have 0 records!')
+    // handleOpen();
+    // setMsg('Please set your business rules! Looks like you have 0 records!')
+    enqueueSnackbar('Please set your business rules! Looks like you have 0 records!', {
+      variant: 'info',
+  });
   }
   }
 
@@ -323,7 +334,7 @@ export default function Customrules(props) {
                 <strong>Create A Custom Rule </strong>
             
               <hr />
-          <Custom entryid={props.entryid} editFn={props.fn} />
+          <Custom entryid={props.entryid} editFn={props.fn} status = {props.status}/>
 
         </TabPanel>
         <TabPanel value={tabValue} index={0} style={{background:"white"}}>
@@ -407,7 +418,10 @@ export default function Customrules(props) {
                     id="given"
                     label="Enter Value"
                     placeholder={howtoenter}
-                    onChange={handleChangeGivenValue}
+                    // onChange={handleChangeGivenValue}
+                    onChange={(e, value) => {
+                      setGivenValue(value)
+                    }}
                     value={givenValue}
                     InputProps={{
                       startAdornment: (
@@ -474,15 +488,15 @@ export default function Customrules(props) {
               {/* </Paper> */}
             </div>
           </div>
-          <div>
+          <div style={{marginTop:"20px"}}>
                 <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                  {props.status==="Scheduled"? <></>:
                     <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         sendData();
-
                     }}>
                         Set Business Rules
-                    </Button>
+                    </Button>}
                 </Grid>
           </div>
         </TabPanel>

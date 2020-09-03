@@ -237,6 +237,20 @@ export default function CustomizedSteppers(props) {
     }
   }
 
+  const [status, setStatus ]=React.useState("")
+
+  const handleStatus = (param) => {
+
+    setStatus(param)
+    setfn('edit')
+    handleNext()
+    
+  };
+
+  const handleEntryId = (param) => {
+    setEntryid(param)
+  };
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -273,17 +287,17 @@ export default function CustomizedSteppers(props) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Setup onPassSetup={handleSetup} entryid={entryid} />;
+        return <Setup onPassSetup={handleSetup} onPassStatus={handleStatus} entryid={entryid} onPassEntryId={handleEntryId}/>;
       case 1:    
         { 
           // console.log("ENTRYY ID -- ", entryid)  
           if(entryid > 0)
-        { return <Metadata onPassMetadata={handleMetadata} entryid={entryid} editFn={fn} />}
+        { return <Metadata onPassMetadata={handleMetadata} status = {status} entryid={entryid} editFn={fn} />}
           else{return <Metadata entryid="error"/>}}
       case 2:
-        return <Customrules entryid={entryid} editFn={fn} />;
+        return <Customrules entryid={entryid} status = {status} editFn={fn} />;
       case 3:
-        return <Summary entryid={entryid} />;
+        return <Summary entryid={entryid} status = {status} />;
       default:
         return 'Unknown step';
     }
@@ -460,7 +474,7 @@ export default function CustomizedSteppers(props) {
                   className={classes.button}
                 >
                   Next
-                </Button> : <> </>}
+                </Button> : <div><i><h5>Current Job is in Schedule State. You'll not be able to save your Changes!</h5></i></div>}
 
               </div>
             </div>

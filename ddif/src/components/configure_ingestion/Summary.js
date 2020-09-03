@@ -14,6 +14,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,6 +41,7 @@ export default function Summary(props) {
     // const [dataTable, setDataTable] = useState({});
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const handleOpen = () => {
         setOpen(true);
@@ -66,13 +68,19 @@ export default function Summary(props) {
         Axios.get(`${local}/status/Created/${props.entryid}`)
             .then((response) => {
                 if (response.status === 200) {
-                    handleOpen();
-                    setMsg(response.data.message)
+                    // handleOpen();
+                    // setMsg(response.data.message)
+                    enqueueSnackbar(response.data.message, {
+                        variant: 'success',
+                    });
                     window.location.href = "/ingestiontable"
                 }
                 else {
-                    handleOpen();
-                    setMsg(response.data.message)
+                    // handleOpen();
+                    // setMsg(response.data.message)
+                    enqueueSnackbar(response.data.message, {
+                        variant: 'success',
+                    });
                 }
             }).catch((err) => {
                 console.log(err)
@@ -85,7 +93,7 @@ export default function Summary(props) {
     if (!loading) {
         return (
             <div>
-                <Snackbar
+                {/* <Snackbar
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'center',
@@ -101,9 +109,9 @@ export default function Summary(props) {
                             </IconButton>
                         </React.Fragment>
                     }
-                />
+                /> */}
 
-                <TableContainer component={Paper} style={{ maxHeight: "330px" }}>
+                <TableContainer component={Paper} style={{ maxHeight: "380px" }}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -137,10 +145,13 @@ export default function Summary(props) {
                 <div style={{ marginTop: " 20px" }}>
                     <Grid container>
                         <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                            {props.status==="Scheduled"? <Button variant="contained" color='primary' onClick={(e)=>{
+                                window.location.href="/ingestiontable"
+                            }}>Take me back to Main Page</Button>:
                             <Button variant="contained" color='primary' onClick={(e) => {
                                  e.preventDefault();
                                  changeStatus();
-                            }}>Create Job </Button>
+                            }}>Create Record </Button>}
                         </Grid>
                     </Grid>
                 </div>
@@ -150,7 +161,7 @@ export default function Summary(props) {
     else {
         return (
             <div>
-                <div style={{ marginLeft: "550px" }}>
+                <div style={{ marginLeft: "550px" ,height:"500px"}}>
                     <CircularProgress />
                 </div>
             </div>

@@ -16,7 +16,12 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import {useSnackbar} from 'notistack';
+import { useSnackbar } from 'notistack';
+import PanToolIcon from '@material-ui/icons/PanTool';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
+import PlayCircleFilledTwoToneIcon from '@material-ui/icons/PlayCircleFilledTwoTone';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,94 +41,192 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function IngestionTable(){
+export default function IngestionTable() {
     const classes = useStyles();
     const [tableData, settableData] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
-    const {enqueueSnackbar} = useSnackbar();
-    
+    const { enqueueSnackbar } = useSnackbar();
+
+
     let local = 'http://localhost:4000'
-    
+
     const handleOpen = () => {
         setOpen(true);
-      };
-      const handleClose = (event, reason) => {
+    };
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
-      };
+    };
 
-    function scheduleNow(){
+    function killScheduled(btnId,entryId,jobId){
+        // console.log(jobId,"00")
+        enqueueSnackbar('Job is getting Killed', {
+            variant: 'success',
+        });
+        let b = document.getElementById(btnId);
+        console.log(b)
+        b.setAttribute('hidden', 'true');
+
+        Axios.post(`${local}/job/killjob`, {
+            job_id : jobId,
+            entryid :entryId
+            
+          }).then((response) => {
+                
+                if (response.data.message === 'success') {
+                    
+                    // enqueueSnackbar('Job is running ..', {
+                    //     variant: 'success',
+                    // });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                } else {
+                    
+                    // enqueueSnackbar('Job is running ..', {
+                    //     variant: 'success',
+                    // });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                }
+            }).catch((err) => {
+                console.log(err);
+                
+                b.setAttribute('hidden', 'false')
+                
+                enqueueSnackbar('Failed to execute the job!', {
+                    variant: 'error',
+                });
+                window.location.href = '/ingestiontable';
+            })
 
     }
 
-    function triggerJob(btnId, entryId){
-        handleOpen();
-        setMsg('Job is triggered')
+
+
+    function triggerScheduled(btnId,entryId,cronTime){
+
+        enqueueSnackbar('Job is triggered', {
+            variant: 'success',
+        });
+        let b = document.getElementById(btnId);
+        console.log(b)
+        b.setAttribute('hidden', 'true');
+
+        Axios.post(`${local}/job/schedule`, {
+            entryid: parseInt(entryId),
+            crontime: cronTime
+            
+          }).then((response) => {
+            console.log(cronTime,"00")
+                if (response.data.message === 'success') {
+                    
+                    enqueueSnackbar('Job is running ..', {
+                        variant: 'success',
+                    });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                } else {
+                    enqueueSnackbar('Job is running ..', {
+                        variant: 'success',
+                    });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                }
+            }).catch((err) => {
+                console.log(err);
+                b.setAttribute('hidden', 'false')
+                
+                enqueueSnackbar('Failed to execute the job!', {
+                    variant: 'error',
+                });
+                window.location.href = '/ingestiontable';
+            })
+
+    }
+
+
+
+    function triggerJob(btnId, entryId) {
+        // handleOpen();
+        // setMsg('Job is triggered')
+        enqueueSnackbar('Job is triggered', {
+            variant: 'success',
+        });
         let b = document.getElementById(btnId);
         console.log(b)
         b.setAttribute('hidden', 'true');
         Axios.get(`${local}/ingestion/api/triggerOnDemand/${entryId}`)
-        .then((response)=>{
-            if(response.data.message === 'success'){
-                handleOpen();
-                setMsg('Job is running ..')
+            .then((response) => {
+                if (response.data.message === 'success') {
+                    // handleOpen();
+                    // setMsg('Job is running ..')
+                    enqueueSnackbar('Job is running ..', {
+                        variant: 'success',
+                    });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                } else {
+                    // handleOpen();
+                    // setMsg('Job is running ..')
+                    enqueueSnackbar('Job is running ..', {
+                        variant: 'success',
+                    });
+                    b.setAttribute('hidden', 'false')
+                    window.location.href = '/ingestiontable';
+                }
+            }).catch((err) => {
+                console.log(err);
                 b.setAttribute('hidden', 'false')
-                window.location.href='/ingestiontable';
-            }else{
-                handleOpen();
-                setMsg('Job is running ..')
-                b.setAttribute('hidden', 'false')
-                window.location.href='/ingestiontable';
-            }
-        }).catch((err)=>{
-            console.log(err);
-            b.setAttribute('hidden', 'false')
-            handleOpen();
-
-            setMsg('Failed to execute the job!')
-        })
+                
+                // handleOpen();
+                // setMsg('Failed to execute the job!')
+                enqueueSnackbar('Failed to execute the job!', {
+                    variant: 'error',
+                });
+                window.location.href = '/ingestiontable';
+            })
     }
 
     function getInfo() {
         Promise.all(
-            [Axios.post(`${local}/ingestion/getRecords`), 
-            ]).then((res)=>{
+            [Axios.post(`${local}/ingestion/getRecords`),
+            ]).then((res) => {
                 return [res]
-            })  
-          .then((response)=>{
-            console.log(response)
-            console.log(response[0][0].data)
-            // console.log("RESPONSE -- ", response[0][1].status)
-            if(response[0][0].status === 200 ){
-                settableData(response[0][0].data.data);
-                seterror(false);
-
-                setloading(false);
-                console.log('CAME !!!!!  ', response.length)
-            }else{
+            })
+            .then((response) => {
                 console.log(response)
-                seterror(true);
-            }
-    
-        }).catch((err)=>{
-            seterror(true)
-        })
+                console.log(response[0][0].data.data,"****")
+                // console.log("RESPONSE -- ", response[0][1].status)
+                if (response[0][0].status === 200) {
+                    settableData(response[0][0].data.data);
+                    seterror(false);
+
+                    setloading(false);
+                    console.log('CAME !!!!!  ', response.length)
+                } else {
+                    console.log(response)
+                    seterror(true);
+                }
+
+            }).catch((err) => {
+                seterror(true)
+            })
     }
-    
+
     useEffect(() => {
         getInfo();
     }, [])
 
-    
-if(!loading){
-    return(
-        <div>
-            <Snackbar
+
+    if (!loading) {
+        return (
+            <div>
+                {/* <Snackbar
           anchorOrigin={{
             vertical: 'top',
             horizontal: 'center',
@@ -139,12 +242,12 @@ if(!loading){
               </IconButton>
             </React.Fragment>
           }
-        />
-        <div>
-        <Paper className={classes.paper}>
+        /> */}
+                <div>
+                    <Paper className={classes.paper}>
                         <strong>Job Log</strong>
-                        <hr/>
-                        <TableContainer component={Paper} style={{maxHeight:"370px"}}>
+                        <hr />
+                        <TableContainer component={Paper} style={{ maxHeight: "420px" }}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -153,70 +256,101 @@ if(!loading){
                                         <TableCell><b>Project Name</b></TableCell>
                                         <TableCell><b>Status</b></TableCell>
                                         <TableCell><b>Schedule Type</b></TableCell>
+                                        {/* <TableCell><b>Job Action</b></TableCell> */}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {tableData.map((row) => (
+                                    {tableData.map((row) => (
                                         <TableRow key={row.entryId} >
                                             <TableCell component="th" scope="row">
                                                 {row.entryId}
                                             </TableCell>
 
-                                            <TableCell onClick={(e)=>{
-                                            window.location.href='/ingestion/'+row.entryId
-                                        }} >{row.jobname}</TableCell>
+                                            <TableCell onClick={(e) => {
+                                                window.location.href = '/ingestion/' + row.entryId
+                                            }} >{row.jobname}</TableCell>
 
-                                            <TableCell onClick={(e)=>{
-                                            window.location.href='/ingestion/'+row.entryId
-                                        }}>{row.projectname}</TableCell>
+                                            <TableCell onClick={(e) => {
+                                                window.location.href = '/ingestion/' + row.entryId
+                                            }}>{row.projectname}</TableCell>
 
 
-                                        {row.status==="Completed"?
-                                           <TableCell onClick={(e)=>{
-                                            window.location.href='/audit/'+row.entryId
-                                        }}> 
-                                            <div style={{color:"green"}}> <a>{row.status} </a></div> </TableCell> :
-                                            <TableCell> {row.status} </TableCell>}
-                                            
-                                        
-                                            {row.Schedule.schedule_type==="On-Demand" ?
+                                            {row.status === "Completed" ?
+                                                <TableCell onClick={(e) => {
+                                                    window.location.href = '/audit/' + row.entryId
+                                                }}>
+                                                    <div style={{ color: "green" }}> <a>{row.status} </a></div> </TableCell> :
+
+                                                row.status === "Scheduled" ?
+                                                <TableCell> <div style={{ color: "orange" }}> <a>{row.status} </a></div> </TableCell>:
+                                                <TableCell>{row.status}</TableCell>
+                                            }
+
+
+                                            {row.Schedule.schedule_type === "On-Demand" && row.status !='draft' && row.status!='Scheduled'?
                                                 <TableCell >
-                                                    <Button  id={row.entryId+'ID'} variant="outlined" size="small" color='primary' onClick={(e)=>{
+                                                    <Button id={row.entryId + 'ID'} variant="outlined" size="small" color='primary' onClick={(e) => {
                                                         e.preventDefault();
-                                                        triggerJob(row.entryId+'ID', row.entryId)
-                                                    }}> 
-                                                        trigger
+                                                        triggerJob(row.entryId + 'ID', row.entryId)
+                                                    }}>
+                                                        <OfflineBoltTwoToneIcon/> &nbsp; Trigger
                                                     </Button>
-                                                </TableCell>:
-                                                <TableCell >{row.Schedule.schedule_type}</TableCell> }
+                                                </TableCell> :
+                                                row.Schedule.schedule_type === 'On-Demand'? <TableCell >{row.Schedule.schedule_type}</TableCell>:
+
+                                            row.Schedule.schedule_type === "Fixed Schedule" && row.status != 'draft' && row.status != 'Scheduled' ?
+                                                <TableCell>
+                                                    <Button id={row.entryId + 'ID'} variant="outlined" size="small" color='primary' onClick={(e) => {
+                                                        e.preventDefault();
+                                                        triggerScheduled(row.entryId+'ID',row.entryId,row.cron_time)
+                                                    }}>
+                                                        <PlayCircleFilledTwoToneIcon/> &nbsp; Start
+                                                </Button> </TableCell> :
+                                                row.Schedule.schedule_type === "Fixed Schedule" && row.status != 'draft' ?
+                                                    <TableCell>
+                                                        <Button id={row.entryId + 'ID'} variant="outlined" size="small" color='secondary' onClick={(e) => {
+                                                            e.preventDefault();
+                                                            killScheduled(row.entryId+'ID',row.entryId, row.schedule_job_id)
+                                                        }}>
+                                                            <PanToolIcon/>
+                                                        </Button> 
+                                                        <small id={row.entryId + 'ID'}> &nbsp; <i>Stop to Edit Details</i></small></TableCell> :
+                                                        
+                                                        <TableCell>
+                                                            {row.Schedule.schedule_type}
+                                                         </TableCell>
+
+                                            }
+
+
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Paper>
-        </div>
+                </div>
 
-        <div style={{marginTop:" 20px"}}>
-            <Grid container>
-        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
-            <Button variant="contained" color='primary' onClick = {(e)=>{
-                e.preventDefault();
-                // window.location.href = "/ingestion/setup";
-                window.location.href = "/ingestion";
-            }}>Create Ingestion </Button>
-        </Grid>
-        </Grid>
-        </div>
-        </div>
-    )
-}
+                <div style={{ marginTop: " 20px" }}>
+                    <Grid container>
+                        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                            <Button variant="contained" color='primary' onClick={(e) => {
+                                e.preventDefault();
+                                // window.location.href = "/ingestion/setup";
+                                window.location.href = "/ingestion";
+                            }}>Create Ingestion </Button>
+                        </Grid>
+                    </Grid>
+                </div>
+            </div>
+        )
+    }
 
-else{
-    return(<div>
-      <LinearProgress />
-    </div>)
-}
+    else {
+        return (<div>
+            <LinearProgress />
+        </div>)
+    }
 }
 
 

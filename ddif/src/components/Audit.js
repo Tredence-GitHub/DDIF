@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import MaterialTable from 'material-table';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +37,32 @@ export default function Audit() {
     const [tableData, settableData] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
+
+    const [columns, setColumns] = useState([
+
+        { title: 'Entry ID', field: 'entryId' },
+
+        { title: 'Job Name', field: 'jobname' },
+
+        { title: 'Project Name', field: 'projectname' },
+
+        { title: 'Start Time', field: 'start_time' },
+
+        { title: 'End Time', field: 'end_time' },
+
+        { title: 'User Name', field: 'username' },
+
+        { title: 'Total Rows', field: 'total_rows' },
+        { title: 'Ingested Rows', field: 'ingested_rows' },
+        { title: 'Duplicate Records', field: 'duplicated_records' },
+        { title: 'DQ Check Failed', field: 'dq_check_failed' },
+        { title: 'BR Check Failed', field: 'br_check_failed' },
+        { title: 'CR Check Failed', field: 'cr_check_failed' },
+        { title: 'Rejected Rows', field: 'rejected_rows' },
+        { title: 'Status', field: 'status' },
+        { title: 'Relative File Path', field:"relative_file_path",width:1100}
+
+    ]);
 
     let local = 'http://localhost:4000'
 
@@ -67,11 +94,10 @@ export default function Audit() {
     useEffect(() => {
         // getInfo(0);
         console.log(window.location.href.split('/'))
-        if((window.location.href.split('/')[4]>0) ){
+        if ((window.location.href.split('/')[4] > 0)) {
             getInfo(window.location.href.split('/')[4]);
         }
-        else
-        {   
+        else {
             getInfo(0);
         }
     }, [])
@@ -82,9 +108,9 @@ export default function Audit() {
             <div>
                 <div>
                     <Paper className={classes.paper}>
-                        <strong>Job Audit</strong>
-                        <hr />
-                        <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+                        {/* <strong>Job Audit</strong>
+                        <hr /> */}
+                        {/* <TableContainer component={Paper} style={{ maxHeight: "490px" }}>
                             <Table className={classes.table} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
@@ -131,7 +157,22 @@ export default function Audit() {
                                     )) : <>No records to display</>}
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                        </TableContainer> */}
+
+                        <MaterialTable
+                            title="Job Audit"
+                            key="entryId"
+                            columns={columns}
+                            data={tableData}
+                            options={{
+                                rowStyle: {
+                                  whiteSpace:"nowrap",
+                                },
+                                headerStyle: {
+                                    whiteSpace:"nowrap",
+                                  }
+                              }}
+                        />
                     </Paper>
                 </div>
 

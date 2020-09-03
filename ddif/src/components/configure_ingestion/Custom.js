@@ -14,6 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Paper, Card, CardHeader, CardContent, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { useSnackbar } from 'notistack';
 
 
 const InitialConfig = AntdConfig; // or BasicConfig
@@ -53,6 +54,7 @@ export default function Custom(props) {
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState('');
     const [previousQuery, setpreviousQuery] = React.useState('');
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const handleOpen = () => {
         setOpen(true);
@@ -197,19 +199,28 @@ export default function Custom(props) {
                 }
             }).then((response) => {
                 if (response.status === 200) {
-                    handleOpen()
-                    setMsg(response.data.message);
+                    // handleOpen()
+                    // setMsg(response.data.message);
+                    enqueueSnackbar(response.data.message, {
+                        variant: 'success',
+                    });
                 } else {
-                    handleOpen()
-                    setMsg(response.data.message);
+                    // handleOpen()
+                    // setMsg(response.data.message);
+                    enqueueSnackbar(response.data.message, {
+                        variant: 'success',
+                    });
                 }
             }).catch((err) => {
                 console.log(err)
             })
         }
         else{
-            handleOpen();
-            setMsg('Please build your custom rules!')
+            // handleOpen();
+            // setMsg('Please build your custom rules!')
+            enqueueSnackbar('Please build your custom rules!', {
+                variant: 'info',
+            });
         }
     }
 
@@ -275,15 +286,16 @@ export default function Custom(props) {
                 
                 </Card>     
                 </Grid>
-                <div>
+                <div style={{marginTop:"20px"}}>
                 <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                    {props.status==="Scheduled"? <></>:
                     <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         sendData();
 
                     }}>
                         {previousQuery != ''? 'Replace Query' : 'Add Query'}
-                    </Button>
+                    </Button>}
                 </Grid>
                 </div>
         </div>
