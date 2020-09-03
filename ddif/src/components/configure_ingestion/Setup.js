@@ -1135,9 +1135,9 @@ export default function Setup(props) {
     
 
 
-    const passParam = () => {
+const passParam = () => {
 
-        const arr =['0','*','*','*','*','?']
+    const arr =['0','*','*','*','*','?']
     if(minute===""){
         arr[1]='*'
     }
@@ -1162,12 +1162,12 @@ export default function Setup(props) {
     else{
         arr[4]=month
     }
-    if(minute===""){
-        arr[5]='?'
-    }
-    else{
-        arr[5]="?"
-    }
+    // if(dayofweek===""){
+    //     arr[5]='?'
+    // }
+    // else{
+    //     arr[5]="?"
+    // }
 
     const arrs = arr.join(" ");
     console.log(arrs)
@@ -1239,12 +1239,12 @@ export default function Setup(props) {
         else{
             arr[4]=month
         }
-        if(minute===""){
-            arr[5]='?'
-        }
-        else{
-            arr[5]="?"
-        }
+        // if(dayofweek===""){
+        //     arr[5]='?'
+        // }
+        // else{
+        //     arr[5]="?"
+        // }
     
         const arrs = arr.join(" ");
         console.log(arrs)
@@ -2594,7 +2594,7 @@ export default function Setup(props) {
                                     </Grid>
 
 
-                                    <Grid item xs={4} direction="column" container>
+                                    {/* <Grid item xs={4} direction="column" container>
                                         <TextField
                                             id="dayofweek"
                                             select
@@ -2611,11 +2611,7 @@ export default function Setup(props) {
                                                 ),
                                             }}
                                         >
-                                            {/* {targetformats.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))} */}
+                                    
                                             <MenuItem value={1}>1</MenuItem>
                                             <MenuItem value={2}>2</MenuItem>
                                             <MenuItem value={3}>3</MenuItem>
@@ -2624,7 +2620,7 @@ export default function Setup(props) {
                                             <MenuItem value={6}>6</MenuItem>
                                             <MenuItem value={7}>7</MenuItem>
                                         </TextField>
-                                    </Grid>
+                                    </Grid> */}
 
                                 </Grid>
                                 {/* Fixed Schedule Parameters */}

@@ -474,7 +474,11 @@ export default function CustomizedSteppers(props) {
                   className={classes.button}
                 >
                   Next
-                </Button> : <div><i><h5>Current Job is in Schedule State. You'll not be able to save your Changes!</h5></i></div>}
+                </Button> : 
+                status==="Scheduled" && fn==="edit"?
+                <div><i><h5>Current Job is in Schedule State. You'll not be able to save your Changes!</h5></i></div> :
+                <></>
+              }
 
               </div>
             </div>
