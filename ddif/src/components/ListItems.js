@@ -27,8 +27,12 @@ import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 
 const useStyles = makeStyles((theme) => ({
+    fo: {
+        size: "10pt"
+      }
     // fab: {
     //     margin: theme.spacing(2),
     // },
@@ -73,44 +77,44 @@ export default function ListItems() {
                     className={classes.root}
                 >
                     <ListItem to="/home" component={Link} button>
-                        <ListItemIcon>
                         <Tooltip title="Home Page">
-                            <HomeIcon fontSize="small" />
-                        </Tooltip>
+                        <ListItemIcon>
+                            <HomeIcon  />
                         </ListItemIcon>
+                        </Tooltip>
                         <ListItemText primary="Home Page" />
                     </ListItem>
                     <ListItem to="/ingestiontable"  component={Link} button>
-                        <ListItemIcon>
                         <Tooltip title="Configue Ingestion Job">
-                            <BarChartIcon fontSize="small" />
-                        </Tooltip>
+                        <ListItemIcon>
+                            <BorderColorIcon  />
                         </ListItemIcon>
+                        </Tooltip>
                         <ListItemText primary="Configue Ingestion Job" />
                     </ListItem>
                     <ListItem to="/Audit"  component={Link} button>
+                        <Tooltip title="Audit" >
                         <ListItemIcon>
-                        <Tooltip title="Audit">
-                            <VerifiedUserIcon fontSize="small" />
-                        </Tooltip>
+                            <VerifiedUserIcon />
                         </ListItemIcon>
+                        </Tooltip>
                         <ListItemText primary="Configue Ingestion Job" />
                     </ListItem>
                     <ListItem to="/admin"  component={Link} button >
-                        <ListItemIcon>
                         <Tooltip title="Administration">
-                            <PersonIcon fontSize="small" />
-                        </Tooltip>
+                        <ListItemIcon>
+                            <PersonIcon />
                         </ListItemIcon>
+                        </Tooltip>
                         <ListItemText primary="Administration" />
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     <ListItem button onClick={handleClick}>
-                        <ListItemIcon>
                         <Tooltip title="Job Monitor">
+                        <ListItemIcon>
                             <SearchIcon fontSize="small" />
-                        </Tooltip>
                         </ListItemIcon>
+                        </Tooltip>
                         <ListItemText primary="Job Monitor" />
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>

@@ -99,7 +99,7 @@ Router.post('/setupDataSave', (req, res)=>{
                 updated_at: new Date(),
                 updated_by: request_data.updated_by,
                 status_changed_at: new Date(),
-                cront_time: request_data.cront_time,
+                cron_time: request_data.cron_time,
                 schedule_job_id: 0
             }).then((resultCreated)=>{
                 let result = JSON.parse(JSON.stringify(resultCreated));
@@ -195,7 +195,8 @@ const triggerNotebook = async (jobId, entryId) => {
         'job_id': jobId,
         'notebook_params': {
         'entryid': entryId,
-        'EntryId': entryId
+        'EntryId': entryId,
+        'SchedulerType': 'On-Demand'
         }
     }
     let notebookRes = await notebook.notebookTrigger(data);
@@ -252,7 +253,7 @@ Router.post('/updateSetupDBData', (req, res)=>{
         updated_at: new Date(),
         updated_by: request_data.updated_by,
         status_changed_at: new Date(),
-        cront_time: request_data.cront_time,
+        cron_time: request_data.cron_time,
         schedule_job_id: request_data.schedule_job_id
     }
     let updateDataCatalog = new Promise((resolve, reject) => {

@@ -22,7 +22,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -90,7 +90,7 @@ export default function SourceDetails(){
     const [Submitted, setSubmitted] = useState(false);
     const [Edited, setEdited] = useState(false);
     const [Fresh, setFresh] = useState(false);
-
+    const history = useHistory()
     const targetformats = [
         {
             value: 'csv',
@@ -308,7 +308,7 @@ export default function SourceDetails(){
                 setMsg(msg) 
                 handleOpen() 
                  setEdited(false);
-                
+                history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -328,6 +328,7 @@ export default function SourceDetails(){
                 setMsg(msg) 
                 handleOpen() 
                 setSubmitted(false);
+                history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")

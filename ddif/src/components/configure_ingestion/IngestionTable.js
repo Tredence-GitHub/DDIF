@@ -71,7 +71,7 @@ export default function IngestionTable() {
         });
         let b = document.getElementById(btnId);
         console.log(b)
-        b.setAttribute('hidden', 'true');
+        // b.setAttribute('hidden', 'true');
 
         Axios.post(`${deploy}/job/killjob`, {
             job_id : jobId,
@@ -84,25 +84,25 @@ export default function IngestionTable() {
                     // enqueueSnackbar('Job is running ..', {
                     //     variant: 'success',
                     // });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 } else {
                     
                     // enqueueSnackbar('Job is running ..', {
                     //     variant: 'success',
                     // });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 }
             }).catch((err) => {
                 console.log(err);
                 
-                b.setAttribute('hidden', 'false')
+                // b.setAttribute('hidden', 'false')
                 
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.history.go(0);
+                getInfo()
             })
 
     }
@@ -116,7 +116,7 @@ export default function IngestionTable() {
         });
         let b = document.getElementById(btnId);
         console.log(b)
-        b.setAttribute('hidden', 'true');
+        // b.setAttribute('hidden', 'true');
 
         Axios.post(`${deploy}/job/schedule`, {
             entryid: parseInt(entryId),
@@ -129,23 +129,23 @@ export default function IngestionTable() {
                     enqueueSnackbar('Job is running ..', {
                         variant: 'success',
                     });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 } else {
                     enqueueSnackbar('Job is running ..', {
                         variant: 'success',
                     });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 }
             }).catch((err) => {
                 console.log(err);
-                b.setAttribute('hidden', 'false')
+                // b.setAttribute('hidden', 'false')
                 
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.history.go(0);
+                getInfo()
             })
 
     }
@@ -160,36 +160,36 @@ export default function IngestionTable() {
         });
         let b = document.getElementById(btnId);
         console.log(b)
-        b.setAttribute('hidden', 'true');
+        // b.setAttribute('hidden', 'true');
         Axios.get(`${deploy}/ingestion/api/triggerOnDemand/${entryId}`)
             .then((response) => {
                 if (response.data.message === 'success') {
                     // handleOpen();
                     // setMsg('Job is running ..')
-                    enqueueSnackbar('Job is running ..', {
+                    enqueueSnackbar('Job executed successfully', {
                         variant: 'success',
                     });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 } else {
                     // handleOpen();
                     // setMsg('Job is running ..')
-                    enqueueSnackbar('Job is running ..', {
+                    enqueueSnackbar('Job executed successfully', {
                         variant: 'success',
                     });
-                    b.setAttribute('hidden', 'false')
-                    window.history.go(0);
+                    // b.setAttribute('hidden', 'false')
+                    getInfo()
                 }
             }).catch((err) => {
                 console.log(err);
-                b.setAttribute('hidden', 'false')
+                // b.setAttribute('hidden', 'false')
                 
                 // handleOpen();
                 // setMsg('Failed to execute the job!')
                 enqueueSnackbar('Failed to execute the job!', {
                     variant: 'error',
                 });
-                window.history.go(0);
+                getInfo()
             })
     }
 
@@ -274,7 +274,6 @@ export default function IngestionTable() {
                                             <TableCell onClick={(e) => {
                                                  history.push('/ingestion/' + row.entryId)
                                             }}>{row.projectname}</TableCell>
-
 
                                             {row.status === "Completed" ?
                                                 <TableCell onClick={(e) => {

@@ -50,6 +50,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 
 import { green, pink, blue, yellow } from '@material-ui/core/colors';
 import Axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 
 // const tutorialSteps = [
@@ -164,7 +165,7 @@ function Home() {
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
     const [notficationsData, setnotficationsData] = useState({});
-
+    const history = useHistory();
     let local = 'http://localhost:4000'
     let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
@@ -473,14 +474,19 @@ function Home() {
                             }}>
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableHead>
-                                        <TableRow>
+                                        <TableRow >
                                             <TableCell><b>Job ID</b></TableCell>
                                             <TableCell align="right"><b>Status</b></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {logData.map((row) => (
-                                            <TableRow key={row.jobname}>
+                                            <TableRow key={row.jobname} onClick={(e)=>{
+                                                e.preventDefault();
+                                                let entry_id = row.jobname.split('_')[3];
+                                                console.log(entry_id, " ()()()")
+                                                history.push('/ingestion/'+ entry_id )
+                                            }}>
                                                 <TableCell component="th" scope="row">
                                                     {row.jobname}
                                                 </TableCell>

@@ -19,6 +19,7 @@ import AppBar from '@material-ui/core/AppBar';
 
 import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,7 +45,7 @@ export default function Administration(){
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
     const [value, setValue] = React.useState(0);
-
+    const history = useHistory();
 
     const handleChange = (event, newValue) => {
         // history.push(`/ingestion/${tabNametoIndex[newValue]}`)
@@ -161,7 +162,7 @@ if(!loading){
                                         {tableData.length> 0 ? tableData.map((row) => (
                                                 <TableRow key={row.row_id} onClick={(e)=>{
 
-                                                    window.location.href = `/addSource/${row.row_id}`
+                                                    history.push(`/addSource/${row.row_id}`)
                                                     }
                                                     }>
                                                     <TableCell component="th" scope="row">
@@ -183,7 +184,7 @@ if(!loading){
                     <Grid direction="column" container  alignItems="flex-end">
                         <Button variant="contained" color='primary' size="small" justify="flex-right" onClick = {(e)=>{
                             e.preventDefault();
-                            window.location.href = "/addSource";
+                            history.push("/addSource");
                         }}>Add Source </Button>
                     </Grid>
                     </Grid>
@@ -207,7 +208,7 @@ if(!loading){
                                     {tableData2.length> 0 ? tableData2.map((row) => (
                                                 <TableRow key={row.row_id} onClick={(e)=>{
 
-                                                    window.location.href = `/addTarget/${row.row_id}`
+                                                   history.push(`/addTarget/${row.row_id}`)
                                                     }
                                                     } >
                                                     <TableCell component="th" scope="row">
@@ -229,7 +230,7 @@ if(!loading){
                     <Grid direction="column" container  alignItems="flex-end">
                         <Button variant="contained" color='primary' size="small" justify="flex-right" onClick = {(e)=>{
                             e.preventDefault();
-                            window.location.href = "/addTarget";
+                            history.push("/addTarget");
                         }}>Add Target </Button>
                     </Grid>
                     </Grid>

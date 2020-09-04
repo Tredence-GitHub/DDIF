@@ -245,11 +245,11 @@ export default function Setup(props) {
     // const [weeks, setWeeks] = React.useState('');
     // const [startDate, setStartDate] = React.useState();
     // const [endDate, setEndDate] = React.useState();
-    const [minute, setMinute] = React.useState('');
-    const [hour, setHour] = React.useState('');
+    const [minute, setMinute] = React.useState(0);
+    const [hour, setHour] = React.useState(0);
     const [dayofmonth, setDayofMonth] = React.useState('');
     const [month, setMonth] = React.useState('');
-    const [dayofweek, setDayofWeek] = React.useState('');
+    const [dayofweek, setDayofWeek] = React.useState(0);
     const [status, setStatus] = React.useState('');
 
     const [hiddenOneDrive, sethiddenOneDrive] = React.useState(true);
@@ -1128,7 +1128,7 @@ export default function Setup(props) {
 
     // };
 
-    const[crontime, setCronTime] = React.useState('');
+    const[crontime, setCronTime] = React.useState('0 0 0 0 0 0 ?');
     const [schedulejobid, setSchedulejobId] = React.useState(0);
 
     
@@ -1162,16 +1162,16 @@ const passParam = () => {
     else{
         arr[4]=month
     }
-    // if(dayofweek===""){
-    //     arr[5]='?'
-    // }
-    // else{
-    //     arr[5]="?"
-    // }
+    if(dayofweek===0){
+        arr[5]='?'
+    }
+    else{
+        arr[5]=dayofweek
+    }
 
     const arrs = arr.join(" ");
     console.log(arrs)
-
+    
         let param = {
             username: localStorage.getItem('username'),
             rationale: rationale,
@@ -1214,7 +1214,7 @@ const passParam = () => {
 
     const passEditParam = () => {
 
-        const arr =['0','*','*','*','*','?']
+        const arr =['0','*','*','*','*', '?']
         if(minute===""){
             arr[1]='*'
         }
@@ -1239,12 +1239,12 @@ const passParam = () => {
         else{
             arr[4]=month
         }
-        // if(dayofweek===""){
-        //     arr[5]='?'
-        // }
-        // else{
-        //     arr[5]="?"
-        // }
+        if(dayofweek===0){
+            arr[5]='?'
+        }
+        else{
+            arr[5]=dayofweek
+        }
     
         const arrs = arr.join(" ");
         console.log(arrs)
@@ -1293,10 +1293,16 @@ const passParam = () => {
     }
 
     const isFormValid = () => {
-        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0
-            && sourcetype > 0 && targettype > 0 && value.length > 0
+        if (value != 'On-Demand'  && (project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0 && minute >= 0 && hour >= 0 
             && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
-            && Object.keys(targetParams)[0].length > 0) === true) {
+            && Object.keys(targetParams)[0].length > 0) === true){
+            passParam();
+        }
+        else if(value == 'On-Demand'  && (project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0 
+            && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
+            && Object.keys(targetParams)[0].length > 0) === true){
             passParam();
         }
         else {
@@ -1309,8 +1315,14 @@ const passParam = () => {
     };
 
     const isFormValidEdit = () => {
-        if ((project > 0 && jobTitle.length > 0 && rationale.length > 0
-            && sourcetype > 0 && targettype > 0 && value.length > 0
+        if (value != 'On-Demand' && (project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0 && minute>= 0 && hour >= 0 
+            && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
+            && Object.keys(targetParams)[0].length > 0) === true) {
+            passEditParam();
+        }
+        else if (value == 'On-Demand' && (project > 0 && jobTitle.length > 0 && rationale.length > 0
+            && sourcetype > 0 && targettype > 0 && value.length > 0  
             && value2.length > 0 && Object.keys(sourceParams)[0].length > 0
             && Object.keys(targetParams)[0].length > 0) === true) {
             passEditParam();
@@ -2594,7 +2606,7 @@ const passParam = () => {
                                     </Grid>
 
 
-                                    {/* <Grid item xs={4} direction="column" container>
+                                    <Grid item xs={4} direction="column" container>
                                         <TextField
                                             id="dayofweek"
                                             select
@@ -2611,7 +2623,7 @@ const passParam = () => {
                                                 ),
                                             }}
                                         >
-                                    
+                                            <MenuItem value={0}></MenuItem>
                                             <MenuItem value={1}>1</MenuItem>
                                             <MenuItem value={2}>2</MenuItem>
                                             <MenuItem value={3}>3</MenuItem>
@@ -2620,7 +2632,7 @@ const passParam = () => {
                                             <MenuItem value={6}>6</MenuItem>
                                             <MenuItem value={7}>7</MenuItem>
                                         </TextField>
-                                    </Grid> */}
+                                    </Grid>
 
                                 </Grid>
                                 {/* Fixed Schedule Parameters */}

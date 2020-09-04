@@ -90,7 +90,7 @@ export default function Customrules(props) {
   const [hideparameters, sethideParameters] = useState(true);
   const [howtoenter, sethowtoenter] = useState('');
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+  const [addbtn, setaddbtn] = useState(true);
   const [column, setColumn] = useState([
 
     { title: 'Rule Id', field: 'id',options:{display:false, hidden:true}},  
@@ -105,24 +105,73 @@ export default function Customrules(props) {
   ]);
 
   function populateTable() {
-    let lenDataTable = dataTable.length;
-    let data = dataTable
-    console.log(data)
-    data.push({ "column_name": columns, 'rule_name': functions, 'rule_parameters': givenValue, 'id':lenDataTable+1})
-    // Object.assign(dataTable,data)
-    setDataTable(data);
+    if(functions === 'Encrypt'){
+      let regex = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/ ;
+      // console.log(typeof(givenValue), "*******")
+      if(regex.test(givenValue) || givenValue.length < 24){
+        enqueueSnackbar("Please avoid special characters and string must contain at least 24 characters",{
+      variant: 'info'
+        });
+        // setGivenValue('')
+    }else{
+      if(columns && functions){
+        let lenDataTable = dataTable.length;
+        let data = dataTable
+        console.log(data)
+        data.push({ "column_name": columns, 'rule_name': functions, 'rule_parameters': givenValue, 'id':lenDataTable+1})
+        // Object.assign(dataTable,data)
+        setDataTable(data);
 
-    setColumns('')
-    setFunctions('')
-    setGivenValue('')
+        setColumns('')
+        setFunctions('')
+        setGivenValue('')
+      }
+      
+      else{
+        handleOpen();
+        setMsg('Please fill all fields')
+      }
+    }
   }
+  else{
+      
+      if(columns && functions){
+        let lenDataTable = dataTable.length;
+        let data = dataTable
+        console.log(data)
+        data.push({ "column_name": columns, 'rule_name': functions, 'rule_parameters': givenValue, 'id':lenDataTable+1})
+        // Object.assign(dataTable,data)
+        setDataTable(data);
+
+        setColumns('')
+        setFunctions('')
+        setGivenValue('')
+      }
+      
+      else{
+        handleOpen();
+        setMsg('Please fill all fields')
+      }
+    }
+  
+}
 
 
   const handleChangeColumns = (event) => {
     setColumns(event.target.value);
+    if(functions){
+      setaddbtn(false)
+    }else{
+      setaddbtn(true)
+    }
   }
 
   const handleChangefunctions = (event) => {
+    if(columns){
+      setaddbtn(false)
+    }else{
+      setaddbtn(true)
+    }
     if(event.target.value.includes('Is')){
       sethideParameters(true)
     }else{
@@ -131,6 +180,10 @@ export default function Customrules(props) {
         sethideParameters(false)
       }else if(event.target.value === 'Like'){
         sethowtoenter("Uses Python Regex For Complex Conditions")
+        sethideParameters(false)
+      }
+      else if(event.target.value === 'Encrypt'){
+        sethowtoenter("Enter a 24 character long alphabet key");
         sethideParameters(false)
       }
       else{
@@ -143,7 +196,8 @@ export default function Customrules(props) {
     setFunctions(event.target.value);
   }
 
-  const handleChangeGivenValue = (event) => {
+  const handleChangeGivenValue = (event, value) => {
+    console.log(value)
     setGivenValue(event.target.value);
   }
 
@@ -370,6 +424,7 @@ export default function Customrules(props) {
                   <TextField
                     id="columns"
                     select
+                    required
                     label="Choose Columns"
                     value={columns}
                     onChange={handleChangeColumns}
@@ -396,6 +451,7 @@ export default function Customrules(props) {
                   <TextField
                     id="functions"
                     select
+                    required
                     label="Choose Functions"
                     value={functions}
                     onChange={handleChangefunctions}
@@ -424,9 +480,7 @@ export default function Customrules(props) {
                     placeholder="Enter Here"
                     helperText={howtoenter}
                     // onChange={handleChangeGivenValue}
-                    onChange={(e, value) => {
-                      setGivenValue(value)
-                    }}
+                    onChange={handleChangeGivenValue}
                     value={givenValue}
                     InputProps={{
                       startAdornment: (
@@ -436,14 +490,14 @@ export default function Customrules(props) {
                       ),
                     }}
                   >
-                    {givenValue}
+                    {/* {givenValue} */}
                     </TextField>
                 </Grid>
                 <Grid item xs={3} container  direction="column" >
                   <Button variant="contained" color='primary' size="small" style={{ margin: '25px 10px' ,borderRadius: '5%', width:"30px", height: "30px" }} onClick={(e) => {
                     e.preventDefault();
                     populateTable();
-                  }} >+</Button>
+                  }} disabled={addbtn}>+</Button>
 
               </Grid>
               </Grid>
