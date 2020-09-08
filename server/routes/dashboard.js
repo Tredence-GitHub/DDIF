@@ -1,7 +1,5 @@
 const db = require('../config/db.js');
 const express = require('express');
-const { resolve } = require('path');
-const { response } = require('express');
 const Router = express.Router();
 
 Router.get('/dashboardInformation', (req, res)=>{
@@ -34,7 +32,7 @@ Router.get('/dashboardInformation', (req, res)=>{
         });
 
         const total_datasets = new Promise((resolve, reject)=>{
-            db.sequelize.query(`SELECT COUNT(EntryId) as total_datasets FROM parameter`)
+            db.sequelize.query(`SELECT COUNT(EntryId) as total_datasets FROM parameters`)
             .then((result4)=>{
                 console.log(Object.keys(result4[0]))
                 resolve(result4[0][0].total_datasets);
@@ -87,7 +85,8 @@ Router.get('/dashboardInformation', (req, res)=>{
 Router.post('/getActivityLogs', (req, res)=>{
     db.DataCatalog.findAll({
         attributes: ['jobname', 'status','created_at'],
-        order: ['created_at']
+        order: [['created_at', 'DESC']],
+        limit: 5
     }).then((result)=>{
         res.status(200).json({ message: 'successful', data: JSON.parse(JSON.stringify(result
             ))});
@@ -113,11 +112,14 @@ Router.get('/announcements',(req, res)=>{
     });
 
     Promise.all([previousStatuses]).then((response)=>{
-        // console.log('AFTER PROMISES --- ', response);
+        console.log('AFTER PROMISES --- ', response);
         // now check if the statuses have changed and update the descriptions in announcements table
         let currentStatuses = JSON.parse(JSON.stringify(response[0]));
         
-
+        if(currentStatuses.length === 0){
+            res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify([]))})
+        }
+        else{
         currentStatuses.map((item, index)=>{
             console.log(item);
             if(item.entry_status != item.DataCatalog.status){
@@ -148,17 +150,33 @@ Router.get('/announcements',(req, res)=>{
                     where: {
                         recent: 1
                     }, //differentiate Drafted ones
-                    order:['created_at']})
+                    order:[['created_at', 'DESC']]})
                 .then((announcements)=>{
-                    res.status(200).json({message: 'Successful', data: JSON.parse(JSON.stringify(announcements))});
+                    res.status(200).json({message: 'Successful', newNotifs: currentStatuses.length , data: JSON.parse(JSON.stringify(announcements))});
                 }).catch((err)=>{
                     console.log(err);
                     res.status(400).json({message: 'Failed to fetch announcements'})
                 })
             }
         })
+    }
 
+    })
+})
 
+Router.get('/markAsRead/:entryid',(req, res)=>{
+    let entry_id = req.params.entryid;
+
+    db.Announcements.update({
+        recent: 0
+    },{
+        where: {
+            entry_id: entry_id
+        }
+    }).then((result)=>{
+        res.status(200).json({message:'done'})
+    }).catch((err)=>{
+        res.status(400).json({message: 'failed to mark as read', error: [err]})
     })
 })
 module.exports = Router;

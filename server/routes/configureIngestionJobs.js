@@ -221,8 +221,23 @@ Router.post('/api/getMetadata',async (req, res) => {
 
     let finalRes = await triggerNotebook(862, request_data.entryId);
     if(finalRes !== 'Failed') {
+        db.BusinessRules.destroy({
+            where: {
+                entry_id: entryId
+            }
+        }).then((resp)=>{
+            db.CustomRules.destroy({
+                where: {
+                    entry_id: entryId
+                }
+            }).then((resp)=>{
+            }).catch((err)=>{
+                res.status(400).json({message: 'Could not destroy Custom rules'})
+            })
+        }).catch((err)=>{
+            res.status(400).json({message: 'Could not destroy Business rules'})
+        })
         let metadata = JSON.parse(JSON.stringify(finalRes.result));
-
         res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(metadata))})
     }else{
         res.status(400).json({message: 'failed', data: finalRes})
@@ -334,16 +349,7 @@ Router.post('/saveMetadata', (req, res)=>{
     let entryId = parseInt(req.body.entryId);
     let request_data = req.body.metadata;
 
-    db.BusinessRules.destroy({
-        where: {
-            entry_id: entryId
-        }
-    }).then((resp)=>{
-        db.CustomRules.destroy({
-            where: {
-                entry_id: entryId
-            }
-        }).then((resp)=>{
+    
             
             db.Metadata.destroy({
                 where: {
@@ -367,12 +373,7 @@ Router.post('/saveMetadata', (req, res)=>{
                 console.log(err);
                 res.status(400).json({message: 'Failed to add records'})
             })
-        }).catch((err)=>{
-            res.status(400).json({message: 'Could not destroy Custom rules'})
-        })
-    }).catch((err)=>{
-        res.status(400).json({message: 'Could not destroy Business rules'})
-    })
+        
 })
 
 // get Metadata for entryId
@@ -407,14 +408,26 @@ Router.get('/api/getEntryData/:entryId', (req, res)=>{
 
 
 Router.get('/api/triggerOnDemand/:entryid', async (req,res)=>{
-    let finalRes = await triggerNotebook(861, req.params.entryid.toString());
-    console.log(finalRes, "*&*&*&*&* here ")
 
-    if(finalRes != 'Failed') {
-        res.status(200).json({message: 'success', data: finalRes})
-    }else{
-        res.status(400).json({message: 'failed', data: finalRes})
+    db.DataCatalog.update({
+        status: 'Running'
+    },{
+        where: {
+            entryId: req.params.entryid
+        }
+    }).then(async (response)=>{
 
-    }
+        let finalRes = await triggerNotebook(861, req.params.entryid.toString());
+        console.log(finalRes, "*&*&*&*&* here ")
+        if(finalRes != 'Failed') {
+            res.status(200).json({message: 'success', data: finalRes})
+        }else{
+            res.status(400).json({message: 'failed', data: finalRes})
+    
+        }
+    }).catch((err)=>{
+        res.status(400).json({message: 'Failed to change status', error: [err]})
+    })
+
 })
 module.exports = Router;

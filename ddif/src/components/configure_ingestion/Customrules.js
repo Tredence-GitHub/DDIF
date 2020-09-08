@@ -333,7 +333,7 @@ export default function Customrules(props) {
     console.log(props.entryid, "*** here ***")
     Axios({
       method: 'post',
-      url: (`${deploy}` + "/saveBusinessRules"),
+      url: (`${local}` + "/saveBusinessRules"),
       data: {
         entryid: props.entryid,
         customrules: {

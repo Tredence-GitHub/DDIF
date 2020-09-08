@@ -60,7 +60,7 @@ export default function TargetDetails(){
 
     const [gddelimiter, setgdDelimiter] = React.useState('');
     const [errorinfo, seterrorinfo] = React.useState(false);
-    const [error, seterror]= React.useState('');
+    const [error, seterror]= React.useState('Allowed: , ; |');
     const [msg, setMsg] = React.useState('');
     const [open, setOpen] = React.useState(false);
 
@@ -683,7 +683,6 @@ export default function TargetDetails(){
                         id="delimiter"
                         label="Delimiter"
                         placeholder="Eg: ;"
-                        helperText = "Allowed: , ; |"
                         value={gddelimiter}
                         onChange={handleChangegdDelimiter}
                         disabled={Disabled}

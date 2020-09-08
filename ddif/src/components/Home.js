@@ -171,9 +171,9 @@ function Home() {
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${deploy}/dashboard/dashboardInformation`),
-            Axios.post(`${deploy}/dashboard/getActivityLogs`),
-            Axios.get(`${deploy}/dashboard/announcements`)
+            [Axios.get(`${local}/dashboard/dashboardInformation`),
+            Axios.post(`${local}/dashboard/getActivityLogs`),
+            Axios.get(`${local}/dashboard/announcements`)
             ]).then((res) => {
                 return [res]
             })

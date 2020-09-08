@@ -16,7 +16,7 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { useHistory } from 'react-router-dom';
@@ -61,7 +61,7 @@ export default function Administration(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${deploy}/administration/getConnections`), 
+            [Axios.get(`${local}/administration/getConnections`), 
             ]).then((res)=>{
                 return [res]
             })  
@@ -94,10 +94,21 @@ export default function Administration(){
             seterror(true)
         })
     }
+
+    function deleteRecord(id){
+        Axios.get(`${local}/administration/deleteInfo/${id}`)
+        .then((response)=>{
+            getInfo();
+        }).catch((err)=>{
+
+        })
+
+    }
     
     useEffect(() => {
         getInfo();
     }, [])
+
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
         return (
@@ -152,7 +163,7 @@ if(!loading){
                                     <Table className={classes.table} aria-label="simple table">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell><b>Source ID</b></TableCell>
+                                                <TableCell><b>Actions</b></TableCell>
                                                 <TableCell><b>Source Connection name</b></TableCell>
                                                 <TableCell><b>Location Name</b></TableCell>
                                                 <TableCell><b>Connection Type</b></TableCell>
@@ -160,18 +171,31 @@ if(!loading){
                                         </TableHead>
                                         <TableBody>
                                         {tableData.length> 0 ? tableData.map((row) => (
-                                                <TableRow key={row.row_id} onClick={(e)=>{
+                                                <TableRow key={row.row_id} >
+                                                <TableCell component="th" scope="row" onClick={(e)=>{
+
+                                                    deleteRecord(row.row_id);
+                                                    }
+                                                    } >
+                                                    <DeleteIcon />
+                                                </TableCell>
+                                                <TableCell onClick={(e)=>{
 
                                                     history.push(`/addSource/${row.row_id}`)
                                                     }
-                                                    }>
-                                                    <TableCell component="th" scope="row">
-                                                        {row.row_id}
-                                                    </TableCell>
-                                                    <TableCell >{row.connection_name}</TableCell>
-                                                    <TableCell >{row.location_name}</TableCell>
-                                                    <TableCell >{row.format}</TableCell>
-                                                </TableRow>
+                                                    }  >{row.connection_name}</TableCell>
+                                                <TableCell onClick={(e)=>{
+
+                                                    history.push(`/addSource/${row.row_id}`)
+                                                    }
+                                                    } >{row.location_name}</TableCell>
+                                                <TableCell onClick={(e)=>{
+
+                                                    history.push(`/addSource/${row.row_id}`)
+                                                    }
+                                                    } >{row.format}</TableCell>
+                                                
+                                            </TableRow>
                                             )) : <>No records to display</>}
                                         </TableBody>
                                     </Table>
@@ -198,7 +222,7 @@ if(!loading){
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell><b>Target ID</b></TableCell>
+                                            <TableCell><b>Actions</b></TableCell>
                                             <TableCell><b>Target Connection Name</b></TableCell>
                                             <TableCell><b>Location Name</b></TableCell>
                                             <TableCell><b>Connection type</b></TableCell>
@@ -206,17 +230,29 @@ if(!loading){
                                     </TableHead>
                                     <TableBody>
                                     {tableData2.length> 0 ? tableData2.map((row) => (
-                                                <TableRow key={row.row_id} onClick={(e)=>{
+                                                <TableRow key={row.row_id} >
+                                                    <TableCell component="th" scope="row" onClick={(e)=>{
 
-                                                   history.push(`/addTarget/${row.row_id}`)
-                                                    }
-                                                    } >
-                                                    <TableCell component="th" scope="row">
-                                                        {row.row_id}
+                                                        deleteRecord(row.row_id);
+                                                        }
+                                                        } >
+                                                        <DeleteIcon />
                                                     </TableCell>
-                                                    <TableCell >{row.connection_name}</TableCell>
-                                                    <TableCell >{row.location_name}</TableCell>
-                                                    <TableCell >{row.format}</TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        }  >{row.connection_name}</TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        } >{row.location_name}</TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        } >{row.format}</TableCell>
                                                     
                                                 </TableRow>
                                             )) : <>No records to display</>}

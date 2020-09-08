@@ -58,7 +58,7 @@ export default function Summary(props) {
 
     const [dataTable, setDataTable] = useState([{}])
     const getAlldetails = () => {
-        Axios.get(`${deploy}/getSummary/${props.entryid}`)
+        Axios.get(`${local}/getSummary/${props.entryid}`)
             .then((response) => {
                 setDataTable(response.data.data);
                 setloading(false);
@@ -68,7 +68,7 @@ export default function Summary(props) {
     }
 
     const changeStatus = () => {
-        Axios.get(`${deploy}/status/Created/${props.entryid}`)
+        Axios.get(`${local}/status/Created/${props.entryid}`)
             .then((response) => {
                 if (response.status === 200) {
                     // handleOpen();

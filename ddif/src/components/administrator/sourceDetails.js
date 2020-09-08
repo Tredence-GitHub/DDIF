@@ -67,7 +67,7 @@ export default function SourceDetails(){
     const [Format, setFormat] = useState('')
     const [gddelimiter, setgdDelimiter] = React.useState('');
     const [errorinfo, seterrorinfo] = React.useState(false);
-    const [error, seterror]= React.useState('');
+    const [error, seterror]= React.useState('Allowed: , ; |');
 
     const [checkedA, setcheckedA] = React.useState(false);
 
@@ -301,7 +301,7 @@ export default function SourceDetails(){
         setEdited(true)
         setMsg('Updating... ')
         handleOpen()
-        Axios.post(`${deploy}/administration/updateConnection`, data)
+        Axios.post(`${local}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
                 let msg = response.data.message;
@@ -321,7 +321,7 @@ export default function SourceDetails(){
         setSubmitted(true);
         setMsg('Saving... ')
         handleOpen()
-        Axios.post(`${deploy}/administration/saveConnection`, data)
+        Axios.post(`${local}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){
                 let msg = response.data.message;
@@ -339,7 +339,7 @@ export default function SourceDetails(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
+            [Axios.get(`${local}/ingestion/getDropdowns`), 
             
             ]).then((res)=>{
                 return [res]
@@ -367,8 +367,8 @@ export default function SourceDetails(){
     function getData(rowid){
         
         Promise.all(
-            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
-            Axios.get(`${deploy}/administration/getById/${rowid}`)
+            [Axios.get(`${local}/ingestion/getDropdowns`), 
+            Axios.get(`${local}/administration/getById/${rowid}`)
             ]).then((res)=>{
                 return [res]
             })  
@@ -527,7 +527,6 @@ export default function SourceDetails(){
                         id="gdDelimiter"
                         label="Enter Delimiter"
                         placeholder="eg: ;"
-                        helperText = "Allowed: , ; |"
                         onChange={handleChangegdDelimiter}
                         error = {errorinfo}
                         value={gddelimiter}
