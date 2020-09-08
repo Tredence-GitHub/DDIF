@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('deaccelator', 'DEadmin@demetadata', 'Tredence@123', {
-    host: "demetadata.mysql.database.azure.com",
+const sequelize = new Sequelize('deaccelator', 'DEadmin@ddifmetadata', 'Tredence@123', {
+    host: "ddifmetadata.mysql.database.azure.com",
     dialect: 'mysql',
+    ssl: true,
     // driver: 'tedious',
     pool: {
         max: 10,

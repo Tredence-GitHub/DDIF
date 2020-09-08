@@ -299,8 +299,8 @@ export default function Customrules(props) {
     }
 
     
-    Promise.all([Axios.get(`${deploy}/getCustomRuleDropdowns/${props.entryid}`),
-            Axios.post(`${deploy}/populateCustomRules`, {
+    Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${local}/populateCustomRules`, {
                 entryid: props.entryid
             })
             ]).then((result)=>{

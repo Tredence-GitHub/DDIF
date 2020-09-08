@@ -219,7 +219,7 @@ Router.post('/api/getMetadata',async (req, res) => {
     let request_data = req.body;
     console.log(request_data.entryId);
 
-    let finalRes = await triggerNotebook(31, request_data.entryId);
+    let finalRes = await triggerNotebook(862, request_data.entryId);
     if(finalRes !== 'Failed') {
         let metadata = JSON.parse(JSON.stringify(finalRes.result));
 
@@ -334,27 +334,44 @@ Router.post('/saveMetadata', (req, res)=>{
     let entryId = parseInt(req.body.entryId);
     let request_data = req.body.metadata;
 
-    db.Metadata.destroy({
+    db.BusinessRules.destroy({
         where: {
             entry_id: entryId
         }
-    }).then((result)=>{
-        for(let i = 0; i < request_data.length; i++){
-            request_data[i]['entry_id'] = entryId;
-            db.Metadata.create(request_data[i])
-            .then((result)=>{
-                if(i === request_data.length-1){
-                    res.status(200).json({message: 'Successful', data: [], entry_id: entryId});
+    }).then((resp)=>{
+        db.CustomRules.destroy({
+            where: {
+                entry_id: entryId
+            }
+        }).then((resp)=>{
+            
+            db.Metadata.destroy({
+                where: {
+                    entry_id: entryId
+                }
+            }).then((result)=>{
+                for(let i = 0; i < request_data.length; i++){
+                    request_data[i]['entry_id'] = entryId;
+                    db.Metadata.create(request_data[i])
+                    .then((result)=>{
+                        if(i === request_data.length-1){
+                            res.status(200).json({message: 'Successful', data: [], entry_id: entryId});
+                        }
+                    }).catch((err)=>{
+                        console.log('error -- looping --', err )
+                        res.status(400).json({message: 'Failed', error: [err]})
+                    })
+        
                 }
             }).catch((err)=>{
-                console.log('error -- looping --', err )
-                res.status(400).json({message: 'Failed', error: [err]})
+                console.log(err);
+                res.status(400).json({message: 'Failed to add records'})
             })
-
-        }
+        }).catch((err)=>{
+            res.status(400).json({message: 'Could not destroy Custom rules'})
+        })
     }).catch((err)=>{
-        console.log(err);
-        res.status(400).json({message: 'Failed to add records'})
+        res.status(400).json({message: 'Could not destroy Business rules'})
     })
 })
 
@@ -390,7 +407,7 @@ Router.get('/api/getEntryData/:entryId', (req, res)=>{
 
 
 Router.get('/api/triggerOnDemand/:entryid', async (req,res)=>{
-    let finalRes = await triggerNotebook(27, req.params.entryid.toString());
+    let finalRes = await triggerNotebook(861, req.params.entryid.toString());
     console.log(finalRes, "*&*&*&*&* here ")
 
     if(finalRes != 'Failed') {

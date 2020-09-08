@@ -239,7 +239,7 @@ export default function TargetDetails(){
 
     const handleChangegdDelimiter= (event) => {
         setgdDelimiter(event.target.value);
-        if((event.target.value !== ',') && (event.target.value !== ';') | (event.target.value !== '|')){
+        if((event.target.value !== ',') && (event.target.value !== ';') && (event.target.value !== '|')){
             seterrorinfo(true)
             seterror("Invalid Delimiter")
         }
@@ -682,7 +682,8 @@ export default function TargetDetails(){
                     <TextField
                         id="delimiter"
                         label="Delimiter"
-                        placeholder="eg: ;"
+                        placeholder="Eg: ;"
+                        helperText = "Allowed: , ; |"
                         value={gddelimiter}
                         onChange={handleChangegdDelimiter}
                         disabled={Disabled}

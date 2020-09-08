@@ -6,7 +6,7 @@ const notebook = require('./notebooks/notebook.js');
 const triggerNotebook = async (entryId, scheduletype, crontime) => {
     const data = {
         "name": 'Sample job',
-        "existing_cluster_id": '0417-064140-cask871',
+        "existing_cluster_id": '0512-055317-call256',
         "timeout_seconds": 300,
         "max_retries": 1,
         "schedule": {

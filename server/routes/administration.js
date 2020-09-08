@@ -31,7 +31,7 @@ Router.get('/getById/:row_id', (req, res)=>{
 const triggerNotebook = async (info) => {
     console.log(info, "\n>>>>>>")
     const data = {
-        'job_id': 34,
+        'job_id': 860,
         'notebook_params': info
     }
     let notebookRes = await notebook.notebookTrigger(data);

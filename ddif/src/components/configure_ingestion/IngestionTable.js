@@ -73,7 +73,7 @@ export default function IngestionTable() {
         console.log(b)
         // b.setAttribute('hidden', 'true');
 
-        Axios.post(`${deploy}/job/killjob`, {
+        Axios.post(`${local}/job/killjob`, {
             job_id : jobId,
             entryid :entryId
             
@@ -118,7 +118,7 @@ export default function IngestionTable() {
         console.log(b)
         // b.setAttribute('hidden', 'true');
 
-        Axios.post(`${deploy}/job/schedule`, {
+        Axios.post(`${local}/job/schedule`, {
             entryid: parseInt(entryId),
             crontime: cronTime
             
@@ -161,7 +161,7 @@ export default function IngestionTable() {
         let b = document.getElementById(btnId);
         console.log(b)
         // b.setAttribute('hidden', 'true');
-        Axios.get(`${deploy}/ingestion/api/triggerOnDemand/${entryId}`)
+        Axios.get(`${local}/ingestion/api/triggerOnDemand/${entryId}`)
             .then((response) => {
                 if (response.data.message === 'success') {
                     // handleOpen();
@@ -195,7 +195,7 @@ export default function IngestionTable() {
 
     function getInfo() {
         Promise.all(
-            [Axios.post(`${deploy}/ingestion/getRecords`),
+            [Axios.post(`${local}/ingestion/getRecords`),
             ]).then((res) => {
                 return [res]
             })

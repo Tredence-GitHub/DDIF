@@ -11,5 +11,6 @@ Router.use('/summary', require('./summary.js'));
 Router.use('/job', require('./scheduleJob.js'));
 Router.use('/ingestion', require('./configureIngestionJobs'));
 Router.use('/audit', require('./audit.js'))
+Router.use('/powerbi', require('./powerBiToken.js'));
 
 module.exports = Router;

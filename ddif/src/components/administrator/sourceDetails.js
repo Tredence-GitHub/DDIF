@@ -180,7 +180,7 @@ export default function SourceDetails(){
 
     const handleChangegdDelimiter= (event) => {
         setgdDelimiter(event.target.value);
-        if((event.target.value !== ',') && (event.target.value !== ';') | (event.target.value !== '|')){
+        if((event.target.value !== ',') && (event.target.value !== ';') && (event.target.value !== '|')){
             seterrorinfo(true)
             seterror("Invalid Delimiter")
         }
@@ -527,6 +527,7 @@ export default function SourceDetails(){
                         id="gdDelimiter"
                         label="Enter Delimiter"
                         placeholder="eg: ;"
+                        helperText = "Allowed: , ; |"
                         onChange={handleChangegdDelimiter}
                         error = {errorinfo}
                         value={gddelimiter}

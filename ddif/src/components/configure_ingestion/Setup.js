@@ -314,8 +314,8 @@ export default function Setup(props) {
         // let entryid = props.entryid;
         console.log(entryid, "Edit Mode");
         Promise.all(
-            [Axios.get(`${deploy}/ingestion/api/getEntryData/${entryid}`),
-            // [Axios.get(`${deploy}/ingestion/api/getEntryData/52`),
+            [Axios.get(`${local}/ingestion/api/getEntryData/${entryid}`),
+            // [Axios.get(`${local}/ingestion/api/getEntryData/52`),
             Axios.get(`${deploy}/ingestion/getDropdowns`)
 
             ]).then((res) => {

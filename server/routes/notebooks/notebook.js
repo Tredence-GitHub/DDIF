@@ -1,17 +1,17 @@
 const axios = require('axios')
 const headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer dapi1b876592cc8332b32b5aa000a6b4cd92'
+    'Authorization': 'Bearer dapif24e3f0ad1842c09cdf49c5be450614e'
 }
 
 const headers2 = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer dapi1b876592cc8332b32b5aa000a6b4cd92'
+    'Authorization': 'Bearer dapif24e3f0ad1842c09cdf49c5be450614e'
 }
-const api_url = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now'
+const api_url = 'https://adb-7452764948368190.10.azuredatabricks.net/api/2.0/jobs/run-now'
 
-const create_api = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/create'
-const delete_api = 'https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/delete'
+const create_api = 'https://adb-7452764948368190.10.azuredatabricks.net/api/2.0/jobs/create'
+const delete_api = 'https://adb-7452764948368190.10.azuredatabricks.net/api/2.0/jobs/delete'
 
 function notebookTrigger(data) {
     return new Promise((resolve, reject)=>{
@@ -38,7 +38,7 @@ function notebookTrigger(data) {
 function runJobResponse (runID) {
     console.log(runID, '------ is supposed to be res')
     return new Promise((resolve, reject)=> {
-        axios.get(`https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/runs/get-output?run_id=${runID}`,{
+        axios.get(`https://adb-7452764948368190.10.azuredatabricks.net/api/2.0/jobs/runs/get-output?run_id=${runID}`,{
         headers: headers
         }).then((result)=>{
             console.log('FIRST TIME--- ',result.data.metadata.state)
@@ -69,7 +69,7 @@ function runJobResponse (runID) {
 function runTestConnection(runID){
     console.log(runID, '------ is supposed to be res')
     return new Promise((resolve, reject)=> {
-        axios.get(`https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/runs/get-output?run_id=${runID}`,{
+        axios.get(`https://adb-7452764948368190.10.azuredatabricks.net/api/2.0/jobs/runs/get-output?run_id=${runID}`,{
         headers: headers2
         }).then((result)=>{
             console.log('FIRST TIME--- ',result.data.metadata.state)
