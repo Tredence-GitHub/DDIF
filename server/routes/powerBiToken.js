@@ -1,6 +1,6 @@
-const request = require('request');
 const express = require('express');
 const Router = express.Router();
+const request = require('request');
 
 let getAccessToken = function () {
 
@@ -40,15 +40,18 @@ let getAccessToken = function () {
 
                 }, function(err, result, body) {
 
-                    if(err) 
+                    if(err) {
+
+                        console.log(err)
                         return reject(err);
+                    }
                     //console.log(body);
                     bodyObj = JSON.parse(body);
                     // console.log("bodyObj first occurrence: ", bodyObj)
 
                     //console.log("Got body: ", bodyObj)
                     //return bodyObj.access_token;
-                    resolve(bodyObj.access_token);
+                    return resolve(bodyObj.access_token);
                 }
             )
 

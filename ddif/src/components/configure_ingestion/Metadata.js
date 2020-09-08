@@ -206,7 +206,7 @@ export default function Metadata(props) {
             // console.log(item) 
 
             arr.push({
-              'column_id': item[0], "column_name": item[1], "data_type": item[2].trim(), "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 'No', nullable: 'Yes', dqcheck: 'Tier 2', default: "", format: ""
+              'column_id': item[0], "column_name": item[1], "data_type": item[2].trim(), "description": item[3], "pii": item[4], "pii_type": item[5], primary_key: 'No', nullable: 'Yes', dqcheck: 'Tier 2', default: "", format: "%d-%m-%y %H:%M:%S"
             })
 
           })
@@ -315,6 +315,7 @@ export default function Metadata(props) {
             },
             headerStyle: {
                 whiteSpace:"nowrap",
+                fontWeight:"bold"
               }
           }}
           editable={{

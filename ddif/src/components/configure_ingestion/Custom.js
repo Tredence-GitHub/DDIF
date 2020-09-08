@@ -112,8 +112,8 @@ export default function Custom(props) {
         setRule(custom_rulename);
         console.log("aaaaaa", custom_rulename);
         console.log("aaaaaaaaaaaaaaaaa", text);
-        Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
-            Axios.post(`${local}/populateCustomRules`, {
+        Promise.all([Axios.get(`${deploy}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${deploy}/populateCustomRules`, {
                 entryid: props.entryid
             })
             ]).then((result)=>{
@@ -188,7 +188,7 @@ export default function Custom(props) {
             console.log(props.entryid, "*** here ***")
             Axios({
                 method: 'post',
-                url: (`${local}` + "/saveCustomRules"),
+                url: (`${deploy}` + "/saveCustomRules"),
                 data: {
                     entryid: props.entryid,
                     customrules: {

@@ -115,6 +115,7 @@ Router.get('/announcements',(req, res)=>{
         console.log('AFTER PROMISES --- ', response);
         // now check if the statuses have changed and update the descriptions in announcements table
         let currentStatuses = JSON.parse(JSON.stringify(response[0]));
+        console.log(currentStatuses);
         
         if(currentStatuses.length === 0){
             res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify([]))})
@@ -152,7 +153,7 @@ Router.get('/announcements',(req, res)=>{
                     }, //differentiate Drafted ones
                     order:[['created_at', 'DESC']]})
                 .then((announcements)=>{
-                    res.status(200).json({message: 'Successful', newNotifs: currentStatuses.length , data: JSON.parse(JSON.stringify(announcements))});
+                    res.status(200).json({message: 'Successful', newNotifs: announcements.length , data: JSON.parse(JSON.stringify(announcements))});
                 }).catch((err)=>{
                     console.log(err);
                     res.status(400).json({message: 'Failed to fetch announcements'})

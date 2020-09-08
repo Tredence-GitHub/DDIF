@@ -329,7 +329,7 @@ export default function CustomizedSteppers(props) {
         else{
         //   handleOpen()
         // setMsg(response.data.message)
-        enqueueSnackbar("Failed", {
+        enqueueSnackbar(response.data.message, {
           variant: 'warning',
       })
     };
@@ -339,7 +339,7 @@ export default function CustomizedSteppers(props) {
       else if (response.status === 400) {
         // handleOpen()
         // setMsg('failed!')
-        enqueueSnackbar("Failed", {
+        enqueueSnackbar(response.data.message, {
           variant: 'warning',
       })
       }
@@ -348,7 +348,7 @@ export default function CustomizedSteppers(props) {
       console.log(err);
       // handleOpen()
       // setMsg('Failed!')
-      enqueueSnackbar("Failed", {
+      enqueueSnackbar('Failed!', {
         variant: 'warning',
     })
     });
@@ -376,7 +376,7 @@ export default function CustomizedSteppers(props) {
       else if (response.status === 400) {
         // handleOpen()
         // setMsg('failed!')
-        enqueueSnackbar("Failed", {
+        enqueueSnackbar(response.data.message, {
             variant: 'warning',
         })
       }
@@ -385,7 +385,7 @@ export default function CustomizedSteppers(props) {
       console.log(err);
       // handleOpen()
       // setMsg('Failed!')
-      enqueueSnackbar("Failed", {
+      enqueueSnackbar('Failed!', {
           variant: 'warning',
       })
     });

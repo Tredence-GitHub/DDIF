@@ -35,6 +35,7 @@ import TargetDetails from './administrator/targetDetails';
 import Setup from './configure_ingestion/Setup';
 import Audit from './Audit';
 import Tooltip from '@material-ui/core/Tooltip';
+import Dashboard from './Dashboard';
 
 const drawerWidth = 70;
 const useStyles = makeStyles((theme) => ({
@@ -198,7 +199,7 @@ export default function Layout() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" className={classes.title} align={'left'}>
+                    <Typography variant="h5" color="inherit" className={classes.title} align={'left'}>
                     <img src={TredenceLogo} height={'40px'} width={'100px'} /> &nbsp;  Driverless Data Ingestion Framework
                     </Typography>
                     <IconButton color='inherit'>
@@ -245,7 +246,7 @@ export default function Layout() {
                             <Switch>
                                 <Fragment>
                                     <Route exact path="/home" >
-                                        <Home />
+                                        <Home/>
                                     </Route>
                                     <Route exact path={['/ingestion','/ingestion/:param']} >
                                         <Ingestion />
@@ -260,6 +261,9 @@ export default function Layout() {
                                     </Route>
                                     <Route exact path="/admin">
                                         <Administration/>
+                                    </Route>
+                                    <Route exact path="/dashboard">
+                                        <Dashboard/>
                                     </Route>
                                     <Route path = {['/addSource','/addSource/:param']}>
                                         <SourceDetails/>

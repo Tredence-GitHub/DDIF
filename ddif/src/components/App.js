@@ -9,7 +9,14 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { SnackbarProvider } from 'notistack';
 
-function App() {
+function App(props) {
+
+const [username, setUsername] = React.useState('')
+
+ const handleUsername = (param)=>{
+   setUsername(param)
+ }
+
   return (
     <SnackbarProvider maxSnack={1}
       anchorOrigin={{
@@ -22,15 +29,15 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/recover" component={ChangePassword} />
-          {localStorage.getItem('loggedIn') === 'true' ? <Layout /> :
+          {/* {localStorage.getItem('loggedIn') === 'true' ? <Layout /> :
             <div>
               <p>Unauthorized access</p>
               <br />
               <Button variant="outlined" color="primary" href='/'>
                 Back To Login
               </Button>
-            </div>}
-          {/* <Layout/> */}
+            </div>} */}
+          <Layout onPassUsername={handleUsername}/>
         </Switch>
       </Router>
     </SnackbarProvider>

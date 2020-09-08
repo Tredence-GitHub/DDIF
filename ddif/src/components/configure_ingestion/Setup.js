@@ -1169,7 +1169,12 @@ const passParam = () => {
         arr[5]=dayofweek
     }
 
-    const arrs = arr.join(" ");
+    
+
+    let arrs = arr.join(" ");
+    if(value==='On-Demand'){
+        arrs = ['0','*','*','*','*','?'].join(" ")
+    }
     console.log(arrs)
     
         let param = {
@@ -1246,7 +1251,10 @@ const passParam = () => {
             arr[5]=dayofweek
         }
     
-        const arrs = arr.join(" ");
+        let arrs = arr.join(" ");
+        if(value==='On-Demand'){
+            arrs = ['0','*','*','*','*','?'].join(" ")
+        }
         console.log(arrs)
 
         let param = {

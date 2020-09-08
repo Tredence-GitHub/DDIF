@@ -126,13 +126,13 @@ export default function IngestionTable() {
             console.log(cronTime,"00")
                 if (response.data.message === 'success') {
                     
-                    enqueueSnackbar('Job is running ..', {
+                    enqueueSnackbar(`Job ${entryId} is running ..`, {
                         variant: 'success',
                     });
                     // b.setAttribute('hidden', 'false')
                     getInfo()
                 } else {
-                    enqueueSnackbar('Job is running ..', {
+                    enqueueSnackbar(`Job ${entryId} is Completed ..`, {
                         variant: 'success',
                     });
                     // b.setAttribute('hidden', 'false')
@@ -142,7 +142,7 @@ export default function IngestionTable() {
                 console.log(err);
                 // b.setAttribute('hidden', 'false')
                 
-                enqueueSnackbar('Failed to execute the job!', {
+                enqueueSnackbar(`Failed to execute the job ${entryId}!`, {
                     variant: 'error',
                 });
                 getInfo()
@@ -166,15 +166,16 @@ export default function IngestionTable() {
                 if (response.data.message === 'success') {
                     // handleOpen();
                     // setMsg('Job is running ..')
-                    enqueueSnackbar('Job executed successfully', {
+                    enqueueSnackbar(`Job ${entryId} executed successfully`, {
                         variant: 'success',
                     });
                     // b.setAttribute('hidden', 'false')
+                   
                     getInfo()
                 } else {
                     // handleOpen();
                     // setMsg('Job is running ..')
-                    enqueueSnackbar('Job executed successfully', {
+                    enqueueSnackbar(`Job ${entryId} executed successfully`, {
                         variant: 'success',
                     });
                     // b.setAttribute('hidden', 'false')
@@ -186,7 +187,7 @@ export default function IngestionTable() {
                 
                 // handleOpen();
                 // setMsg('Failed to execute the job!')
-                enqueueSnackbar('Failed to execute the job!', {
+                enqueueSnackbar(`Failed to execute the job ${entryId}!`, {
                     variant: 'error',
                 });
                 getInfo()
@@ -246,18 +247,17 @@ export default function IngestionTable() {
         /> */}
                 <div>
                     <Paper className={classes.paper}>
-                        <strong>Job Log</strong>
+                        <strong style={{display:'flex',justifyContent:"left", color:"black", marginLeft:"10px"}}>Ingestion Job Log</strong>
                         <hr />
                         <TableContainer component={Paper} style={{ maxHeight: "420px" }}>
-                            <Table className={classes.table} aria-label="simple table">
+                            <Table className={classes.table} aria-label="a dense table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell><b>Entry ID</b></TableCell>
+                                        <TableCell ><b>Entry ID</b></TableCell>
                                         <TableCell><b>Job ID</b></TableCell>
                                         <TableCell><b>Project Name</b></TableCell>
                                         <TableCell><b>Status</b></TableCell>
-                                        <TableCell><b>Schedule Type</b></TableCell>
-                                        {/* <TableCell><b>Job Action</b></TableCell> */}
+                                        <TableCell style={{width:"200px"}}><b>Schedule Type</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

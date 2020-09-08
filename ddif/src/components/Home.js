@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import image from '../assets/Images/flow.png';
+import Gif from '../assets/Images/GIF Final.gif'
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -51,6 +52,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import { green, pink, blue, yellow } from '@material-ui/core/colors';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 // const tutorialSteps = [
@@ -165,6 +167,7 @@ function Home() {
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
     const [notficationsData, setnotficationsData] = useState({});
+    const [newNotif, setNewNotif] =  useState(0)
     const history = useHistory();
     let local = 'http://localhost:4000'
     let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
@@ -179,10 +182,12 @@ function Home() {
             })
             .then((response) => {
                 console.log("RESPONSE -- ", response[0][1].status)
+                console.log(response)
                 if (response[0][0].status === 200 && response[0][1].status === 200) {
                     setdashboardnumbers(response[0][0].data.data);
                     setlogData(response[0][1].data.data);
                     setnotficationsData(response[0][2].data.data);
+                    setNewNotif(response[0][2].data.newNotifs)
 
                     seterror(false);
                     setloading(false);
@@ -199,7 +204,7 @@ function Home() {
 
     useEffect(() => {
         getInfo();
-    }, [])
+    }, [notficationsData])
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -233,10 +238,14 @@ function Home() {
         >
             <List>
                 {notficationsData.map((text, index) => (
-                    <ListItem button key={index}>
+                    <ListItem key={index}>
                         {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                         <ListItemIcon> <MailIcon /></ListItemIcon>
                         <ListItemText primary={text.description} />
+                        <br/>
+                        <CloseIcon onClick={(e)=>{
+                            markRead(text.entry_id)
+                        }}/>
                         <Divider />
                     </ListItem>
                 ))}
@@ -246,11 +255,23 @@ function Home() {
         </div>
     );
 
+    function markRead(entryid){
+        Axios.get(`${local}/dashboard/markAsRead/${entryid}`)
+            .then((response) => {
+                getInfo()
+                
+            }).catch((err) => {
+                console.log(err);
+            })
+
+    }
+
 
 
     if (!loading) {
         return (
             <div className={classes.root} >
+                <Paper>
                 <Grid container spacing={4}>
                     <Grid item container xs={12} style={{
                         paddingLeft: "25px"
@@ -308,7 +329,7 @@ function Home() {
                                     <Avatar className={classes.green}>
                                         <SettingsInputComponentIcon fontSize='small' />
                                     </Avatar>
-                                    <Typography className={classes.title} variant="h6" color="textSecondary" gutterBottom>
+                                    <Typography className={classes.title}  color="textSecondary" gutterBottom>
                                         <span >Ingested Datasets</span>
                                     </Typography>
                                 </Grid>
@@ -339,12 +360,13 @@ function Home() {
 
                 <Grid container spacing={3} style={{ height: "500px" }}>
                     <Grid item xs={8}>
-                        <Paper className={classes.paper} style={{ margin: "0 0 0 15px", padding: '1px' }}>
-                            {/* <img src={image} width={'700px'} /> */}
+                        {/* <Paper className={classes.paper} style={{ margin: "0 0 0 15px", padding: '1px' }}> */}
+                            <div style={{ margin: "0 0 0 15px", padding: '1px' }}>
+                            <img src={Gif} width={'730px'} height={'470px'} />
                             {/* <Paper square elevation={0} className={classes.header}>
                             <Typography>{"DDIF-Flowchart"}</Typography>
                         </Paper> */}
-                            {activeStep === 0 ? <Typography>{"Key Capabilities"}</Typography> : <Typography>{"Data Ingestion Framework"}</Typography>}
+                            {/* {activeStep === 0 ? <Typography>{"Key Capabilities"}</Typography> : <Typography>{"Data Ingestion Framework"}</Typography>}
                             {activeStep === 1 ?
                                 <img
                                     className={classes.img}
@@ -361,10 +383,10 @@ function Home() {
                                         // paddingLeft: "25px"
                                         // border: '1px solid blue'
 
-                                    }} >
+                                    }} > */}
                                         {/* Row 1 */}
 
-                                        <Grid item container xs={12} style={{
+                                        {/* <Grid item container xs={12} style={{
                                             // paddingLeft: "25px"
                                             // border: '1px solid yellow',
                                             padding: "1%",
@@ -394,11 +416,11 @@ function Home() {
                                                 <small className="subtext">Operational Metadata </small>
                                             </div>
 
-                                        </Grid>
+                                        </Grid> */}
 
                                         {/* Row 2 */}
 
-                                        <Grid item container xs={12} style={{
+                                        {/* <Grid item container xs={12} style={{
                                             // paddingLeft: "25px"
                                             // border: '1px solid red',
                                             padding: "1%",
@@ -452,16 +474,18 @@ function Home() {
 
                                     </Button>
                                 }
-                            />
-                        </Paper>
+                            /> */}
+                            </div>
+                        {/* </Paper> */}
+                        
 
 
                     </Grid>
-                    <Grid item container direction="column" xs={4}>
-                        <Paper className={classes.paper}>
-                            <Typography>Activity Log {['right'].map((anchor) => (
+                    <Grid item container direction="column" xs={4} >
+                        <Paper className={classes.paper} style={{ marginRight:'15px' }}>
+                            <Typography style={{color:'black', fontWeight:"bold"}}>Activity Log {['right'].map((anchor) => (
                                 <React.Fragment key={anchor}>
-                                    <Button color='default' style={{ width: '1px', border: 'none', backgroundColor: 'none' }} onClick={toggleDrawer(anchor, true)}><NotificationsIcon fontSize='small' />({notficationsData.length})</Button>
+                                    <Button color='default' style={{ width: '1px', border: 'none', backgroundColor: 'none' }} onClick={toggleDrawer(anchor, true)}><NotificationsIcon fontSize='small' />({newNotif})</Button>
                                     <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
                                         {list(anchor)}
                                     </Drawer>
@@ -502,6 +526,7 @@ function Home() {
 
                     </Grid>
                 </Grid>
+                </Paper>
             </div>
         );
     } else {

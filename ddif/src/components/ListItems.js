@@ -107,9 +107,18 @@ export default function ListItems() {
                         </ListItemIcon>
                         </Tooltip>
                         <ListItemText primary="Administration" />
-                        {open ? <ExpandLess /> : <ExpandMore />}
+                        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
                     </ListItem>
-                    <ListItem button onClick={handleClick}>
+                    <ListItem to="/dashboard"  component={Link} button >
+                        <Tooltip title="Monitoring Dashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        </Tooltip>
+                        <ListItemText primary="Monitoring Dashboard" />
+                        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+                    </ListItem>
+                    {/* <ListItem button onClick={handleClick}>
                         <Tooltip title="Job Monitor">
                         <ListItemIcon>
                             <SearchIcon fontSize="small" />
@@ -138,7 +147,7 @@ export default function ListItems() {
                                 <ListItemText primary="Operational Dashboard" />
                             </ListItem>
                         </List>
-                    </Collapse>
+                    </Collapse> */}
                 </List>
             </Paper>
         </div>

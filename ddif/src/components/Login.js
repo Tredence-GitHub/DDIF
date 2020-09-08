@@ -91,6 +91,7 @@ export default function Login(props) {
     // };
 
 
+
     const validator = (e) => {
 
 
@@ -110,7 +111,7 @@ export default function Login(props) {
                 localStorage.setItem('loggedIn', true);
                 localStorage.setItem('username', username);
                 // return window.location.href = "/home";
-                setTimeout(history.push('/home'), 10000);
+                setTimeout(history.push('/home'), 50000);
             }
             else if (response.status === 400) {
                 // handleOpen()
@@ -222,7 +223,7 @@ export default function Login(props) {
                                 />
                             </div>
                             <div className={classes.buttonRoot}>
-                                <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); validator() }}>
+                                <Button variant="contained" color="primary" onClick={(e) => { e.preventDefault(); validator(); }}>
                                     Login
                                 </Button>
 

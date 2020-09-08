@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MaterialTable from 'material-table';
+import './Audit.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -160,6 +161,7 @@ export default function Audit() {
                         </TableContainer> */}
 
                         <MaterialTable
+                            id='title'
                             title="Job Audit"
                             key="entryId"
                             columns={columns}
@@ -170,7 +172,9 @@ export default function Audit() {
                                 },
                                 headerStyle: {
                                     whiteSpace:"nowrap",
-                                  }
+                                    fontWeight:"bold"
+                                  },
+                                
                               }}
                         />
                     </Paper>
