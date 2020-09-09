@@ -104,7 +104,7 @@ export default function Metadata(props) {
     { title: 'Default', field: 'default' },
 
     { title: 'Date Format', field: 'format', 
-     lookup: { '%d-%m-%Y': '%d-%m-%Y', '%d-%b-%Y': '%d-%b-%Y' , '%Y-%b-%d': '%Y-%b-%d', '%Y-%m-%d': '%Y-%m-%d', '%d-%m-%y %H:%M:%S': '%d-%m-%y %H:%M:%S' }, },
+     lookup: { '%d-%m-%Y': '%d-%m-%Y', '%d-%b-%Y': '%d-%b-%Y' , '%Y-%b-%d': '%Y-%b-%d', '%Y-%m-%d': '%Y-%m-%d','%m-%d-%y %H:%M:%S': '%m-%d-%y %H:%M:%S', '%d-%m-%y %H:%M:%S': '%d-%m-%y %H:%M:%S' }, },
 
     { title: 'Description', field: 'description' },
 
@@ -135,7 +135,7 @@ export default function Metadata(props) {
   let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
 
   function getSavedMetadata(entryid) {
-    Axios.get(`${local}/ingestion/getSavedMetadata/${entryid}`)
+    Axios.get(`${deploy}/ingestion/getSavedMetadata/${entryid}`)
       .then((response) => {
         console.log('IN EDIT OF METADATA ', response.data.data);
         setDataTable(response.data.data);
@@ -147,7 +147,7 @@ export default function Metadata(props) {
 
   function updateMetadata() {
     setloading(true)
-    let resp = Axios.post(`${local}/ingestion/saveMetadata`, {
+    let resp = Axios.post(`${deploy}/ingestion/saveMetadata`, {
       entryId: parseInt(props.entryid),
       metadata: dataTable
     }).then((response) => {
@@ -189,7 +189,7 @@ export default function Metadata(props) {
         // handleOpen()
         // setMsg("Resetting............ Please Wait")
         setloading(true)
-    let resp = Axios.post(`${local}/ingestion/api/getMetadata`,{entryId : entryid})
+    let resp = Axios.post(`${deploy}/ingestion/api/getMetadata`,{entryId : entryid})
       .then((response) => {
         console.log(response.data.data);
         
@@ -213,7 +213,7 @@ export default function Metadata(props) {
 
           console.log(arr)
 
-          Axios.post(`${local}/ingestion/saveMetadata`, {
+          Axios.post(`${deploy}/ingestion/saveMetadata`, {
             entryId: parseInt(props.entryid),
             metadata: arr
 

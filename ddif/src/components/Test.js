@@ -204,7 +204,7 @@ function Home() {
 
     let local = "http://localhost:4000"
 
-//     let resp = Axios.post(`${local}/`)
+//     let resp = Axios.post(`${deploy}/`)
 //         .then((response) => {
 //         console.log(response);
 

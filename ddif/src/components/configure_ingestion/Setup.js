@@ -314,8 +314,8 @@ export default function Setup(props) {
         // let entryid = props.entryid;
         console.log(entryid, "Edit Mode");
         Promise.all(
-            [Axios.get(`${local}/ingestion/api/getEntryData/${entryid}`),
-            // [Axios.get(`${local}/ingestion/api/getEntryData/52`),
+            [Axios.get(`${deploy}/ingestion/api/getEntryData/${entryid}`),
+            // [Axios.get(`${deploy}/ingestion/api/getEntryData/52`),
             Axios.get(`${deploy}/ingestion/getDropdowns`)
 
             ]).then((res) => {
@@ -480,36 +480,7 @@ export default function Setup(props) {
                     }
                     //////////////////////////////////////////////////////
 
-                    // if (response[0][0].data.data[0].Schedule.recurrence_type=== "minute") {
-                    //     setHiddenHour("none")
-                    //     setHiddenDay("none")
-                    //     setHiddenWeek("none")
-                    //     setHiddenMinute("block")
-
-                    // }
-                    // else if (response[0][0].data.data[0].Schedule.recurrence_type === "hourly") {
-                    //     setHiddenMinute("none")
-                    //     setHiddenDay("none")
-                    //     setHiddenWeek("none")
-                    //     setHiddenHour("block")
-
-                    // }
-                    // else if (response[0][0].data.data[0].Schedule.recurrence_type === "daily") {
-                    //     setHiddenMinute("none")
-                    //     setHiddenHour("none")
-                    //     setHiddenWeek("none")
-                    //     setHiddenDay("block")
-                    // }
-                    // else {
-                    //     setHiddenMinute("none")
-                    //     setHiddenHour("none")
-                    //     setHiddenDay("none")
-                    //     setHiddenWeek("block")
-                    // }
-
-
-
-
+                   
                     settargetParams(JSON.parse(response[0][0].data.data[0].Parameter.TargetParameter))
                     let TargetParameters = JSON.parse(response[0][0].data.data[0].Parameter.TargetParameter);
 
@@ -1022,6 +993,11 @@ export default function Setup(props) {
                 setjdbcPassword(item1.account_key)
                 setjdbcDatabaseName(item1.location_name)
                 setjdbcsourceQuery(item1.source_query)
+                setjdbcHostname2(item1.hostname)
+                setjdbcUsername2(item1.account_name)
+                setjdbcPassword2(item1.account_key)
+                setjdbcDatabaseName2(item1.location_name)
+                setjdbcsourceQuery2(item1.source_query)
                 // console.log(item1,"***");
             }
         })
@@ -1475,9 +1451,9 @@ const passParam = () => {
                                             id="sourceConnection"
                                             select
                                             label=""
-                                            name="abbrv"
+                                            // name="abbrv"
                                             value={sourceConnection}
-                                            defaultValue={sourceConnection}
+                                            // defaultValue={sourceConnection}
                                             onChange={handleChangeSourceConnectiontype}
                                             helperText="Please select the Source Connection"
                                             InputProps={{
@@ -2361,14 +2337,15 @@ const passParam = () => {
                             </div>
 
                             <div style={{ margin: "50px 20px" }}>
-                                <strong>Schedule </strong>
+                                <strong>Schedule </strong> 
+                                
                                 <hr />
                                 <Grid container spacing={2}>
                                     <FormControl component="fieldset" >
                                         {/* <FormLabel component="legend">Gender</FormLabel> */}
                                         <RadioGroup aria-label="schedule" name="schedule" value={value} onChange={handleChangeSchedule} row >
                                             <FormControlLabel value="On-Demand" control={<Radio />} label="On-Demand" style={{ marginRight: "50px" }} />
-                                            <FormControlLabel value="Fixed Schedule" control={<Radio />} label="Fixed Schedule" style={{ marginLeft: "50px" }} />
+                                            <FormControlLabel value="Fixed Schedule" control={<Radio />} label="Fixed Schedule (Time zone: America/Los_Angeles)" style={{ marginLeft: "50px" }} />
                                         </RadioGroup>
                                     </FormControl>
 

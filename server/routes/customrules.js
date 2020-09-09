@@ -173,4 +173,29 @@ Router.post('/populateCustomRules', (req, res)=>{
     })
 })
 
+
+Router.get('/deleteCustomRules/:id', (req, res)=>{
+    db.CustomRules.destroy({
+        where: {
+            entry_id: req.params.id
+        }
+    }).then((resp)=>{
+        res.status(200).json({message: 'Deleted'})
+    }).catch((err)=>{
+        res.status(400).json({message: 'Failed'})
+    })
+})
+
+Router.get('/deleteBusinessRules/:id', (req, res)=>{
+    db.BusinessRules.destroy({
+        where: {
+            entry_id: parseInt(req.params.id)
+        }
+    }).then((resp)=>{
+        res.status(200).json({message: 'Deleted'})
+    }).catch((err)=>{
+        res.status(400).json({message: 'Failed'})
+    })
+})
+
 module.exports = Router;

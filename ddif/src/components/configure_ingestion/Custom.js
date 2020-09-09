@@ -184,7 +184,6 @@ export default function Custom(props) {
         }
     }, [])
     const sendData = () => {
-        if(text.length > 0){
             console.log(props.entryid, "*** here ***")
             Axios({
                 method: 'post',
@@ -215,15 +214,38 @@ export default function Custom(props) {
             }).catch((err) => {
                 console.log(err)
             })
-        }
-        else{
-            // handleOpen();
-            // setMsg('Please build your custom rules!')
-            enqueueSnackbar('Please build your custom rules!', {
-                variant: 'info',
-            });
-        }
+        
+        
     }
+    const deleteCustom = () => {
+        console.log(props.entryid, "*** here ***")
+        Axios({
+            method: 'get',
+            url: (`${deploy}` + `/deleteCustomRules/${props.entryid}`)
+           
+        }).then((response) => {
+            if (response.status === 200) {
+                // handleOpen()
+                // setMsg(response.data.message);
+                // firstcall()
+                enqueueSnackbar(response.data.message, {
+                    variant: 'success',
+                });
+
+            } else {
+                // handleOpen()
+                // setMsg(response.data.message);
+                // firstcall()
+                enqueueSnackbar(response.data.message, {
+                    variant: 'success',
+                });
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    
+    
+}
 
     if (!loading) {
         return (
@@ -264,7 +286,7 @@ export default function Custom(props) {
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Your Customised Query
                     </Typography>
-                    <Typography variant="h5" component="h5">
+                    <Typography variant="h5" component="h5" >
                         {renderResult(allValues)}
                     </Typography>
                                         
@@ -272,13 +294,13 @@ export default function Custom(props) {
                 </Card>     
                 <Card className={classes.root} variant="outlined">
                 <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom >
                     Previously Customised Query
                     </Typography>
-                    { previousQuery != '' ? <Typography variant="h5" component="h5">
+                    { previousQuery != '' ? <Typography variant="h5" component="h5" >
                         { previousQuery }
                     </Typography> : 
-                    <Typography variant="h6" component="h6">
+                    <Typography variant="h6" component="h6" >
                         Looks like you have not customised one!
                     </Typography>
                     }
@@ -288,7 +310,7 @@ export default function Custom(props) {
                 </Card>     
                 </Grid>
                 <div style={{marginTop:"20px"}}>
-                <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                <Grid direction="row" container justify="flex-end" alignItems="flex-end">
                     {props.status==="Scheduled"? <></>:
                     <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
@@ -296,6 +318,16 @@ export default function Custom(props) {
 
                     }}>
                         {previousQuery != ''? 'Replace Query' : 'Add Query'}
+                    </Button>}
+                {/* </Grid>
+                <Grid direction="row"  justify="flex-end" alignItems="flex-end"> */}
+                    {props.status==="Scheduled"? <></>:
+                    <Button variant="contained" color="primary" style={{marginLeft: '2px' }} onClick={(e) => {
+                        e.preventDefault();
+                        deleteCustom();
+
+                    }}>
+                        Delete All
                     </Button>}
                 </Grid>
                 </div>

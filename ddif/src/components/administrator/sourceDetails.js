@@ -301,14 +301,14 @@ export default function SourceDetails(){
         setEdited(true)
         setMsg('Updating... ')
         handleOpen()
-        Axios.post(`${local}/administration/updateConnection`, data)
+        Axios.post(`${deploy}/administration/updateConnection`, data)
         .then((response)=>{
             if(response.status == 200){
                 let msg = response.data.message;
                 setMsg(msg) 
                 handleOpen() 
                  setEdited(false);
-                history.push('/admin');
+                // history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -321,14 +321,14 @@ export default function SourceDetails(){
         setSubmitted(true);
         setMsg('Saving... ')
         handleOpen()
-        Axios.post(`${local}/administration/saveConnection`, data)
+        Axios.post(`${deploy}/administration/saveConnection`, data)
         .then((response)=>{
             if(response.status === 200){
                 let msg = response.data.message;
                 setMsg(msg) 
                 handleOpen() 
                 setSubmitted(false);
-                history.push('/admin');
+                // history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -339,7 +339,7 @@ export default function SourceDetails(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`), 
+            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
             
             ]).then((res)=>{
                 return [res]
@@ -367,8 +367,8 @@ export default function SourceDetails(){
     function getData(rowid){
         
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`), 
-            Axios.get(`${local}/administration/getById/${rowid}`)
+            [Axios.get(`${deploy}/ingestion/getDropdowns`), 
+            Axios.get(`${deploy}/administration/getById/${rowid}`)
             ]).then((res)=>{
                 return [res]
             })  
@@ -530,7 +530,7 @@ export default function SourceDetails(){
                         onChange={handleChangegdDelimiter}
                         error = {errorinfo}
                         value={gddelimiter}
-                        helperText= {error}
+                        helperText= 'Allowed: , ; |'
                         
                         InputProps={{
                             startAdornment: (
@@ -733,6 +733,7 @@ export default function SourceDetails(){
                         value={gddelimiter}
                         onChange={handleChangegdDelimiter}
                         disabled={Disabled}
+                        helperText= 'Allowed: , ; |'
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

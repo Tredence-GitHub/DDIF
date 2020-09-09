@@ -296,7 +296,7 @@ export default function TargetDetails(){
                 setMsg(response.data.message) 
                 handleOpen() 
                 setEdited(false);
-                history.push('/admin');
+                // history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -316,7 +316,7 @@ export default function TargetDetails(){
                 setMsg(msg) 
                 handleOpen() 
                 setSubmitted(false);
-                history.push('/admin');
+                // history.push('/admin');
             }
         }).catch((err)=>{
             console.log(err, "while saving ")
@@ -686,6 +686,7 @@ export default function TargetDetails(){
                         value={gddelimiter}
                         onChange={handleChangegdDelimiter}
                         disabled={Disabled}
+                        helperText = 'Allowed: , ; |'
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

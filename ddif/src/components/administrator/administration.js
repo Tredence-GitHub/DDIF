@@ -61,7 +61,7 @@ export default function Administration(){
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/administration/getConnections`), 
+            [Axios.get(`${deploy}/administration/getConnections`), 
             ]).then((res)=>{
                 return [res]
             })  
@@ -96,7 +96,7 @@ export default function Administration(){
     }
 
     function deleteRecord(id){
-        Axios.get(`${local}/administration/deleteInfo/${id}`)
+        Axios.get(`${deploy}/administration/deleteInfo/${id}`)
         .then((response)=>{
             getInfo();
         }).catch((err)=>{

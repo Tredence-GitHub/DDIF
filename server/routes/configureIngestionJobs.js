@@ -8,7 +8,8 @@ const Moment = require('moment');
 // get all the information for the data table
 Router.post('/getRecords', (req, res)=>{
     db.DataCatalog.findAll({
-        include: [db.Schedule]
+        include: [db.Schedule],
+        order: [['entryId', 'DESC']]
     })
     .then((result)=>{
         res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify(result))});
@@ -223,12 +224,12 @@ Router.post('/api/getMetadata',async (req, res) => {
     if(finalRes !== 'Failed') {
         db.BusinessRules.destroy({
             where: {
-                entry_id: entryId
+                entry_id: request_data.entryId
             }
         }).then((resp)=>{
             db.CustomRules.destroy({
                 where: {
-                    entry_id: entryId
+                    entry_id: request_data.entryId
                 }
             }).then((resp)=>{
             }).catch((err)=>{
@@ -410,7 +411,7 @@ Router.get('/api/getEntryData/:entryId', (req, res)=>{
 Router.get('/api/triggerOnDemand/:entryid', async (req,res)=>{
 
     db.DataCatalog.update({
-        status: 'Running'
+        status: 'Triggered'
     },{
         where: {
             entryId: req.params.entryid
@@ -422,7 +423,18 @@ Router.get('/api/triggerOnDemand/:entryid', async (req,res)=>{
         if(finalRes != 'Failed') {
             res.status(200).json({message: 'success', data: finalRes})
         }else{
-            res.status(400).json({message: 'failed', data: finalRes})
+            db.DataCatalog.update({
+                status: 'Created'
+            }, {
+                where: {
+                    entry_id: req.params.entryid
+                }
+            }).then((resp)=>{
+
+                res.status(400).json({message: 'failed', data: finalRes})
+            }).catch((err)=>{
+                res.status(400).json({message: 'failed', data: []})
+            })
     
         }
     }).catch((err)=>{

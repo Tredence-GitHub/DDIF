@@ -174,9 +174,9 @@ function Home() {
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/dashboard/dashboardInformation`),
-            Axios.post(`${local}/dashboard/getActivityLogs`),
-            Axios.get(`${local}/dashboard/announcements`)
+            [Axios.get(`${deploy}/dashboard/dashboardInformation`),
+            Axios.post(`${deploy}/dashboard/getActivityLogs`),
+            Axios.get(`${deploy}/dashboard/announcements`)
             ]).then((res) => {
                 return [res]
             })
@@ -256,7 +256,7 @@ function Home() {
     );
 
     function markRead(entryid){
-        Axios.get(`${local}/dashboard/markAsRead/${entryid}`)
+        Axios.get(`${deploy}/dashboard/markAsRead/${entryid}`)
             .then((response) => {
                 getInfo()
                 

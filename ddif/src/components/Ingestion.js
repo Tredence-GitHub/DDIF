@@ -308,7 +308,7 @@ export default function CustomizedSteppers(props) {
 
 
   const saveData = (param) => {
-    let resp = Axios.post(`${local}/ingestion/setupDataSave`, param
+    let resp = Axios.post(`${deploy}/ingestion/setupDataSave`, param
 
     ).then((response) => {
       // console.log(response);
@@ -356,7 +356,7 @@ export default function CustomizedSteppers(props) {
 
 
   const updateData = (param) => {
-    let resp = Axios.post(`${local}/ingestion/updateSetupDBData`, param
+    let resp = Axios.post(`${deploy}/ingestion/updateSetupDBData`, param
 
     ).then((response) => {
       console.log(response);
@@ -460,7 +460,7 @@ export default function CustomizedSteppers(props) {
             <div>
               <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
               <div>
-                <Button disable={activeStep===0} onClick={handleBack} className={classes.button}>
+                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                   Back
               </Button>
                {activeStep >= 2 && activeStep != 3? <Button

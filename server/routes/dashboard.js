@@ -1,5 +1,6 @@
 const db = require('../config/db.js');
 const express = require('express');
+const { Announcements } = require('../config/db.js');
 const Router = express.Router();
 
 Router.get('/dashboardInformation', (req, res)=>{
@@ -86,7 +87,7 @@ Router.post('/getActivityLogs', (req, res)=>{
     db.DataCatalog.findAll({
         attributes: ['jobname', 'status','created_at'],
         order: [['created_at', 'DESC']],
-        limit: 5
+        limit: 8
     }).then((result)=>{
         res.status(200).json({ message: 'successful', data: JSON.parse(JSON.stringify(result
             ))});
@@ -115,7 +116,6 @@ Router.get('/announcements',(req, res)=>{
         console.log('AFTER PROMISES --- ', response);
         // now check if the statuses have changed and update the descriptions in announcements table
         let currentStatuses = JSON.parse(JSON.stringify(response[0]));
-        console.log(currentStatuses);
         
         if(currentStatuses.length === 0){
             res.status(200).json({message: 'successful', data: JSON.parse(JSON.stringify([]))})

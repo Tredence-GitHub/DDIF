@@ -94,7 +94,7 @@ export default function Login(props) {
 
     const validator = (e) => {
 
-
+        localStorage.setItem('loggedIn', true);
         let resp = Axios.post(`${deploy}/auth/authenticateUser`, {
             username: username,
             password: password,
@@ -108,7 +108,7 @@ export default function Login(props) {
                 enqueueSnackbar(response.data.message, {
                     variant: 'success',
                 });
-                localStorage.setItem('loggedIn', true);
+               
                 localStorage.setItem('username', username);
                 // return window.location.href = "/home";
                 setTimeout(history.push('/home'), 50000);

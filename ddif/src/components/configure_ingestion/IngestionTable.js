@@ -22,7 +22,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import OfflineBoltTwoToneIcon from '@material-ui/icons/OfflineBoltTwoTone';
 import PlayCircleFilledTwoToneIcon from '@material-ui/icons/PlayCircleFilledTwoTone';
 import { useHistory } from 'react-router-dom';
-
+import CachedIcon from '@material-ui/icons/Cached';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,14 +66,14 @@ export default function IngestionTable() {
 
     function killScheduled(btnId,entryId,jobId){
         // console.log(jobId,"00")
-        enqueueSnackbar('Job is getting Killed', {
+        enqueueSnackbar(`Job ${entryId} terminating ..`, {
             variant: 'success',
         });
         let b = document.getElementById(btnId);
         console.log(b)
         // b.setAttribute('hidden', 'true');
 
-        Axios.post(`${local}/job/killjob`, {
+        Axios.post(`${deploy}/job/killjob`, {
             job_id : jobId,
             entryid :entryId
             
@@ -99,7 +99,7 @@ export default function IngestionTable() {
                 
                 // b.setAttribute('hidden', 'false')
                 
-                enqueueSnackbar('Failed to execute the job!', {
+                enqueueSnackbar(`Failed to execute the job ${entryId}!`, {
                     variant: 'error',
                 });
                 getInfo()
@@ -111,14 +111,14 @@ export default function IngestionTable() {
 
     function triggerScheduled(btnId,entryId,cronTime){
 
-        enqueueSnackbar('Job is triggered', {
+        enqueueSnackbar(`Job ${entryId} is triggered`, {
             variant: 'success',
         });
         let b = document.getElementById(btnId);
         console.log(b)
         // b.setAttribute('hidden', 'true');
 
-        Axios.post(`${local}/job/schedule`, {
+        Axios.post(`${deploy}/job/schedule`, {
             entryid: parseInt(entryId),
             crontime: cronTime
             
@@ -155,13 +155,13 @@ export default function IngestionTable() {
     function triggerJob(btnId, entryId) {
         // handleOpen();
         // setMsg('Job is triggered')
-        enqueueSnackbar('Job is triggered', {
+        enqueueSnackbar(`Job ${entryId} is triggered`, {
             variant: 'success',
         });
         let b = document.getElementById(btnId);
         console.log(b)
         // b.setAttribute('hidden', 'true');
-        Axios.get(`${local}/ingestion/api/triggerOnDemand/${entryId}`)
+        Axios.get(`${deploy}/ingestion/api/triggerOnDemand/${entryId}`)
             .then((response) => {
                 if (response.data.message === 'success') {
                     // handleOpen();
@@ -196,7 +196,7 @@ export default function IngestionTable() {
 
     function getInfo() {
         Promise.all(
-            [Axios.post(`${local}/ingestion/getRecords`),
+            [Axios.post(`${deploy}/ingestion/getRecords`),
             ]).then((res) => {
                 return [res]
             })
@@ -228,6 +228,17 @@ export default function IngestionTable() {
     if (!loading) {
         return (
             <div>
+                 <div style={{ marginBottom: " 20px" }}>
+                    <Grid container>
+                        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                            <Button variant="contained" color='primary' onClick={(e) => {
+                                e.preventDefault();
+                                // window.location.href = "/ingestion/setup";
+                                history.push("/ingestion");
+                            }}>Create Ingestion </Button>
+                        </Grid>
+                    </Grid>
+                </div>
                 {/* <Snackbar
           anchorOrigin={{
             vertical: 'top',
@@ -247,7 +258,9 @@ export default function IngestionTable() {
         /> */}
                 <div>
                     <Paper className={classes.paper}>
-                        <strong style={{display:'flex',justifyContent:"left", color:"black", marginLeft:"10px"}}>Ingestion Job Log</strong>
+                        <strong style={{display:'flex',justifyContent:"left", color:"black", marginLeft:"0px"}}><h5>
+                        Ingestion Job Log </h5>
+                        <Button onClick={getInfo} style={{justifyContent:"center", color:"blue", marginLeft:"75%"}}><CachedIcon/></Button></strong>
                         <hr />
                         <TableContainer component={Paper} style={{ maxHeight: "420px" }}>
                             <Table className={classes.table} aria-label="a dense table">
@@ -289,7 +302,7 @@ export default function IngestionTable() {
                                             }
 
 
-                                            {row.Schedule.schedule_type === "On-Demand" && row.status !='draft' && row.status!='Scheduled'?
+                                            {row.Schedule.schedule_type === "On-Demand" && row.status !='draft' && row.status!='Scheduled' && row.status !== 'Triggered' && row.status !== 'Running' ?
                                                 <TableCell >
                                                     <Button id={row.entryId + 'ID'} variant="outlined" size="small" color='primary' onClick={(e) => {
                                                         e.preventDefault();
@@ -298,7 +311,7 @@ export default function IngestionTable() {
                                                         <OfflineBoltTwoToneIcon/> &nbsp; Trigger
                                                     </Button>
                                                 </TableCell> :
-                                                row.Schedule.schedule_type === 'On-Demand'? <TableCell >{row.Schedule.schedule_type}</TableCell>:
+                                                row.Schedule.schedule_type === 'On-Demand' ? <TableCell >{row.Schedule.schedule_type}</TableCell>:
 
                                             row.Schedule.schedule_type === "Fixed Schedule" && row.status != 'draft' && row.status != 'Scheduled' ?
                                                 <TableCell>
@@ -336,17 +349,7 @@ export default function IngestionTable() {
                     </Paper>
                 </div>
 
-                <div style={{ marginTop: " 20px" }}>
-                    <Grid container>
-                        <Grid direction="column" container justify="flex-end" alignItems="flex-end">
-                            <Button variant="contained" color='primary' onClick={(e) => {
-                                e.preventDefault();
-                                // window.location.href = "/ingestion/setup";
-                                history.push("/ingestion");
-                            }}>Create Ingestion </Button>
-                        </Grid>
-                    </Grid>
-                </div>
+               
             </div>
         )
     }

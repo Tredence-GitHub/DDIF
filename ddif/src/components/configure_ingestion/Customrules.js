@@ -299,8 +299,8 @@ export default function Customrules(props) {
     }
 
     
-    Promise.all([Axios.get(`${local}/getCustomRuleDropdowns/${props.entryid}`),
-            Axios.post(`${local}/populateCustomRules`, {
+    Promise.all([Axios.get(`${deploy}/getCustomRuleDropdowns/${props.entryid}`),
+            Axios.post(`${deploy}/populateCustomRules`, {
                 entryid: props.entryid
             })
             ]).then((result)=>{
@@ -328,8 +328,39 @@ export default function Customrules(props) {
     }
   }, [])
 
+  const deleteCustom = () => {
+    console.log(props.entryid, "*** here ***")
+    Axios({
+        method: 'get',
+        url: (`${deploy}` + `/deleteBusinessRules/${props.entryid}`)
+       
+    }).then((response) => {
+        if (response.status === 200) {
+            // handleOpen()
+            // setMsg(response.data.message);
+            enqueueSnackbar(response.data.message, {
+                variant: 'success',
+            });
+
+            firstcall()
+        } else {
+            // handleOpen()
+            // setMsg(response.data.message);
+            firstcall()
+            enqueueSnackbar(response.data.message, {
+                variant: 'success',
+            });
+
+        }
+    }).catch((err) => {
+        console.log(err)
+    })
+
+
+}
+
   const sendData = () => {
-    if(dataTable.length > 0){
+    if(dataTable.length >= 0){
     console.log(props.entryid, "*** here ***")
     Axios({
       method: 'post',
@@ -352,6 +383,7 @@ export default function Customrules(props) {
         enqueueSnackbar(response.data.message, {
           variant: 'success',
       });
+      firstcall();
       } else {
         // handleOpen()
         // setMsg(response.data.message);
@@ -389,7 +421,7 @@ export default function Customrules(props) {
         </AppBar>
         <TabPanel value={tabValue} index={1} style={{background:"white"}}>
 
-                <strong>Create A Custom Rule </strong>
+                <strong>Create a Custom Rule </strong>
             
               <hr />
           <Custom entryid={props.entryid} editFn={props.fn} status = {props.status}/>
@@ -548,13 +580,21 @@ export default function Customrules(props) {
             </div>
           </div>
           <div style={{marginTop:"20px"}}>
-                <Grid direction="column" container justify="flex-end" alignItems="flex-end">
+                <Grid direction="row" container justify="flex-end" alignItems="flex-end">
                   {props.status==="Scheduled"? <></>:
                     <Button variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         sendData();
                     }}>
                         Set Business Rules
+                    </Button>}
+                    {props.status==="Scheduled"? <></>:
+                    <Button variant="contained" color="primary" style={{marginLeft: '2px' }} onClick={(e) => {
+                        e.preventDefault();
+                        deleteCustom();
+
+                    }}>
+                        Delete All
                     </Button>}
                 </Grid>
           </div>

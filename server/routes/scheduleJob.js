@@ -7,14 +7,14 @@ const triggerNotebook = async (entryId, scheduletype, crontime) => {
     const data = {
         "name": 'Sample job',
         "existing_cluster_id": '0512-055317-call256',
-        "timeout_seconds": 300,
+        "timeout_seconds": 14400,
         "max_retries": 1,
         "schedule": {
         "quartz_cron_expression": crontime,  
         "timezone_id": "America/Los_Angeles"     
         },
         "notebook_task": {
-        "notebook_path": "/Shared/DataIngestionV2",
+        "notebook_path": "/Shared/DDIF/DataIngestionV2",
         "base_parameters": { 
             "EntryId": entryId,
             "SchedulerType": scheduletype,

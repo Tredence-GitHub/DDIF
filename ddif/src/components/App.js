@@ -37,7 +37,7 @@ const [username, setUsername] = React.useState('')
                 Back To Login
               </Button>
             </div>} */}
-          <Layout onPassUsername={handleUsername}/>
+          <Layout />
         </Switch>
       </Router>
     </SnackbarProvider>
