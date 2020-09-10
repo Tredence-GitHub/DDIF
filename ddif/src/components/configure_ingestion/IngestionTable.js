@@ -235,7 +235,7 @@ export default function IngestionTable() {
                                 e.preventDefault();
                                 // window.location.href = "/ingestion/setup";
                                 history.push("/ingestion");
-                            }}>Create Ingestion </Button>
+                            }}>Set Up New Job </Button>
                         </Grid>
                     </Grid>
                 </div>
@@ -308,7 +308,7 @@ export default function IngestionTable() {
                                                         e.preventDefault();
                                                         triggerJob(row.entryId + 'ID', row.entryId)
                                                     }}>
-                                                        <OfflineBoltTwoToneIcon/> &nbsp; Trigger
+                                                        <OfflineBoltTwoToneIcon/> &nbsp; Execute
                                                     </Button>
                                                 </TableCell> :
                                                 row.Schedule.schedule_type === 'On-Demand' ? <TableCell >{row.Schedule.schedule_type}</TableCell>:
@@ -319,7 +319,7 @@ export default function IngestionTable() {
                                                         e.preventDefault();
                                                         triggerScheduled(row.entryId+'ID',row.entryId,row.cron_time)
                                                     }}>
-                                                        <PlayCircleFilledTwoToneIcon/> &nbsp; Start
+                                                        <PlayCircleFilledTwoToneIcon/> &nbsp; Schedule
                                                 </Button> </TableCell> :
                                                 row.Schedule.schedule_type === "Fixed Schedule" && row.status != 'draft' ?
                                                     <TableCell>

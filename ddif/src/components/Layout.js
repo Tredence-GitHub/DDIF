@@ -32,6 +32,7 @@ import IngestionTable from './configure_ingestion/IngestionTable';
 import Administration from './administrator/administration';
 import SourceDetails from './administrator/sourceDetails';
 import TargetDetails from './administrator/targetDetails';
+import ProjectDetails from './administrator/projectDetails';
 import Setup from './configure_ingestion/Setup';
 import Audit from './Audit';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -271,6 +272,9 @@ export default function Layout() {
                                    
                                     <Route exact  path = {['/addTarget','/addTarget/:param']}>
                                         <TargetDetails/>
+                                    </Route>
+                                    <Route exact  path = {['/addProject','/addProject/:param']}>
+                                        <ProjectDetails/>
                                     </Route>
                                     {/* <Route path = {['/ingestion','/ingestion/:param']}>
                                         <Setup/>

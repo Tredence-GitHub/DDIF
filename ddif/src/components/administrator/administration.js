@@ -153,6 +153,7 @@ if(!loading){
                     <Tab label="Data Sources" {...a11yProps(0)}/>
                     {/* <Tab label="Metadata Discovery" disabled={enable} {...a11yProps(1)} /> */}
                     <Tab label="Data Targets" {...a11yProps(1)} />
+                    <Tab label="Project" {...a11yProps(2)} />
                    
                 </Tabs>
             </AppBar>
@@ -268,6 +269,65 @@ if(!loading){
                             e.preventDefault();
                             history.push("/addTarget");
                         }}>Add Target </Button>
+                    </Grid>
+                    </Grid>
+                </div>
+            </TabPanel>
+
+            <TabPanel value={value} index={2}>
+                
+            <div >
+            <Paper className={classes.paper}>
+                            <TableContainer component={Paper} style={{maxHeight:"500px"}}>
+                                <Table className={classes.table} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell><b>Actions</b></TableCell>
+                                            <TableCell><b>Target Connection Name</b></TableCell>
+                                            <TableCell><b>Location Name</b></TableCell>
+                                            <TableCell><b>Connection type</b></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                    {tableData2.length> 0 ? tableData2.map((row) => (
+                                                <TableRow key={row.row_id} >
+                                                    <TableCell component="th" scope="row" onClick={(e)=>{
+
+                                                        deleteRecord(row.row_id);
+                                                        }
+                                                        } >
+                                                        <DeleteIcon />
+                                                    </TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        }  >{row.connection_name}</TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        } >{row.location_name}</TableCell>
+                                                    <TableCell onClick={(e)=>{
+
+                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        }
+                                                        } >{row.format}</TableCell>
+                                                    
+                                                </TableRow>
+                                            )) : <>No records to display</>}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+            </div>
+            <div style={{marginTop:" 15px"}}>
+                <Grid container>
+                    <Grid direction="column" container  alignItems="flex-end">
+                        <Button variant="contained" color='primary' size="small" justify="flex-right" onClick = {(e)=>{
+                            e.preventDefault();
+                            history.push("/addProject");
+                        }}>Add Project </Button>
                     </Grid>
                     </Grid>
                 </div>
