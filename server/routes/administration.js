@@ -371,4 +371,100 @@ Router.get('/deleteInfo/:id', (req, res)=>{
         res.status(400).json({message: [err]})
     })
 })
+
+// send owners dropdown
+Router.get('/getUsers', (req, res)=>{
+    db.Users.findAll()
+    .then((result)=>{
+        res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))})
+    }).catch((err)=>{
+        res.status(400).json({message: [err]})
+    })
+})
+
+
+// save details
+Router.post('/saveProject', (req, res)=>{
+    let request_data = req.body;
+
+    if(request_data.entrytype == 'existing'){
+
+        db.BusinessFunctions.create({
+            project_type: parseInt(request_data.project_type),
+            business_function: request_data.business_function,
+            description: request_data.description,
+            owner: parseInt(request_data.owner)
+        }).then((result)=>{
+            res.status(200)
+        }).catch((err)=>{
+            res.status(400).json({message: [err]})
+        })
+    }
+    else{
+
+        db.ProjectTypes.create({
+            project_type: request_data.project_type
+        }).then((result)=>{
+            let jResult = JSON.parse(JSON.parse(result));
+
+            db.BusinessFunctions.create({
+                project_type: jResult['typeId'],
+                business_function: request_data.business_function,
+                description: request_data.description,
+                owner: parseInt(request_data.owner)
+            }).then((result2)=>{
+                res.status(200)
+            }).catch((err)=>{
+                res.status(400).json({message: [err]})
+            })
+
+        }).catch((err)=>{
+            res.status(400).json({error: [err]})
+        })
+    }
+
+})
+
+// fetch all records
+Router.get('/allProjects', (req, res)=>{
+    db.BusinessFunctions.findAll({
+        include: [db.Users, db.ProjectTypes]
+    }).then((result)=>{
+        res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))})
+    }).catch((err)=>{
+        res.status(400).json({message: [err]})
+    })
+})
+
+Router.get('/deleteProject/:rowid', (req, res)=>{
+    db.BusinessFunctions.destroy({
+        where:{
+            row_id: req.params.rowid
+        }
+    }).then((result)=>{
+        res.status(200)
+    }).catch((err)=>{
+        res.status(400).json({message: [err]})
+    })
+})
+
+Router.post('/updateProject', (req, res)=>{
+    let request_data = req.body;
+
+    db.BusinessFunctions.update({
+        project_type: parseInt(request_data.project_type),
+        business_function: request_data.business_function,
+        description: request_data.description,
+        owner: parseInt(request_data.owner)
+    }, {
+        where:{
+            row_id:  request_data.row_id
+        }
+    }).then((result2)=>{
+        res.status(200).json({message: 'Updated details'})
+    }).catch((err)=>{
+        res.status(400).json({message: [err]})
+    })
+})
+
 module.exports = Router;

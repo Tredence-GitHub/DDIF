@@ -41,12 +41,14 @@ db.Metadata = require('../models/metadataDb.js')(sequelize, Sequelize);
 db.BusinessRules = require('../models/businessrulesDb.js')(sequelize, Sequelize);
 db.CustomRules = require('../models/customrulesDb.js')(sequelize, Sequelize);
 db.CentralRules = require('../models/centralruleRepoDb.js')(sequelize, Sequelize);
+db.BusinessFunctions =  require('../models/projectDescriptionsDb.js')(sequelize, Sequelize);
 
 db.Announcements.belongsTo(db.DataCatalog, {foreignKey: 'entry_id'});
 db.DataCatalog.belongsTo(db.Schedule, {foreignKey: 'entryId'});
 db.DataCatalog.belongsTo(db.Parameters, {foreignKey: 'entryId'});
 db.DataCatalog.belongsTo(db.CustomRules, {foreignKey: 'entry_id'});
-
+db.ProjectTypes.belongsTo(db.BusinessFunctions, {foreignKey: 'project_type'});
+db.Users.belongsTo(db.BusinessFunctions, {foreignKey: 'owner'})
 
 module.exports = db;
 
