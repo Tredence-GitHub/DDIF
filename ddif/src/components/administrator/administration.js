@@ -42,6 +42,7 @@ export default function Administration(){
     const classes = useStyles();
     const [tableData, settableData] = useState({})
     const [tableData2, settableData2] = useState({})
+    const [tableData3, settableData3] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true)
     const [value, setValue] = React.useState(0);
@@ -55,13 +56,12 @@ export default function Administration(){
     let local = 'http://localhost:4000'
     let deploy = 'https://driverless-data-ingestion.azurewebsites.net'
  
-    function scheduleNow(){
-
-    }
+    
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${deploy}/administration/getConnections`), 
+            [Axios.get(`${deploy}/administration/getConnections`),
+            Axios.get(`${deploy}/administration/allProjects`)
             ]).then((res)=>{
                 return [res]
             })  
@@ -81,6 +81,7 @@ export default function Administration(){
                 })
                 settableData(sources);
                 settableData2(targets);
+                settableData3(response[0][1].data.data)
                 seterror(false);
 
                 setloading(false);
@@ -104,6 +105,17 @@ export default function Administration(){
         })
 
     }
+    function deleteProjectRecord(id){
+        Axios.get(`${deploy}/administration/deleteProject/${id}`)
+        .then((response)=>{
+            getInfo();
+        }).catch((err)=>{
+
+        })
+
+    }
+
+    
     
     useEffect(() => {
         getInfo();
@@ -283,36 +295,36 @@ if(!loading){
                                     <TableHead>
                                         <TableRow>
                                             <TableCell><b>Actions</b></TableCell>
-                                            <TableCell><b>Target Connection Name</b></TableCell>
-                                            <TableCell><b>Location Name</b></TableCell>
-                                            <TableCell><b>Connection type</b></TableCell>
+                                            <TableCell><b>Business Function</b></TableCell>
+                                            <TableCell><b>Description</b></TableCell>
+                                            <TableCell><b>Owner</b></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                    {tableData2.length> 0 ? tableData2.map((row) => (
+                                    {tableData3.length> 0 ? tableData3.map((row) => (
                                                 <TableRow key={row.row_id} >
                                                     <TableCell component="th" scope="row" onClick={(e)=>{
 
-                                                        deleteRecord(row.row_id);
+                                                        deleteProjectRecord(row.row_id);
                                                         }
                                                         } >
                                                         <DeleteIcon />
                                                     </TableCell>
                                                     <TableCell onClick={(e)=>{
 
-                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        history.push(`/addProject/${row.row_id}`)
                                                         }
-                                                        }  >{row.connection_name}</TableCell>
+                                                        }  >{row.business_function}</TableCell>
                                                     <TableCell onClick={(e)=>{
 
-                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        history.push(`/addProject/${row.row_id}`)
                                                         }
-                                                        } >{row.location_name}</TableCell>
+                                                        } >{row.description}</TableCell>
                                                     <TableCell onClick={(e)=>{
 
-                                                        history.push(`/addTarget/${row.row_id}`)
+                                                        history.push(`/addProject/${row.row_id}`)
                                                         }
-                                                        } >{row.format}</TableCell>
+                                                        } >{row.owner}</TableCell>
                                                     
                                                 </TableRow>
                                             )) : <>No records to display</>}

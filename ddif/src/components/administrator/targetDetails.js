@@ -546,7 +546,7 @@ export default function TargetDetails(){
                     <TextField
                         id="sourcequery"
                         label="Source Query"
-                        placeholder="SELECT * FROM table;"
+                        placeholder="Set Session Context"
                         value={SourceQuery}
                         onChange={handleChangeQuery}
                         multiline 

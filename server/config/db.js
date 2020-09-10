@@ -47,8 +47,8 @@ db.Announcements.belongsTo(db.DataCatalog, {foreignKey: 'entry_id'});
 db.DataCatalog.belongsTo(db.Schedule, {foreignKey: 'entryId'});
 db.DataCatalog.belongsTo(db.Parameters, {foreignKey: 'entryId'});
 db.DataCatalog.belongsTo(db.CustomRules, {foreignKey: 'entry_id'});
-db.ProjectTypes.belongsTo(db.BusinessFunctions, {foreignKey: 'project_type'});
-db.Users.belongsTo(db.BusinessFunctions, {foreignKey: 'owner'})
+db.BusinessFunctions.belongsTo(db.ProjectTypes, {foreignKey: 'project_type'});
+// db.Users.belongsTo(db.BusinessFunctions, {foreignKey: 'owner'})
 
 module.exports = db;
 

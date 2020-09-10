@@ -393,7 +393,7 @@ Router.post('/saveProject', (req, res)=>{
             project_type: parseInt(request_data.project_type),
             business_function: request_data.business_function,
             description: request_data.description,
-            owner: parseInt(request_data.owner)
+            owner: request_data.owner
         }).then((result)=>{
             res.status(200)
         }).catch((err)=>{
@@ -405,15 +405,15 @@ Router.post('/saveProject', (req, res)=>{
         db.ProjectTypes.create({
             project_type: request_data.project_type
         }).then((result)=>{
-            let jResult = JSON.parse(JSON.parse(result));
+            let jResult = JSON.parse(JSON.stringify(result));
 
             db.BusinessFunctions.create({
                 project_type: jResult['typeId'],
                 business_function: request_data.business_function,
                 description: request_data.description,
-                owner: parseInt(request_data.owner)
+                owner: request_data.owner
             }).then((result2)=>{
-                res.status(200)
+                res.status(200).json({message: 'success'})
             }).catch((err)=>{
                 res.status(400).json({message: [err]})
             })
@@ -428,10 +428,12 @@ Router.post('/saveProject', (req, res)=>{
 // fetch all records
 Router.get('/allProjects', (req, res)=>{
     db.BusinessFunctions.findAll({
-        include: [db.Users, db.ProjectTypes]
+        include: [db.ProjectTypes]
     }).then((result)=>{
+        console.log(result);
         res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))})
     }).catch((err)=>{
+        console.log(err);
         res.status(400).json({message: [err]})
     })
 })
@@ -439,10 +441,10 @@ Router.get('/allProjects', (req, res)=>{
 Router.get('/deleteProject/:rowid', (req, res)=>{
     db.BusinessFunctions.destroy({
         where:{
-            row_id: req.params.rowid
+            row_id: parseInt(req.params.rowid)
         }
     }).then((result)=>{
-        res.status(200)
+        res.status(200).json({message: "Deleted"})
     }).catch((err)=>{
         res.status(400).json({message: [err]})
     })
@@ -455,7 +457,7 @@ Router.post('/updateProject', (req, res)=>{
         project_type: parseInt(request_data.project_type),
         business_function: request_data.business_function,
         description: request_data.description,
-        owner: parseInt(request_data.owner)
+        owner: request_data.owner
     }, {
         where:{
             row_id:  request_data.row_id
@@ -466,5 +468,12 @@ Router.post('/updateProject', (req, res)=>{
         res.status(400).json({message: [err]})
     })
 })
+
+Router.get('/getProjectById/:rowid', (req, res)=>{
+        db.BusinessFunctions.findAll({  
+                  where: {            row_id: req.params.rowid        }   
+                 }).then((result)=>
+                    {        res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))}) 
+                   }).catch((err)=>{        res.status(400).json({message: [err]})    })})
 
 module.exports = Router;

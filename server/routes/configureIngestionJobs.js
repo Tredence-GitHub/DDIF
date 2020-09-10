@@ -252,6 +252,7 @@ Router.post('/api/getMetadata',async (req, res) => {
 
 Router.post('/updateSetupDBData', (req, res)=>{
     let request_data = req.body;
+    console.log(request_data,"AAAAAAAAAAAA");
     
     let jobID = `JOB_${request_data.source_abbrv}_${request_data.target_abbrv}_${request_data.entryId}`;
     

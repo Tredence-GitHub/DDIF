@@ -24,7 +24,7 @@ export default function Dashboard(props) {
     ]
 
     async function f(){
-        let resp = await Axios.post(`${url.local}/powerbi/getEmbedToken`,{data}
+        let resp = await Axios.post(`${url.deploy}/powerbi/getEmbedToken`,{data}
          ).then((response)=> {
              console.log(response)
              setresults(response.data.embedToken);
@@ -41,22 +41,22 @@ export default function Dashboard(props) {
          });
     }
     // 42bcd1c4-e9a8-42b5-94f1-f33273ec93fa
-    function refreshDashboard(){
-        // setloading(true)
-        Axios.post(`https://api.powerbi.com/v1.0/myorg/groups/fb993d6f-32cb-4185-872f-29658ba8f5d7/datasets/42bcd1c4-e9a8-42b5-94f1-f33273ec93fa/refreshes`,
-         {
-             body: {
-            "notifyOption": "NoNotification"
-          }
-        })
-        .then((response)=>{
-            console.log(response, " ******* ! **** ")
-            // setloading(false);
-        }).catch((err)=>{
-            // setloading(false)
-            console.log(err, "*****111");
-        })
-    }
+    // function refreshDashboard(){
+    //     // setloading(true)
+    //     Axios.post(`https://api.powerbi.com/v1.0/myorg/groups/fb993d6f-32cb-4185-872f-29658ba8f5d7/datasets/42bcd1c4-e9a8-42b5-94f1-f33273ec93fa/refreshes`,
+    //      {
+    //          body: {
+    //         "notifyOption": "NoNotification"
+    //       }
+    //     })
+    //     .then((response)=>{
+    //         console.log(response, " ******* ! **** ")
+    //         // setloading(false);
+    //     }).catch((err)=>{
+    //         // setloading(false)
+    //         console.log(err, "*****111");
+    //     })
+    // }
 
     useEffect(() => {
         f()

@@ -15,7 +15,7 @@ module.exports = function(sequelize, Sequelize){
             type: 'TEXT'
         },
         owner: {
-            type: Sequelize.INTEGER
+            type: Sequelize.STRING
         }
     }, {
         freezeTableName: true,

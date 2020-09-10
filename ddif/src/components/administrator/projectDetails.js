@@ -57,10 +57,12 @@ export default function TargetDetails() {
     const [businessFunction, setBusinessFunction] = useState('')
     const [description, setDescription] = useState('')
     const [owner, setOwner] = useState('')
+    const [dropDownOwner, setdropDownOwner] = useState({})
     const [newProject, setNewProject] = React.useState('');
 
     const [hiddenNewProject, setHiddenNewProject] = React.useState(true);
     const [HiddenExistingProject, setHiddenExistingProject] = React.useState(true);
+    const [HiddenValue, setHiddenValue] = React.useState(false);
     
     const [error, seterror] = React.useState('Allowed: , ; |');
     const [msg, setMsg] = React.useState('');
@@ -128,23 +130,32 @@ export default function TargetDetails() {
 
     const handleSubmit = () => {
 
-
-        // let data ={
-        //     "type_id":SourceType,
-        //     "type":'target',
-        //     "connection_name":ConnectionName.trim(),
-        //     "default":Default,
-        //     "format":Format,
-        //     "hostname": Hostname.trim(),
-        //     "account_name": AccountName.trim(),
-        //     "account_key": AccountKey.trim(),
-        //     "source_query": SourceQuery.trim(),
-        //     "location_name": LocationName.trim(),
-        //     "path": Path.trim(),
-        //     "delimiter": gddelimiter.trim(),
-        //     "file_type": TargetFileType,
-        //     "port": Port
-        // }
+        if(value==="Existing Project"){
+            let data ={
+            
+                "project_type":Project,
+                "business_function":businessFunction.trim(),
+                "description":description.trim(),
+                "owner":owner,
+                "entrytype":"existing",
+                
+            }
+            saveSubmit(data);
+        }
+        else{
+            let data ={
+            
+                "project_type":newProject.trim(),
+                "business_function":businessFunction.trim(),
+                "description":description.trim(),
+                "owner":owner,
+                "entrytype":value,
+                
+            }
+            saveSubmit(data);
+        }
+        
+        
 
         // if(dbc===false && Hostname.trim().length>0 && SourceType > 0 && AccountKey.trim().length>0 && Port.trim().length>0 && 
         //     SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
@@ -179,23 +190,17 @@ export default function TargetDetails() {
 
 
     const handleEdit = () => {
-        // let data = {
-        //     "row_id":parseInt(window.location.href.split('/')[4]),
-        //     "type_id":SourceType,
-        //     "type":'target',
-        //     "connection_name":ConnectionName.trim(),
-        //     "default":Default,
-        //     "format":Format,
-        //     "hostname": Hostname.trim(),
-        //     "account_name": AccountName.trim(),
-        //     "account_key": AccountKey.trim(),
-        //     "source_query": SourceQuery.trim(),
-        //     "location_name": LocationName.trim(),
-        //     "path": Path.trim(),
-        //     "delimiter": gddelimiter.trim(),
-        //     "file_type": TargetFileType,
-        //     "port": Port
-        // }
+
+        let data ={
+            "project_type":Project,
+            "business_function":businessFunction.trim(),
+            "description":description.trim(),
+            "owner":owner,
+            "row_id":window.location.href.split('/')[4]
+        }
+        updateData(data);
+
+        
 
         // if(dbc===false && Hostname.trim().length>0 && SourceType > 0 &&  AccountKey.trim().length>0 && Port.trim().length>0 && 
         // SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
@@ -221,8 +226,9 @@ export default function TargetDetails() {
         setEdited(true);
         setMsg('Updating... ')
         handleOpen()
-        Axios.post(`${local}/administration/updateConnection`, data)
+        Axios.post(`${deploy}/administration/updateProject`, data)
             .then((response) => {
+                console.log(response);
                 if (response.status == 200) {
                     setMsg(response.data.message)
                     handleOpen()
@@ -240,7 +246,7 @@ export default function TargetDetails() {
         setSubmitted(true);
         setMsg('Saving... ')
         handleOpen()
-        Axios.post(`${local}/administration/saveConnection`, data)
+        Axios.post(`${deploy}/administration/saveProject`, data)
             .then((response) => {
                 if (response.status === 200) {
                     let msg = response.data.message;
@@ -259,8 +265,9 @@ export default function TargetDetails() {
     function getData(rowid) {
 
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`),
-            Axios.get(`${local}/administration/getById/${rowid}`)
+            [Axios.get(`${deploy}/ingestion/getDropdowns`),
+            Axios.get(`${deploy}/administration/getProjectById/${rowid}`),
+            Axios.get(`${deploy}/administration/getUsers`)
             ]).then((res) => {
                 return [res]
             })
@@ -269,6 +276,13 @@ export default function TargetDetails() {
                 if (response[0][0].status === 200 && response[0][1].status === 200) {
                     
                     setdropDownProject(response[0][0].data.data.project_types);
+                    setdropDownOwner(response[0][2].data.data)
+                    setProject(response[0][1].data.data[0].project_type)
+                    setBusinessFunction(response[0][1].data.data[0].business_function)
+                    setDescription(response[0][1].data.data[0].description)
+                    setOwner(response[0][1].data.data[0].owner)
+                    setHiddenExistingProject(false)
+                    setHiddenValue(true)
 
                     setloaderror(false);
                     setloading(false);
@@ -283,7 +297,8 @@ export default function TargetDetails() {
 
     function getInfo() {
         Promise.all(
-            [Axios.get(`${local}/ingestion/getDropdowns`),
+            [Axios.get(`${deploy}/ingestion/getDropdowns`),
+            Axios.get(`${deploy}/administration/getUsers`)
 
             ]).then((res) => {
                 return [res]
@@ -293,6 +308,7 @@ export default function TargetDetails() {
                 console.log(response)
                 if (response[0][0].status === 200) {
                     setdropDownProject(response[0][0].data.data.project_types)
+                    setdropDownOwner(response[0][1].data.data)
                     setSubmitted(false);
                     setFresh(true);
                     setloaderror(false);
@@ -347,7 +363,7 @@ export default function TargetDetails() {
                     </center>
                     <hr />
 
-                    <Grid container style={{ marginLeft: "3.5%" }}>
+                    <Grid container style={{ marginLeft: "3.5%" }} hidden={HiddenValue}>
                         <FormControl component="fieldset" >
                             {/* <FormLabel component="legend">Gender</FormLabel> */}
                             <RadioGroup aria-label="schedule" name="schedule" value={value} onChange={handleChangeValue} row >
@@ -413,11 +429,12 @@ export default function TargetDetails() {
 
                         <TextField
                             id="Owner"
+                            select
                             label="Owner"
                             placeholder=""
                             value={owner}
                             onChange={handleChangeOwner}
-                            multiline
+                            
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -425,7 +442,13 @@ export default function TargetDetails() {
                                     </InputAdornment>
                                 ),
                             }}
-                        />
+                        >
+                        {dropDownOwner.map((option) => (
+                                <MenuItem key={option.username} value={option.username}>
+                                    {option.username}
+                                </MenuItem>
+                            ))}
+                            </TextField>
 
                     </Grid>
 
@@ -485,10 +508,11 @@ export default function TargetDetails() {
                         <TextField
                             id="Owner"
                             label="Owner"
+                            select
                             placeholder=""
                             value={owner}
                             onChange={handleChangeOwner}
-                            multiline
+                            
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -496,7 +520,13 @@ export default function TargetDetails() {
                                     </InputAdornment>
                                 ),
                             }}
-                        />
+                        >
+                            {dropDownOwner.map((option) => (
+                                <MenuItem key={option.username} value={option.username}>
+                                    {option.username}
+                                </MenuItem>
+                            ))}
+                            </TextField>
 
 
                         

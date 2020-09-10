@@ -167,6 +167,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Setup(props) {
     const classes = useStyles();
     const [project, setProject] = React.useState(0);
+    const [businessFunction, setBusinessFunction] = React.useState('');
     const [jobTitle, setjobTitle] = React.useState('');
     const [rationale, setRationale] = React.useState('');
     const [value, setValue] = React.useState('');
@@ -193,8 +194,10 @@ export default function Setup(props) {
     const [dropDownTarget, setdropDownTarget] = useState({})
     const [dropDownSourceConnection, setdropDownSourceConnection] = useState({})
     const [dropDownTargetConnection, setdropDownTargetConnection] = useState({})
+    const [dropDownBusinessFunction, setdropDownBusinessFunction] = useState({})
     const [sourceSecondDropdown, setsourceSecondDropdown] = useState({})
     const [targetSecondDropdown, settargetSecondDropdown] = useState({})
+    const [businessFunctionSecondDropdown, setBusinessFunctionSecondDropdown] = useState({})
     const [error, seterror] = useState(false)
     const [loading, setloading] = useState(true);
     const [open, setOpen] = React.useState(false);
@@ -269,6 +272,7 @@ export default function Setup(props) {
     function getInfo() {
         Promise.all(
             [Axios.get(`${deploy}/ingestion/getDropdowns`),
+            Axios.get(`${deploy}/administration/allProjects`)
 
             ]).then((res) => {
                 return [res]
@@ -280,6 +284,8 @@ export default function Setup(props) {
                     setdropDownProject(response[0][0].data.data.project_types);
                     setdropDownSource(response[0][0].data.data.data_sources);
                     setdropDownTarget(response[0][0].data.data.data_targets);
+                    setdropDownBusinessFunction(response[0][1].data.data)
+                    setBusinessFunctionSecondDropdown(response[0][1].data.data)
                     let sources = [];
                     let targets = [];
                     response[0][0].data.data.connection_types.map((item, index) => {
@@ -315,8 +321,8 @@ export default function Setup(props) {
         console.log(entryid, "Edit Mode");
         Promise.all(
             [Axios.get(`${deploy}/ingestion/api/getEntryData/${entryid}`),
-            // [Axios.get(`${deploy}/ingestion/api/getEntryData/52`),
-            Axios.get(`${deploy}/ingestion/getDropdowns`)
+            Axios.get(`${deploy}/ingestion/getDropdowns`),
+            Axios.get(`${deploy}/administration/allProjects`)
 
             ]).then((res) => {
                 return [res]
@@ -341,6 +347,9 @@ export default function Setup(props) {
                     setdropDownTargetConnection(targets)
                     setsourceSecondDropdown(sources)
                     settargetSecondDropdown(targets)
+                    setBusinessFunction(response[0][0].data.data[0].business_function)
+                    setdropDownBusinessFunction(response[0][2].data.data)
+                    setBusinessFunctionSecondDropdown(response[0][2].data.data)
 
 
                     setdropDownProject(response[0][1].data.data.project_types);
@@ -823,6 +832,23 @@ export default function Setup(props) {
     const handleChangeProject = (event) => {
         setProject(event.target.value);
         console.log(event.target.value);
+
+        let businessFunctionSecondDropdown = [];
+
+        dropDownProject.map((item, index) => {
+            if (item.typeId === event.target.value) {
+                
+                dropDownBusinessFunction.map((item1, index1) => {
+                    if (item1.project_type == event.target.value) {
+                        businessFunctionSecondDropdown.push(item1);
+                        setBusinessFunction(item1)
+                    }
+                })
+            }
+        })
+        console.log(businessFunctionSecondDropdown,"****");
+
+        setBusinessFunctionSecondDropdown(businessFunctionSecondDropdown);
     };
 
     const handleChangejobTitle = (event) => {
@@ -1004,28 +1030,11 @@ export default function Setup(props) {
     };
 
 
-    // const handleOnedrive = (data) => {
-    //     setsourceParams(data)
-    // }
-    // const handleGoogleDrive = (data) => {
-    //     setsourceParams(data)
-    // }
-    // const handleMysql = (data) => {
-    //     setsourceParams(data)
-    // }
-    // const handleHive = (data) => {
-    //     setsourceParams(data)
-    // }
-    // const handleAzureBlob = (data) => {
-    //     setsourceParams(data)
-    // }
-    // target
-    // const handleADLSGenOne = (data) => {
-    //     settargetParams(data)
-    // }
-    // const handleADLSGenTwo = (data) => {
-    //     settargetParams(data)
-    // }
+    const handleChangeBusinessFunction = (event) => {
+        console.log(event.target.value,"!!!!!")
+        setBusinessFunction(event.target.value);
+
+    };
 
     //Scheduler
     const handleOneTimeSchedule = (data) => {
@@ -1157,6 +1166,7 @@ const passParam = () => {
             username: localStorage.getItem('username'),
             rationale: rationale,
             project_type: project,
+            business_function:businessFunction,
             jobname: "",
             projectname: jobTitle,
             created_by: localStorage.getItem('username'),
@@ -1237,6 +1247,7 @@ const passParam = () => {
             username: localStorage.getItem('username'),
             rationale: rationale,
             project_type: project,
+            business_function:businessFunction,
             jobname: "",
             projectname: jobTitle,
             created_by: localStorage.getItem('username'),
@@ -1351,7 +1362,7 @@ const passParam = () => {
                                 <strong>Project Information </strong>
                                 <hr />
                                 <Grid container spacing={2}>
-                                    <Grid item xs={4} direction="column" container >
+                                    <Grid item xs={3} direction="column" container >
                                         <TextField
                                             id="projects"
                                             select
@@ -1375,8 +1386,32 @@ const passParam = () => {
                                             ))}
                                         </TextField>
                                     </Grid>
+                                    <Grid item xs={3} direction="column" container >
+                                        <TextField
+                                            id="Business Function"
+                                            select
+                                            label="Please select the Business Function"
+                                            value={businessFunction}
+                                            onChange={handleChangeBusinessFunction}
+                                            defaultValue={businessFunction}
+                                            // helperText="Please select the Project Type"
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VerifiedUserIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        >
+                                            {businessFunctionSecondDropdown.map((option) => (
+                                                <MenuItem key={option.business_function} value={option.business_function}>
+                                                    {option.business_function}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
 
-                                    <Grid item xs={4} direction="column" container >
+                                    <Grid item xs={3} direction="column" container >
                                         <TextField
                                             id="jobTitle"
                                             label="Enter Job title"
@@ -1393,7 +1428,7 @@ const passParam = () => {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={4} direction="column" container>
+                                    <Grid item xs={3} direction="column" container>
                                         <TextField
                                             id="rationale"
                                             label="Rationale"
