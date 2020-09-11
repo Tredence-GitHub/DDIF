@@ -77,7 +77,7 @@ Router.post('/setupDataSave', (req, res)=>{
     console.log(request_data);
     db.DataCatalog.findAll({
         where: {
-            projectname: request_data.projectname
+            jobtitle: request_data.jobtitle
         }
     }).then((result)=>{
         if(result.length > 0){
@@ -88,10 +88,10 @@ Router.post('/setupDataSave', (req, res)=>{
             db.DataCatalog.create({
                 username: request_data.username,
                 rationale: request_data.rationale,
-                projectname: request_data.projectname,
+                jobtitle: request_data.jobtitle,
                 project_type: request_data.project_type,
                 jobname: '',
-                business_function: request_data.business_function,
+                project_name: request_data.project_name,
                 created_by: request_data.created_by,
                 created_at: new Date(),
                 source_type: request_data.source_type,
@@ -259,12 +259,12 @@ Router.post('/updateSetupDBData', (req, res)=>{
     let DataCatalogData = {
         username: request_data.username,
         rationale: request_data.rationale,
-        projectname: request_data.projectname,
+        jobtitle: request_data.jobtitle,
         project_type: request_data.project_type,
-        business_function: request_data.business_function,
+        project_name: request_data.project_name,
         jobname: jobID,
         created_by: request_data.created_by,
-        created_at: Moment(request_data.created_at).format("YYYY-MM-DD HH:mm:ss"),
+        // created_at: Moment(request_data.created_at).format("YYYY-MM-DD HH:mm:ss"),
         source_type: request_data.source_type,
         target_type: request_data.target_type,
         status: request_data.status,

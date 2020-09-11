@@ -112,29 +112,6 @@ const Accordion = withStyles({
     expanded: {},
 })(MuiAccordion);
 
-const AccordionSummary = withStyles({
-    root: {
-        backgroundColor: 'rgba(0, 0, 0, .03)',
-        borderBottom: '1px solid rgba(0, 0, 0, .125)',
-        marginBottom: -1,
-        minHeight: 56,
-        '&$expanded': {
-            minHeight: 56,
-        },
-    },
-    content: {
-        '&$expanded': {
-            margin: '12px 0',
-        },
-    },
-    expanded: {},
-})(MuiAccordionSummary);
-
-const AccordionDetails = withStyles((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
-}))(MuiAccordionDetails);
 
 
 const useStyles = makeStyles((theme) => ({
@@ -177,7 +154,7 @@ export default function Setup(props) {
     const [sourcetypeAbbrv, setSourcetypeAbbrv] = React.useState('');
     const [sourceConnection, setsourceConnection] = React.useState('');
     const [targetConnection, settargetConnection] = React.useState('');
-
+    const [CreatedAt, setCreatedAt] = useState('');
     // check old connection with new
     const [oldsourceConnection, setoldsourceConnection] = React.useState('');
     const [oldtargetConnection, setoldtargetConnection] = React.useState('');
@@ -347,15 +324,20 @@ export default function Setup(props) {
                     setdropDownTargetConnection(targets)
                     setsourceSecondDropdown(sources)
                     settargetSecondDropdown(targets)
-                    setBusinessFunction(response[0][0].data.data[0].business_function)
+                    setBusinessFunction(response[0][0].data.data[0].project_name)
                     setdropDownBusinessFunction(response[0][2].data.data)
-                    setBusinessFunctionSecondDropdown(response[0][2].data.data)
-
+                    let businessSecondEdit = []
+                    response[0][2].data.data.map((item, index)=>{
+                        if(item.project_name === response[0][0].data.data[0].project_name){
+                            businessSecondEdit.push(item)
+                        }
+                    })
+                    setBusinessFunctionSecondDropdown(businessSecondEdit)
 
                     setdropDownProject(response[0][1].data.data.project_types);
                     setdropDownSource(response[0][1].data.data.data_sources);
                     setdropDownTarget(response[0][1].data.data.data_targets);
-                    setjobTitle(response[0][0].data.data[0].projectname)
+                    setjobTitle(response[0][0].data.data[0].jobtitle)
                     setProject(response[0][0].data.data[0].project_type)
                     setRationale(response[0][0].data.data[0].rationale)
                     setSourcetype(response[0][0].data.data[0].source_type)
@@ -364,6 +346,7 @@ export default function Setup(props) {
                             setSourcetypeAbbrv(item.abbrv)
                         }
                     })
+                    setCreatedAt(response[0][0].data.data[0].created_at);
                     setTargettype(response[0][0].data.data[0].target_type)
                     response[0][1].data.data.data_targets.map((item, index) => {
                         if (item.typeId === response[0][0].data.data[0].target_type) {
@@ -832,7 +815,7 @@ export default function Setup(props) {
     const handleChangeProject = (event) => {
         setProject(event.target.value);
         console.log(event.target.value);
-
+        setBusinessFunction('');
         let businessFunctionSecondDropdown = [];
 
         dropDownProject.map((item, index) => {
@@ -841,7 +824,7 @@ export default function Setup(props) {
                 dropDownBusinessFunction.map((item1, index1) => {
                     if (item1.project_type == event.target.value) {
                         businessFunctionSecondDropdown.push(item1);
-                        setBusinessFunction(item1)
+                        // setBusinessFunction(item1)
                     }
                 })
             }
@@ -1166,9 +1149,9 @@ const passParam = () => {
             username: localStorage.getItem('username'),
             rationale: rationale,
             project_type: project,
-            business_function:businessFunction,
+            project_name:businessFunction,
             jobname: "",
-            projectname: jobTitle,
+            jobtitle: jobTitle,
             created_by: localStorage.getItem('username'),
             created_at: new Date(),
             source_type: sourcetype,
@@ -1247,11 +1230,11 @@ const passParam = () => {
             username: localStorage.getItem('username'),
             rationale: rationale,
             project_type: project,
-            business_function:businessFunction,
+            project_name:businessFunction,
             jobname: "",
-            projectname: jobTitle,
+            jobtitle: jobTitle,
             created_by: localStorage.getItem('username'),
-            created_at: new Date(),
+            created_at: CreatedAt,
             source_type: sourcetype,
             target_type: targettype,
             operation: value2,
@@ -1366,7 +1349,7 @@ const passParam = () => {
                                         <TextField
                                             id="projects"
                                             select
-                                            label="Please select the Project Type"
+                                            label="Please select the Project Domain"
                                             value={project}
                                             onChange={handleChangeProject}
                                             defaultValue={project}
@@ -1388,9 +1371,9 @@ const passParam = () => {
                                     </Grid>
                                     <Grid item xs={3} direction="column" container >
                                         <TextField
-                                            id="Business Function"
+                                            id="Project Name"
                                             select
-                                            label="Please select the Business Function"
+                                            label="Please select the Project Name"
                                             value={businessFunction}
                                             onChange={handleChangeBusinessFunction}
                                             defaultValue={businessFunction}
@@ -1404,8 +1387,8 @@ const passParam = () => {
                                             }}
                                         >
                                             {businessFunctionSecondDropdown.map((option) => (
-                                                <MenuItem key={option.business_function} value={option.business_function}>
-                                                    {option.business_function}
+                                                <MenuItem key={option.project_name} value={option.project_name}>
+                                                    {option.project_name}
                                                 </MenuItem>
                                             ))}
                                         </TextField>

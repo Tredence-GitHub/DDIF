@@ -47,6 +47,7 @@ export default function Administration(){
     const [loading, setloading] = useState(true)
     const [value, setValue] = React.useState(0);
     const history = useHistory();
+    const [ProjectTypes, setProjectTypes] = useState({});
 
     const handleChange = (event, newValue) => {
         // history.push(`/ingestion/${tabNametoIndex[newValue]}`)
@@ -61,7 +62,8 @@ export default function Administration(){
     function getInfo() {
         Promise.all(
             [Axios.get(`${deploy}/administration/getConnections`),
-            Axios.get(`${deploy}/administration/allProjects`)
+            Axios.get(`${deploy}/administration/allProjects`),
+            Axios.get(`${deploy}/ingestion/getDropdowns`)
             ]).then((res)=>{
                 return [res]
             })  
@@ -82,6 +84,8 @@ export default function Administration(){
                 settableData(sources);
                 settableData2(targets);
                 settableData3(response[0][1].data.data)
+
+                setProjectTypes(response[0][2].data.data.project_types)
                 seterror(false);
 
                 setloading(false);
@@ -295,7 +299,8 @@ if(!loading){
                                     <TableHead>
                                         <TableRow>
                                             <TableCell><b>Actions</b></TableCell>
-                                            <TableCell><b>Business Function</b></TableCell>
+                                            <TableCell><b>Project Domain</b></TableCell>
+                                            <TableCell><b>Project Name</b></TableCell>
                                             <TableCell><b>Description</b></TableCell>
                                             <TableCell><b>Owner</b></TableCell>
                                         </TableRow>
@@ -310,11 +315,22 @@ if(!loading){
                                                         } >
                                                         <DeleteIcon />
                                                     </TableCell>
+                                                   <TableCell> {
+                                                        ProjectTypes.map((item, index)=>{
+                                                            if(item.typeId === row.project_type){
+                                                              return(  <div>
+                                                                    { item.project_type }
+                                                        
+                                                                </div>)
+                                                            }
+                                                        })
+                                                    }
+                                                    </TableCell>
                                                     <TableCell onClick={(e)=>{
 
                                                         history.push(`/addProject/${row.row_id}`)
                                                         }
-                                                        }  >{row.business_function}</TableCell>
+                                                        }  >{row.project_name}</TableCell>
                                                     <TableCell onClick={(e)=>{
 
                                                         history.push(`/addProject/${row.row_id}`)

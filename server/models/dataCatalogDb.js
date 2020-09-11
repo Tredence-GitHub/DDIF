@@ -11,13 +11,13 @@ module.exports = function(sequelize, Sequelize) {
         project_type: {
             type: Sequelize.INTEGER
         },
-        business_function: {
+        project_name: {
             type: Sequelize.STRING
         },
         jobname: {
             type: Sequelize.STRING
         },
-        projectname: {
+        jobtitle: {
             type: Sequelize.STRING
         },
         rationale: {

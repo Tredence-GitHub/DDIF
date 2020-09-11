@@ -75,20 +75,6 @@ export default function TargetDetails() {
     const [Edited, setEdited] = useState(false);
     const [Fresh, setFresh] = useState(false);
     const history = useHistory()
-    // const targetformats = [
-    //     {
-    //         value: 'csv',
-    //         label: 'csv',
-    //     },
-    //     {
-    //         value: 'orc',
-    //         label: 'orc',
-    //     },
-    //     {
-    //         value: 'parquet',
-    //         label: 'parquet',
-    //     },
-    // ];
 
     const handleChangeValue = (event) => {
         console.log(event.target.value);
@@ -154,24 +140,6 @@ export default function TargetDetails() {
             }
             saveSubmit(data);
         }
-        
-        
-
-        // if(dbc===false && Hostname.trim().length>0 && SourceType > 0 && AccountKey.trim().length>0 && Port.trim().length>0 && 
-        //     SourceQuery.trim().length> 0 && LocationName.trim().length>0 && ConnectionName.trim().length>0){
-        //         saveSubmit(data);
-        //     }
-        //  else if(blob===false && AccountName.trim().length>0 && AccountKey.trim().length>0 
-        //  && LocationName.trim().length>0 && ConnectionName.trim().length>0){
-        //             saveSubmit(data);
-        //         }
-        // else if(links===false && Path.trim().length>0 && gddelimiter.trim().length > 0 && ConnectionName.trim().length>0){
-        //     saveSubmit(data);
-        // }else{
-        //     handleOpen();
-        //     setMsg('Please fill the required fields');
-        // }
-        // console.log('DATA -- ', data);
 
 
     }
@@ -278,7 +246,7 @@ export default function TargetDetails() {
                     setdropDownProject(response[0][0].data.data.project_types);
                     setdropDownOwner(response[0][2].data.data)
                     setProject(response[0][1].data.data[0].project_type)
-                    setBusinessFunction(response[0][1].data.data[0].business_function)
+                    setBusinessFunction(response[0][1].data.data[0].project_name)
                     setDescription(response[0][1].data.data[0].description)
                     setOwner(response[0][1].data.data[0].owner)
                     setHiddenExistingProject(false)
@@ -367,8 +335,8 @@ export default function TargetDetails() {
                         <FormControl component="fieldset" >
                             {/* <FormLabel component="legend">Gender</FormLabel> */}
                             <RadioGroup aria-label="schedule" name="schedule" value={value} onChange={handleChangeValue} row >
-                                <FormControlLabel value="Existing Project" control={<Radio />} label="Existing Project" style={{ marginRight: "50px" }} />
-                                <FormControlLabel value="New Project" control={<Radio />} label="New Project" style={{ marginLeft: "50px" }} />
+                                <FormControlLabel value="Existing Project" control={<Radio />} label="Choose from Existing Domain" style={{ marginRight: "50px" }} />
+                                <FormControlLabel value="New Project" control={<Radio />} label="Add New Domain" style={{ marginLeft: "50px" }} />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
@@ -377,7 +345,7 @@ export default function TargetDetails() {
                         <TextField
                             id="ProjectType"
                             select
-                            label="Choose Project Name"
+                            label="Choose Project Domain"
                             value={Project}
                             onChange={handleChangeProject}
                             // helperText="Please select the project name"
@@ -396,8 +364,8 @@ export default function TargetDetails() {
                             ))}
                         </TextField>
                         <TextField
-                            id="Busniess Function"
-                            label="Business Function"
+                            id="Project Name"
+                            label="Project Name"
                             placeholder=""
                             value={businessFunction}
                             onChange={handleChangeBusinessFunction}
@@ -455,7 +423,7 @@ export default function TargetDetails() {
                     <Grid container style={{ padding: "2%" }} hidden={hiddenNewProject}>
                         <TextField
                             id="NewProjectType"
-                            label="Enter Project Name"
+                            label="Enter Project Domain"
                             value={newProject}
                             onChange={handleChangeNewProject}
                             // helperText="Please enter the project name"
@@ -474,8 +442,8 @@ export default function TargetDetails() {
                             ))} */}
                         </TextField>
                         <TextField
-                            id="Busniess Function"
-                            label="Business Function"
+                            id="Project Name"
+                            label="Project Name"
                             placeholder=""
                             value={businessFunction}
                             onChange={handleChangeBusinessFunction}

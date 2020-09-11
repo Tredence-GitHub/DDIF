@@ -43,9 +43,9 @@ export default function Audit() {
 
         { title: 'Entry ID', field: 'entryId' },
 
-        { title: 'Job Name', field: 'jobname' },
+        { title: 'Job ID', field: 'jobname' },
 
-        { title: 'Project Name', field: 'projectname' },
+        { title: 'Job Title', field: 'projectname' },
 
         { title: 'Start Time', field: 'start_time' },
 

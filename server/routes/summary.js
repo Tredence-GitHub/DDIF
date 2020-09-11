@@ -18,11 +18,12 @@ Router.get('/getSummary/:entryid', (req, res)=>{
             console.log(Object.keys(item), item)
             frame.push({ fields: 'Entry ID', values: item.entryId })
             frame.push({ fields: 'Assigned Job ID', values: item.jobname });
+            frame.push({fields: 'Job Title', values: item.jobtitle});
+            frame.push({fields: 'Project Name', values: item.project_name});
+            frame.push({fields: 'Status', values: item.status});
             frame.push({ fields: 'Created by', values: item.username })
             frame.push({ fields: 'Updated by', values: item.updated_by })
-            frame.push({fields: 'Status', values: item.status});
             frame.push({fields: 'Rationale', values: item.rationale})
-            frame.push({fields: 'Job Title', values: item.projectname})
             frame.push({fields: 'Operation', values: item.operation});
             frame.push({fields: 'Schedule type', values: item.Schedule.schedule_type});
             // if(item.Schedule.schedule_type.includes('Fixed')){

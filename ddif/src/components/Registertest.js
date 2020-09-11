@@ -106,7 +106,7 @@ export default function Login() {
 
         if (password === confirmpassword.value && password !== "") {
             console.log(username,name);
-            let resp = Axios.post(`${local}/register`, {
+            let resp = Axios.post(`${deploy}/register`, {
                 name:name,
                 username:username,
                 password:password,

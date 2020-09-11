@@ -268,7 +268,8 @@ export default function IngestionTable() {
                                     <TableRow>
                                         <TableCell ><b>Entry ID</b></TableCell>
                                         <TableCell><b>Job ID</b></TableCell>
-                                        <TableCell><b>Project Name</b></TableCell>
+                                        <TableCell><b>Job Title</b></TableCell>
+                                        <TableCell><b>Created Date</b></TableCell>
                                         <TableCell><b>Status</b></TableCell>
                                         <TableCell style={{width:"200px"}}><b>Schedule Type</b></TableCell>
                                     </TableRow>
@@ -286,7 +287,11 @@ export default function IngestionTable() {
 
                                             <TableCell onClick={(e) => {
                                                  history.push('/ingestion/' + row.entryId)
-                                            }}>{row.projectname}</TableCell>
+                                            }}>{row.jobtitle}</TableCell>
+
+                                            <TableCell>
+                                                {row.created_at}
+                                            </TableCell>
 
                                             {row.status === "Completed" ?
                                                 <TableCell onClick={(e) => {

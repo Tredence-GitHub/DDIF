@@ -391,11 +391,11 @@ Router.post('/saveProject', (req, res)=>{
 
         db.BusinessFunctions.create({
             project_type: parseInt(request_data.project_type),
-            business_function: request_data.business_function,
+            project_name: request_data.business_function,
             description: request_data.description,
             owner: request_data.owner
         }).then((result)=>{
-            res.status(200)
+            res.status(200).json({message: 'success'})
         }).catch((err)=>{
             res.status(400).json({message: [err]})
         })
@@ -409,7 +409,7 @@ Router.post('/saveProject', (req, res)=>{
 
             db.BusinessFunctions.create({
                 project_type: jResult['typeId'],
-                business_function: request_data.business_function,
+                project_name: request_data.business_function,
                 description: request_data.description,
                 owner: request_data.owner
             }).then((result2)=>{
@@ -455,7 +455,7 @@ Router.post('/updateProject', (req, res)=>{
 
     db.BusinessFunctions.update({
         project_type: parseInt(request_data.project_type),
-        business_function: request_data.business_function,
+        project_name: request_data.business_function,
         description: request_data.description,
         owner: request_data.owner
     }, {
@@ -471,9 +471,13 @@ Router.post('/updateProject', (req, res)=>{
 
 Router.get('/getProjectById/:rowid', (req, res)=>{
         db.BusinessFunctions.findAll({  
-                  where: {            row_id: req.params.rowid        }   
-                 }).then((result)=>
-                    {        res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))}) 
-                   }).catch((err)=>{        res.status(400).json({message: [err]})    })})
+                  where: {  
+                    row_id: req.params.rowid
+                }   
+        }).then((result)=>{        
+                res.status(200).json({message: 'success', data: JSON.parse(JSON.stringify(result))}) 
+        }).catch((err)=>{
+                res.status(400).json({message: [err]})    }) 
+    })
 
 module.exports = Router;

@@ -13,7 +13,7 @@ module.exports = function(sequelize, Sequelize) {
         projectname: {
             type: Sequelize.STRING,
             allowNull: false,
-            field: 'ProjectName'
+            field: 'JobTitle'
         },
         start_time: {
             type: 'TIMESTAMP',
